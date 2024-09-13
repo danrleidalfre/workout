@@ -2,7 +2,8 @@
   "name": "workout-server",
   "version": "1.0.0",
   "scripts": {
-    "dev": "tsx watch --env-file .env src/http/server.ts"
+    "dev": "tsx watch --env-file .env src/http/server.ts",
+    "seed": "tsx --env-file .env src/db/seed.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.0",
