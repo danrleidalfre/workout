@@ -1,7 +1,14 @@
 import { client, db } from '.'
-import { exercises, groups, workoutExercises, workouts } from './schema'
+import {
+  exercises,
+  groups,
+  workoutExercises,
+  workoutExerciseSeries,
+  workouts,
+} from './schema'
 
 async function seed() {
+  await db.delete(workoutExerciseSeries)
   await db.delete(workoutExercises)
   await db.delete(exercises)
   await db.delete(groups)
@@ -9,7 +16,7 @@ async function seed() {
 
   const workoutsCreated = await db
     .insert(workouts)
-    .values([{ title: 'Superiores' }, { title: 'Inferiores' }])
+    .values([{ title: 'Push' }, { title: 'Pull' }, { title: 'Legs' }])
     .returning()
 
   const groupsCreated = await db
@@ -17,9 +24,10 @@ async function seed() {
     .values([
       { title: 'Peito' },
       { title: 'Costas' },
-      { title: 'Pernas' },
       { title: 'Ombros' },
-      { title: 'Braços' },
+      { title: 'Bíceps' },
+      { title: 'Tríceps' },
+      { title: 'Pernas' },
     ])
     .returning()
 
@@ -27,70 +35,177 @@ async function seed() {
     .insert(exercises)
     .values([
       { title: 'Supino', groupId: groupsCreated[0].id },
-      { title: 'Remanda Curvada', groupId: groupsCreated[1].id },
-      { title: 'Barra Fixa', groupId: groupsCreated[1].id },
-      { title: 'Agachamento Livre', groupId: groupsCreated[2].id },
-      { title: 'Levantamento Terra', groupId: groupsCreated[2].id },
-      { title: 'Stiff', groupId: groupsCreated[2].id },
-      { title: 'Desenvolvimento', groupId: groupsCreated[3].id },
-      { title: 'Rosca Direta', groupId: groupsCreated[4].id },
+      { title: 'Crucifixo', groupId: groupsCreated[0].id },
+      { title: 'Remanda', groupId: groupsCreated[1].id },
+      { title: 'Puxada', groupId: groupsCreated[1].id },
+      { title: 'Desenvolvimento', groupId: groupsCreated[2].id },
+      { title: 'Rosca Direta', groupId: groupsCreated[3].id },
       { title: 'Tríceps Testa', groupId: groupsCreated[4].id },
+      { title: 'Agachamento Livre', groupId: groupsCreated[5].id },
+      { title: 'Levantamento Terra', groupId: groupsCreated[5].id },
+      { title: 'Stiff', groupId: groupsCreated[5].id },
     ])
     .returning()
 
-  await db.insert(workoutExercises).values([
+  const workoutExercisesCreated = await db
+    .insert(workoutExercises)
+    .values([
+      { workoutId: workoutsCreated[0].id, exerciseId: exercisesCreated[0].id },
+      { workoutId: workoutsCreated[0].id, exerciseId: exercisesCreated[1].id },
+      { workoutId: workoutsCreated[0].id, exerciseId: exercisesCreated[4].id },
+      { workoutId: workoutsCreated[0].id, exerciseId: exercisesCreated[6].id },
+      { workoutId: workoutsCreated[1].id, exerciseId: exercisesCreated[2].id },
+      { workoutId: workoutsCreated[1].id, exerciseId: exercisesCreated[3].id },
+      { workoutId: workoutsCreated[1].id, exerciseId: exercisesCreated[5].id },
+      { workoutId: workoutsCreated[2].id, exerciseId: exercisesCreated[7].id },
+      { workoutId: workoutsCreated[2].id, exerciseId: exercisesCreated[8].id },
+      { workoutId: workoutsCreated[2].id, exerciseId: exercisesCreated[9].id },
+    ])
+    .returning()
+
+  await db.insert(workoutExerciseSeries).values([
     {
-      workoutId: workoutsCreated[0].id,
-      exerciseId: exercisesCreated[0].id,
-      series: 3,
+      workoutExerciseId: workoutExercisesCreated[0].id,
       reps: 12,
     },
     {
-      workoutId: workoutsCreated[0].id,
-      exerciseId: exercisesCreated[1].id,
-      series: 3,
+      workoutExerciseId: workoutExercisesCreated[0].id,
       reps: 12,
     },
     {
-      workoutId: workoutsCreated[0].id,
-      exerciseId: exercisesCreated[2].id,
-      series: 3,
+      workoutExerciseId: workoutExercisesCreated[0].id,
       reps: 12,
     },
     {
-      workoutId: workoutsCreated[0].id,
-      exerciseId: exercisesCreated[6].id,
-      series: 3,
+      workoutExerciseId: workoutExercisesCreated[1].id,
       reps: 12,
     },
     {
-      workoutId: workoutsCreated[0].id,
-      exerciseId: exercisesCreated[7].id,
-      series: 3,
+      workoutExerciseId: workoutExercisesCreated[1].id,
       reps: 12,
     },
     {
-      workoutId: workoutsCreated[0].id,
-      exerciseId: exercisesCreated[8].id,
-      series: 3,
+      workoutExerciseId: workoutExercisesCreated[1].id,
       reps: 12,
     },
     {
-      workoutId: workoutsCreated[1].id,
-      exerciseId: exercisesCreated[3].id,
-      series: 5,
+      workoutExerciseId: workoutExercisesCreated[2].id,
       reps: 12,
     },
     {
-      workoutId: workoutsCreated[1].id,
-      exerciseId: exercisesCreated[4].id,
-      series: 5,
+      workoutExerciseId: workoutExercisesCreated[2].id,
       reps: 12,
     },
     {
-      workoutId: workoutsCreated[1].id,
-      exerciseId: exercisesCreated[5].id,
-      series: 5,
+      workoutExerciseId: workoutExercisesCreated[2].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[3].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[3].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[3].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[4].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[4].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[4].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[4].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[5].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[5].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[5].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[5].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[6].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[6].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[6].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[6].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[7].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[7].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[7].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[7].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[8].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[8].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[8].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[8].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[9].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[9].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[9].id,
+      reps: 12,
+    },
+    {
+      workoutExerciseId: workoutExercisesCreated[9].id,
       reps: 12,
     },
   ])
