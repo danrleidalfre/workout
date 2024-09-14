@@ -1,5 +1,5 @@
 {
-  "id": "21f34504-7601-422e-991c-920a7a0f34e2",
+  "id": "c4a7e734-d21d-4009-94c2-1dc4aae9cee3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -92,7 +92,7 @@
         },
         "load": {
           "name": "load",
-          "type": "double precision",
+          "type": "real",
           "primaryKey": false,
           "notNull": false
         }

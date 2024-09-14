@@ -1,5 +1,5 @@
 import { createId } from '@paralleldrive/cuid2'
-import { doublePrecision, integer, pgTable, text } from 'drizzle-orm/pg-core'
+import { integer, pgTable, real, text } from 'drizzle-orm/pg-core'
 
 export const workouts = pgTable('workouts', {
   id: text('id')
@@ -45,5 +45,5 @@ export const workoutExerciseSeries = pgTable('workout_exercise_series', {
     .references(() => workoutExercises.id)
     .notNull(),
   reps: integer('reps').notNull(),
-  load: doublePrecision('load'),
+  load: real('load'),
 })

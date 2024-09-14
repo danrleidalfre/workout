@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS "workout_exercise_series" (
 	"id" text PRIMARY KEY NOT NULL,
 	"workout_exercise_id" text NOT NULL,
 	"reps" integer NOT NULL,
-	"load" double precision
+	"load" real
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "workout_exercises" (
