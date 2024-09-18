@@ -1,7 +1,7 @@
 # Workout
 
 ## Server (In Progress...)
-- Node.js
+- Node + Typescript
 - Docker
 - Postgres
 - DrizzleORM
@@ -18,7 +18,14 @@ npm run dev
 ```
 
 ## Web
-- React
+- React + Typescript
+- Tailwind
+- Chadcn/ui
+
+```bash
+cd web
+npm run dev
+```
 
 ## Mobile
 - React Native
