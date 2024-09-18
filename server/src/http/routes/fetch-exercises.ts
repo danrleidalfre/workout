@@ -7,6 +7,7 @@ export const fetchExercises: FastifyPluginAsyncZod = async app => {
   app.get('/exercises', async () => {
     return await db
       .select({
+        id: exercises.id,
         exercise: exercises.title,
         group: groups.title,
       })
