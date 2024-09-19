@@ -1,6 +1,6 @@
 # Workout
 
-## Server (In Progress...)
+## Server
 - Node + Typescript
 - Docker
 - Postgres
