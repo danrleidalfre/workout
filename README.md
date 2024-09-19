@@ -20,7 +20,7 @@ npm run dev
 ## Web
 - React + Typescript
 - Tailwind
-- Chadcn/ui
+- shadcn/ui
 
 ```bash
 cd web
