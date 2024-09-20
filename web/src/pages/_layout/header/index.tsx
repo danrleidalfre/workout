@@ -1,6 +1,6 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
 import { BicepsFlexed } from 'lucide-react'
+import { Account } from './account'
 import { NavLink } from './nav-link'
 import { ToggleTheme } from './toggle-theme'
 
@@ -21,10 +21,7 @@ export function Header() {
 
       <div className="flex gap-4">
         <ToggleTheme />
-        <Avatar>
-          <AvatarImage src="https://github.com/danrleidalfre.png" />
-          <AvatarFallback>DF</AvatarFallback>
-        </Avatar>
+        <Account />
       </div>
     </header>
   )
