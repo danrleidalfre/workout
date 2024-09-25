@@ -24,6 +24,7 @@ npm run dev
 
 ```bash
 cd web
+cp .env.local.example .env.local
 npm run dev
 ```
 
