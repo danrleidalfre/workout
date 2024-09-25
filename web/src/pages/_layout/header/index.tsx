@@ -10,12 +10,12 @@ export function Header() {
       <div className="flex items-center gap-4">
         <BicepsFlexed className="size-10 text-primary" strokeWidth={1} />
 
-        <Separator orientation="vertical" className="h-8" />
+        <Separator orientation="vertical" className="h-10" />
 
         <nav className="flex gap-4">
-          <NavLink to="/">Home</NavLink>
-          <NavLink to="/workouts">Workouts</NavLink>
-          <NavLink to="/exercises">Exercises</NavLink>
+          <NavLink to="/">Início</NavLink>
+          <NavLink to="/workouts">Treinos</NavLink>
+          <NavLink to="/exercises">Exercícios</NavLink>
         </nav>
       </div>
 

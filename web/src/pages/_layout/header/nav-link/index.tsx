@@ -6,7 +6,7 @@ export function NavLink(props: LinkProps) {
   return (
     <Link
       data-active={pathname === props.to}
-      className="text-sm font-medium text-muted-foreground hover:text-foreground data-[active=true]:text-foreground"
+      className="text-sm font-semibold text-muted-primary hover:text-primary data-[active=true]:text-primary transition-all"
       {...props}
     />
   )
