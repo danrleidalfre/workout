@@ -1,4 +1,5 @@
 import { fetchExercises } from '@/api/fetch-exercises'
+import { fetchGroups } from '@/api/fetch-groups'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -18,9 +19,15 @@ import { useQuery } from '@tanstack/react-query'
 import { PlusCircle } from 'lucide-react'
 
 export function Exercises() {
-  const { data } = useQuery({
+  const exercises = useQuery({
     queryKey: ['exercises'],
     queryFn: fetchExercises,
+    staleTime: 1000 * 60,
+  })
+
+  const groups = useQuery({
+    queryKey: ['groups'],
+    queryFn: fetchGroups,
     staleTime: 1000 * 60,
   })
 
@@ -34,9 +41,11 @@ export function Exercises() {
               <SelectValue placeholder="Filtrar por grupo muscular" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
+              {groups.data?.map(group => (
+                <SelectItem key={group.id} value={group.id}>
+                  {group.group}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -45,8 +54,8 @@ export function Exercises() {
           <span>Exercício</span>
         </Button>
       </div>
-      <div className="flex flex-col gap-4">
-        {data?.map(exercise => (
+      <div className="grid grid-cols-4 gap-4">
+        {exercises.data?.map(exercise => (
           <Card key={exercise.id}>
             <CardHeader>
               <CardTitle>{exercise.exercise}</CardTitle>

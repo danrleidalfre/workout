@@ -12,6 +12,7 @@ import { deleteWorkout } from './routes/delete-workout'
 import { fetchExercise } from './routes/fetch-exercise'
 import { fetchExercises } from './routes/fetch-exercises'
 import { fetchExercisesByGroup } from './routes/fetch-exercises-by-group'
+import { fetchGroups } from './routes/fetch-groups'
 import { fetchWorkout } from './routes/fetch-workout'
 import { fetchWorkouts } from './routes/fetch-workouts'
 import { updateExercise } from './routes/update-exercise'
@@ -38,6 +39,8 @@ app.register(fetchExercises)
 app.register(fetchExercisesByGroup)
 app.register(updateExercise)
 app.register(deleteExercise)
+
+app.register(fetchGroups)
 
 app
   .listen({
