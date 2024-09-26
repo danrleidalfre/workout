@@ -2,7 +2,13 @@ import { fetchExercises } from '@/api/fetch-exercises'
 import { fetchGroups } from '@/api/fetch-groups'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Card, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import {
   Select,
@@ -22,7 +28,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { useQuery } from '@tanstack/react-query'
-import { Edit3, PlusCircle, Trash2 } from 'lucide-react'
+import { Edit3, Ellipsis, PlusCircle, Trash2 } from 'lucide-react'
 
 export function Exercises() {
   const exercises = useQuery({
@@ -92,20 +98,27 @@ export function Exercises() {
       <div className="grid grid-cols-4 gap-4">
         {exercises.data?.map(exercise => (
           <Card key={exercise.id}>
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <h2 className="mr-2">{exercise.exercise}</h2>
-                  <Button size="icon" variant="link">
-                    <Edit3 className="size-4" />
-                  </Button>
-                  <Button size="icon" variant="link">
-                    <Trash2 className="size-4" />
-                  </Button>
-                </div>
-                <Badge>{exercise.group}</Badge>
-              </CardTitle>
-            </CardHeader>
+            <CardContent className="flex items-center justify-between p-5">
+              <div className="flex items-center gap-2">
+                <h2 className="font-semibold text-base">{exercise.exercise}</h2>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Ellipsis className="text-primary cursor-pointer" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start">
+                    <DropdownMenuItem>
+                      <Edit3 className="size-4 mr-2" />
+                      <span>Editar</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Trash2 className="size-4 mr-2" />
+                      <span>Excluir</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+              <Badge>{exercise.group}</Badge>
+            </CardContent>
           </Card>
         ))}
       </div>

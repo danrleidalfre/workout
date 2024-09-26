@@ -36,7 +36,7 @@ async function seed() {
     .values([
       { title: 'Supino', groupId: groupsCreated[0].id },
       { title: 'Crucifixo', groupId: groupsCreated[0].id },
-      { title: 'Remanda', groupId: groupsCreated[1].id },
+      { title: 'Remada', groupId: groupsCreated[1].id },
       { title: 'Puxada', groupId: groupsCreated[1].id },
       { title: 'Desenvolvimento', groupId: groupsCreated[2].id },
       { title: 'Rosca Direta', groupId: groupsCreated[3].id },
