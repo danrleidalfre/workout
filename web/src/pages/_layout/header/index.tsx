@@ -6,23 +6,23 @@ import { ToggleTheme } from './toggle-theme'
 
 export function Header() {
   return (
-    <header className="flex justify-between items-center h-20 px-8 border-b">
-      <div className="flex items-center gap-5">
+    <header className="flex justify-between items-center h-20 px-8 border-b sticky top-0 backdrop-blur-lg">
+      <div className="flex items-center gap-4">
         <BicepsFlexed className="size-10 text-primary" strokeWidth={1} />
 
         <Separator orientation="vertical" className="h-10" />
 
-        <nav className="flex gap-5">
+        <nav className="flex gap-6">
           <NavLink to="/">
-            <Home className="size-5" />
+            <Home className="size-4" />
             <span>Início</span>
           </NavLink>
           <NavLink to="/workouts">
-            <Trophy className="size-5" />
+            <Trophy className="size-4" />
             <span>Treinos</span>
           </NavLink>
           <NavLink to="/exercises">
-            <Dumbbell className="size-5" />
+            <Dumbbell className="size-4" />
             <span>Exercícios</span>
           </NavLink>
         </nav>
