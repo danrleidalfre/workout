@@ -40,6 +40,7 @@ import {
 import { Controller, useForm } from 'react-hook-form'
 import { useSearchParams } from 'react-router-dom'
 import { z } from 'zod'
+import { ExerciseCardSkeleton } from './skeleton'
 
 const filterSchema = z.object({
   search: z.string().optional(),
@@ -54,19 +55,25 @@ export function Exercises() {
   const search = searchParams.get('search')
   const groupId = searchParams.get('groupId')
 
-  const exercises = useQuery({
+  const { data: exercises } = useQuery({
     queryKey: ['exercises', search, groupId],
     queryFn: () => fetchExercises({ search, groupId }),
     staleTime: 1000 * 60,
   })
 
-  const groups = useQuery({
+  const { data: groups } = useQuery({
     queryKey: ['groups'],
     queryFn: fetchGroups,
     staleTime: 1000 * 60,
   })
 
-  const { register, handleSubmit, control, reset } = useForm<FilterSchema>({
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { isSubmitting },
+  } = useForm<FilterSchema>({
     resolver: zodResolver(filterSchema),
   })
 
@@ -120,7 +127,7 @@ export function Exercises() {
                     <SelectValue placeholder="Filtrar por grupo muscular" />
                   </SelectTrigger>
                   <SelectContent>
-                    {groups.data?.map(group => (
+                    {groups?.map(group => (
                       <SelectItem key={group.id} value={group.id}>
                         {group.group}
                       </SelectItem>
@@ -132,14 +139,14 @@ export function Exercises() {
           />
           <Button
             type="submit"
-            variant="secondary"
+            variant="outline"
             className="items-center gap-1"
           >
             <Search className="size-4" />
             <span>Filtrar</span>
           </Button>
           <Button
-            variant="destructive"
+            variant="outline"
             className="items-center gap-1"
             onClick={handleClearFilter}
           >
@@ -165,7 +172,7 @@ export function Exercises() {
                   <SelectValue placeholder="Selecione o grupo muscular" />
                 </SelectTrigger>
                 <SelectContent>
-                  {groups.data?.map(group => (
+                  {groups?.map(group => (
                     <SelectItem key={group.id} value={group.id}>
                       {group.group}
                     </SelectItem>
@@ -182,11 +189,13 @@ export function Exercises() {
         </Sheet>
       </div>
       <div className="grid grid-cols-4 gap-4">
-        {exercises.data?.map(exercise => (
+        {exercises?.map(exercise => (
           <Card key={exercise.id}>
             <CardContent className="flex items-center justify-between p-5">
               <div className="flex items-center gap-2">
-                <h2 className="font-semibold text-base">{exercise.exercise}</h2>
+                <h2 className="font-semibold text-base select-none">
+                  {exercise.exercise}
+                </h2>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Ellipsis className="text-primary cursor-pointer" />
@@ -203,10 +212,11 @@ export function Exercises() {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              <Badge>{exercise.group}</Badge>
+              <Badge className="select-none">{exercise.group}</Badge>
             </CardContent>
           </Card>
         ))}
+        {(!exercises || isSubmitting) && <ExerciseCardSkeleton />}
       </div>
     </>
   )
