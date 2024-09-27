@@ -9,3 +9,4 @@ services:
       - POSTGRES_USER=docker
       - POSTGRES_PASSWORD=docker
       - POSTGRES_DB=workout
+    restart: unless-stopped

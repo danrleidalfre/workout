@@ -1,12 +1,25 @@
 import { api } from '@/lib/axios'
 
+type Filter = {
+  search: string | null
+  groupId: string | null
+}
+
 type Exercise = {
   id: string
   exercise: string
   group: string
 }
 
-export async function fetchExercises(): Promise<Exercise[]> {
-  const { data } = await api.get('/exercises')
+export async function fetchExercises({
+  search,
+  groupId,
+}: Filter): Promise<Exercise[]> {
+  const { data } = await api.get('/exercises', {
+    params: {
+      search,
+      groupId,
+    },
+  })
   return data
 }

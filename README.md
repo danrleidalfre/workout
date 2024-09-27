@@ -6,6 +6,7 @@
 - Postgres
 - DrizzleORM
 - Fastify
+- Zod
 
 ```bash
 cd server
@@ -21,6 +22,10 @@ npm run dev
 - React + Typescript
 - Tailwind
 - shadcn/ui
+- React Query
+- Axios
+- React Hook Form
+- Zod
 
 ```bash
 cd web
