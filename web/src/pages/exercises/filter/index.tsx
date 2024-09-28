@@ -43,6 +43,10 @@ export function ExerciseFilter() {
 
   const { register, handleSubmit, control, reset } = useForm<FilterSchema>({
     resolver: zodResolver(filterSchema),
+    defaultValues: {
+      search: search ?? '',
+      groupId: groupId ?? '',
+    },
   })
 
   const handleFilter = async ({ search, groupId }: FilterSchema) => {
