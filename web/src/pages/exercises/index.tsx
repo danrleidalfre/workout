@@ -4,7 +4,7 @@ import { useSearchParams } from 'react-router-dom'
 import { ExerciseCard } from './card'
 import { ExerciseCardSkeleton } from './card/skeleton'
 import { ExerciseFilter } from './filter'
-import { ExerciseFormSheet } from './form-sheet'
+import { ExerciseForm } from './form'
 
 export function Exercises() {
   const [searchParams] = useSearchParams()
@@ -22,7 +22,7 @@ export function Exercises() {
     <>
       <div className="flex justify-between mb-4">
         <ExerciseFilter />
-        <ExerciseFormSheet />
+        <ExerciseForm />
       </div>
       <div className="grid grid-cols-4 gap-4">
         {exercises?.map(exercise => (

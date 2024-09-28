@@ -1,14 +1,7 @@
 import { fetchExercises } from '@/api/fetch-exercises'
-import { fetchGroups } from '@/api/fetch-groups'
+import { SelectGroup } from '@/components/select-group'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'
 import { Eraser, Search } from 'lucide-react'
@@ -32,12 +25,6 @@ export function ExerciseFilter() {
   useQuery({
     queryKey: ['exercises', search, groupId],
     queryFn: () => fetchExercises({ search, groupId }),
-    staleTime: 1000 * 60,
-  })
-
-  const { data: groups } = useQuery({
-    queryKey: ['groups'],
-    queryFn: fetchGroups,
     staleTime: 1000 * 60,
   })
 
@@ -92,18 +79,14 @@ export function ExerciseFilter() {
         control={control}
         render={({ field: { name, onChange, value } }) => {
           return (
-            <Select name={name} onValueChange={onChange} value={value}>
-              <SelectTrigger className="w-56">
-                <SelectValue placeholder="Filtrar por grupo muscular" />
-              </SelectTrigger>
-              <SelectContent>
-                {groups?.map(group => (
-                  <SelectItem key={group.id} value={group.id}>
-                    {group.group}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div className="w-56">
+              <SelectGroup
+                name={name}
+                onValueChange={onChange}
+                value={value}
+                placeholder="Filtrar por grupo muscular"
+              />
+            </div>
           )
         }}
       />
