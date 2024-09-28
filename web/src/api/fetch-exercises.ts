@@ -5,7 +5,7 @@ type Filter = {
   groupId: string | null
 }
 
-type Exercise = {
+export type Exercise = {
   id: string
   exercise: string
   group: string
