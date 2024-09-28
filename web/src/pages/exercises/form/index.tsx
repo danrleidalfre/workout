@@ -11,6 +11,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
 import { CheckCircle2, LoaderCircle, PlusCircle } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -23,6 +24,8 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>
 
 export function ExerciseForm() {
+  const queryClient = useQueryClient()
+
   const {
     register,
     handleSubmit,
@@ -35,6 +38,8 @@ export function ExerciseForm() {
 
   const handleSave = async ({ title, groupId }: FormSchema) => {
     await createExercise({ title, groupId })
+
+    queryClient.invalidateQueries({ queryKey: ['exercises'] })
 
     reset({
       title: '',
