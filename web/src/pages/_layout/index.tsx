@@ -1,3 +1,4 @@
+import { Toaster } from '@/components/ui/toaster'
 import { Outlet } from 'react-router-dom'
 import { Header } from './header'
 
@@ -8,6 +9,7 @@ export function Layout() {
       <main className="flex flex-1 flex-col py-4 px-12">
         <Outlet />
       </main>
+      <Toaster />
     </div>
   )
 }
