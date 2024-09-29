@@ -1,5 +1,5 @@
 import { fetchExercises } from '@/api/fetch-exercises'
-import { SelectGroup } from '@/components/select-group'
+import { SelectGroup } from '@/components/select-groups'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'

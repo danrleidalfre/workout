@@ -1,5 +1,5 @@
 import { createExercise } from '@/api/create-exercise'
-import { SelectGroup } from '@/components/select-group'
+import { SelectGroup } from '@/components/select-groups'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
