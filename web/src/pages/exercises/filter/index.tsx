@@ -90,16 +90,14 @@ export function ExerciseFilter() {
         }}
       />
       <Button type="submit" variant="outline" className="items-center gap-1">
-        <Search className="size-4" />
-        <span>Filtrar</span>
+        <Search className="size-4" /> Filtrar
       </Button>
       <Button
         variant="outline"
         className="items-center gap-1"
         onClick={handleClearFilter}
       >
-        <Eraser className="size-4" />
-        <span>Limpar</span>
+        <Eraser className="size-4" /> Limpar
       </Button>
     </form>
   )

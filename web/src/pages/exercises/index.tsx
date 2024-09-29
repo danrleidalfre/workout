@@ -22,24 +22,21 @@ export function Exercises() {
   })
 
   return (
-    <>
-      <div className="flex justify-between mb-4">
+    <div className="grid gap-4">
+      <div className="flex justify-between">
         <ExerciseFilter />
         <Button
-          className="items-center gap-1"
           onClick={() => setIsFormOpen(true)}
+          className="items-center gap-1"
         >
-          <PlusCircle className="size-4" />
-          <span>Exercício</span>
+          <PlusCircle className="size-4" /> Exercício
         </Button>
         <ExerciseForm open={isFormOpen} onOpenChange={setIsFormOpen} />
       </div>
-      <div className="grid grid-cols-4 gap-4">
-        {exercises?.map(exercise => (
-          <ExerciseCard key={exercise.id} exercise={exercise} />
-        ))}
-        {!exercises && <ExerciseCardSkeleton />}
-      </div>
-    </>
+      {exercises?.map(exercise => (
+        <ExerciseCard key={exercise.id} exercise={exercise} />
+      ))}
+      {!exercises && <ExerciseCardSkeleton />}
+    </div>
   )
 }

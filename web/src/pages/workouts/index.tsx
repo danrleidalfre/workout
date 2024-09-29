@@ -18,7 +18,7 @@ export function Workouts() {
   })
 
   return (
-    <div className="grid gap-4 w-[768px] mx-auto">
+    <div className="grid gap-4">
       <div className="flex justify-end">
         <Button className="items-center gap-1">
           <PlusCircle className="size-4" />
