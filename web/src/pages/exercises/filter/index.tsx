@@ -25,7 +25,6 @@ export function ExerciseFilter() {
   useQuery({
     queryKey: ['exercises', search, groupId],
     queryFn: () => fetchExercises({ search, groupId }),
-    staleTime: 1000 * 60,
   })
 
   const { register, handleSubmit, control, reset } = useForm<FilterSchema>({

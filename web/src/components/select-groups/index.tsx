@@ -20,7 +20,6 @@ export function SelectGroup({
   const { data: groups } = useQuery({
     queryKey: ['groups'],
     queryFn: fetchGroups,
-    staleTime: 1000 * 60,
   })
 
   return (

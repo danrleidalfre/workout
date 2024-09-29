@@ -15,7 +15,6 @@ export function Workouts() {
   const { data: workouts } = useQuery({
     queryKey: ['workouts'],
     queryFn: fetchWorkouts,
-    staleTime: 1000 * 60,
   })
 
   return (
