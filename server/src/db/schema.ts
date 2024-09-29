@@ -33,7 +33,7 @@ export const workoutExercises = pgTable('workout_exercises', {
     .references(() => workouts.id)
     .notNull(),
   exerciseId: text('exercise_id')
-    .references(() => exercises.id)
+    .references(() => exercises.id, { onDelete: 'cascade' })
     .notNull(),
 })
 
@@ -42,7 +42,7 @@ export const workoutExerciseSeries = pgTable('workout_exercise_series', {
     .primaryKey()
     .$defaultFn(() => createId()),
   workoutExerciseId: text('workout_exercise_id')
-    .references(() => workoutExercises.id)
+    .references(() => workoutExercises.id, { onDelete: 'cascade' })
     .notNull(),
   reps: integer('reps').notNull(),
   load: real('load'),

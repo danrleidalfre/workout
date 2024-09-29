@@ -8,6 +8,20 @@
       "when": 1726278476865,
       "tag": "0000_small_ma_gnuci",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1727583037169,
+      "tag": "0001_cynical_electro",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1727583139858,
+      "tag": "0002_demonic_power_pack",
+      "breakpoints": true
     }
   ]
 }
