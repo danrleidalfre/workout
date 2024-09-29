@@ -21,8 +21,9 @@ export const fetchExercises: FastifyPluginAsyncZod = async app => {
       return await db
         .select({
           id: exercises.id,
-          exercise: exercises.title,
+          title: exercises.title,
           group: groups.title,
+          groupId: groups.id,
         })
         .from(exercises)
         .leftJoin(groups, eq(exercises.groupId, groups.id))

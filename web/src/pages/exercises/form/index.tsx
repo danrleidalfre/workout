@@ -1,4 +1,6 @@
 import { createExercise } from '@/api/create-exercise'
+import type { UpdateExerciseBody } from '@/api/update-exercise'
+import { updateExercise } from '@/api/update-exercise'
 import { SelectGroup } from '@/components/select-groups'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -8,11 +10,11 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from '@/components/ui/sheet'
 import { zodResolver } from '@hookform/resolvers/zod'
+import type { DialogProps } from '@radix-ui/react-dialog'
 import { useQueryClient } from '@tanstack/react-query'
-import { CheckCircle2, LoaderCircle, PlusCircle } from 'lucide-react'
+import { CheckCircle2, LoaderCircle } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -23,7 +25,12 @@ const formSchema = z.object({
 
 type FormSchema = z.infer<typeof formSchema>
 
-export function ExerciseForm() {
+type Props = DialogProps & {
+  exercise?: UpdateExerciseBody
+  onCloseForm?: () => void
+}
+
+export function ExerciseForm({ exercise, onCloseForm, ...props }: Props) {
   const queryClient = useQueryClient()
 
   const {
@@ -34,10 +41,21 @@ export function ExerciseForm() {
     formState: { isSubmitting },
   } = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: exercise?.title,
+      groupId: exercise?.groupId,
+    },
   })
 
   const handleSave = async ({ title, groupId }: FormSchema) => {
-    await createExercise({ title, groupId })
+    if (exercise?.id) {
+      await updateExercise({ id: exercise.id, title, groupId })
+      if (onCloseForm) {
+        onCloseForm()
+      }
+    } else {
+      await createExercise({ title, groupId })
+    }
 
     queryClient.invalidateQueries({ queryKey: ['exercises'] })
 
@@ -48,16 +66,10 @@ export function ExerciseForm() {
   }
 
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button className="items-center gap-1">
-          <PlusCircle className="size-4" />
-          <span>Exercício</span>
-        </Button>
-      </SheetTrigger>
+    <Sheet {...props}>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Novo exercício</SheetTitle>
+          <SheetTitle>{exercise?.id ? 'Editar' : 'Criar'} exercício</SheetTitle>
         </SheetHeader>
         <form
           onSubmit={handleSubmit(handleSave)}

@@ -7,8 +7,9 @@ type Filter = {
 
 export type Exercise = {
   id: string
-  exercise: string
+  title: string
   group: string
+  groupId: string
 }
 
 export async function fetchExercises({
