@@ -16,10 +16,11 @@ import {
   Trash2,
 } from 'lucide-react'
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 export function Workout() {
   const { id } = useParams()
+  const navigate = useNavigate()
 
   const [selectedExercise, setSelectedExercise] = useState('')
 
@@ -34,11 +35,17 @@ export function Workout() {
       </div>
 
       <div className="grid gap-2">
-        <div className="grid grid-cols-[1fr_auto] gap-4">
-          <SelectExercises onSelectedExercise={setSelectedExercise} />
+        <div className="grid grid-cols-[auto_1fr_auto] gap-2">
+          <div className="size-9 flex justify-center items-center border rounded-md text-sm bg-primary text-primary-foreground">
+            1°
+          </div>
+          <SelectExercises
+            selectedExercise={selectedExercise}
+            onSelectedExercise={setSelectedExercise}
+          />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button size="icon" variant="outline">
+              <Button size="icon">
                 <Ellipsis className="cursor-pointer" />
               </Button>
             </DropdownMenuTrigger>
@@ -58,7 +65,10 @@ export function Workout() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="grid grid-cols-[1fr_1fr_auto] gap-4">
+        <div className="grid grid-cols-[auto_1fr_1fr_auto] gap-2">
+          <div className="size-9 flex justify-center items-center border rounded-md text-sm">
+            1ª
+          </div>
           <Input placeholder="Carga" />
           <Input placeholder="Repetições" />
           <DropdownMenu>
@@ -82,11 +92,15 @@ export function Workout() {
       </div>
 
       <div className="flex justify-between">
-        <Button className="items-center gap-1" variant="outline">
+        <Button
+          className="items-center gap-1"
+          variant="outline"
+          onClick={() => navigate('/workouts')}
+        >
           <CircleChevronLeft className="size-4" />
           <span>Voltar</span>
         </Button>
-        <Button className="items-center gap-1">
+        <Button type="submit" className="items-center gap-1">
           <CheckCircle2 className="size-4" />
           <span>Salvar</span>
         </Button>

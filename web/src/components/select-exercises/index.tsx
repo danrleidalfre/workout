@@ -1,5 +1,3 @@
-import { Check, ChevronsUpDown } from 'lucide-react'
-
 import { fetchExercises } from '@/api/fetch-exercises'
 import { Button } from '@/components/ui/button'
 import {
@@ -17,15 +15,19 @@ import {
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
+import { Check, ChevronsUpDown } from 'lucide-react'
 import { useState } from 'react'
 
 type Props = {
+  selectedExercise: string
   onSelectedExercise: (value: string) => void
 }
 
-export function SelectExercises({ onSelectedExercise }: Props) {
+export function SelectExercises({
+  selectedExercise,
+  onSelectedExercise,
+}: Props) {
   const [open, setOpen] = useState(false)
-  const [selectedExercise, setSelectedExercise] = useState('')
 
   const { data: exercises } = useQuery({
     queryKey: ['exercises'],
@@ -43,7 +45,7 @@ export function SelectExercises({ onSelectedExercise }: Props) {
         >
           {selectedExercise
             ? exercises?.find(exercise => exercise.id === selectedExercise)
-                ?.title
+                ?.title || 'Exercício inválido'
             : 'Selecione o exercício'}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -61,7 +63,6 @@ export function SelectExercises({ onSelectedExercise }: Props) {
                   onSelect={currentValue => {
                     const value =
                       currentValue === selectedExercise ? '' : currentValue
-                    setSelectedExercise(value)
                     onSelectedExercise(value)
                     setOpen(false)
                   }}
