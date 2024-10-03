@@ -7,7 +7,7 @@ export const api = axios.create({
 
 api.interceptors.request.use(async config => {
   await new Promise(resolve =>
-    setTimeout(resolve, Math.round(Math.random() * 2000))
+    setTimeout(resolve, Math.round(Math.random() * 5000))
   )
 
   return config

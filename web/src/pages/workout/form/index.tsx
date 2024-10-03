@@ -1,16 +1,22 @@
 import type { Workout } from '@/api/create-workout'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { CheckCircle2, CircleChevronLeft, PlusCircle } from 'lucide-react'
+import {
+  CheckCircle2,
+  CircleChevronLeft,
+  LoaderCircle,
+  PlusCircle,
+} from 'lucide-react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { WorkoutFormExercise } from './exercise'
 
 type Props = {
-  handleSubmitForm: (data: Workout) => void
+  isSubmitting: boolean
+  handleSubmitForm: (workout: Workout) => void
 }
 
-export function WorkoutForm({ handleSubmitForm }: Props) {
+export function WorkoutForm({ isSubmitting, handleSubmitForm }: Props) {
   const navigate = useNavigate()
 
   const { control, handleSubmit, register } = useForm<Workout>({
@@ -29,8 +35,8 @@ export function WorkoutForm({ handleSubmitForm }: Props) {
     name: 'exercises',
   })
 
-  const onSubmit = (data: Workout) => {
-    handleSubmitForm(data)
+  const onSubmit = (workout: Workout) => {
+    handleSubmitForm(workout)
   }
 
   return (
@@ -72,8 +78,17 @@ export function WorkoutForm({ handleSubmitForm }: Props) {
           <span>Voltar</span>
         </Button>
         <Button type="submit" className="items-center gap-1">
-          <CheckCircle2 className="size-4" />
-          <span>Salvar</span>
+          {isSubmitting ? (
+            <>
+              <LoaderCircle className="size-4 animate-spin" />
+              <span>Salvando...</span>
+            </>
+          ) : (
+            <>
+              <CheckCircle2 className="size-4" />
+              <span>Salvar</span>
+            </>
+          )}
         </Button>
       </div>
     </form>
