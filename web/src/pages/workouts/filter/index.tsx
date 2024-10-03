@@ -22,6 +22,7 @@ export function WorkoutFilter() {
   useQuery({
     queryKey: ['workouts', search],
     queryFn: () => fetchWorkouts({ search }),
+    staleTime: 60 * 1000,
   })
 
   const { register, handleSubmit, reset } = useForm<FilterSchema>({

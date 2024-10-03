@@ -19,6 +19,7 @@ export function Exercises() {
   const { data: exercises } = useQuery({
     queryKey: ['exercises', search, groupId],
     queryFn: () => fetchExercises({ search: null, groupId: null }),
+    staleTime: 60 * 1000,
   })
 
   return (

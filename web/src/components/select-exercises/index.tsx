@@ -32,6 +32,7 @@ export function SelectExercises({
   const { data: exercises } = useQuery({
     queryKey: ['exercises'],
     queryFn: () => fetchExercises({ search: null, groupId: null }),
+    staleTime: 60 * 1000,
   })
 
   return (
