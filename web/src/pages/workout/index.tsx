@@ -4,7 +4,7 @@ import {
 } from '@/api/create-workout'
 import { fetchWorkout } from '@/api/fetch-workout'
 import { updateWorkout } from '@/api/update-workout'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { WorkoutForm } from './form'
@@ -13,6 +13,7 @@ import { WorkoutFormSkeleton } from './form/skeleton'
 export function Workout() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -32,6 +33,9 @@ export function Workout() {
     }
 
     setIsSubmitting(false)
+
+    queryClient.invalidateQueries({ queryKey: ['workouts'] })
+
     navigate('/workouts')
   }
 
