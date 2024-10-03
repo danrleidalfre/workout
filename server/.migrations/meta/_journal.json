@@ -22,6 +22,13 @@
       "when": 1727583139858,
       "tag": "0002_demonic_power_pack",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1727919349534,
+      "tag": "0003_yellow_tinkerer",
+      "breakpoints": true
     }
   ]
 }

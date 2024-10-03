@@ -40,14 +40,14 @@ export const fetchWorkout: FastifyPluginAsyncZod = async app => {
         .where(eq(workouts.id, id))
 
       return {
-        workout: result[0]?.workoutTitle || null,
+        title: result[0]?.workoutTitle || null,
         exercises: result.reduce(
           (acc, row) => {
-            let exercise = acc.find(e => e.exercise === row.exerciseTitle)
+            let exercise = acc.find(e => e.exerciseId === row.exerciseId)
 
             if (!exercise) {
               exercise = {
-                exercise: row.exerciseTitle || '',
+                exerciseId: row.exerciseId || '',
                 series: [],
               }
               acc.push(exercise)
@@ -61,7 +61,7 @@ export const fetchWorkout: FastifyPluginAsyncZod = async app => {
             return acc
           },
           [] as {
-            exercise: string
+            exerciseId: string
             series: { reps: number; load: number | null }[]
           }[]
         ),

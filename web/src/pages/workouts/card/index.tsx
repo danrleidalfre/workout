@@ -8,12 +8,15 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Edit3, Ellipsis, Trash2 } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 type Props = {
   workout: Workout
 }
 
 export function WorkoutCard({ workout }: Props) {
+  const navigate = useNavigate()
+
   return (
     <Card>
       <CardContent className="p-5">
@@ -25,7 +28,9 @@ export function WorkoutCard({ workout }: Props) {
                 <Ellipsis className="text-primary cursor-pointer" />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => navigate(`/workout/${workout.id}`)}
+                >
                   <Edit3 className="size-4 mr-2" />
                   <span>Editar</span>
                 </DropdownMenuItem>

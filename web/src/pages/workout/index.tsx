@@ -2,6 +2,9 @@ import {
   type Workout as WorkoutBody,
   createWorkout,
 } from '@/api/create-workout'
+import { fetchWorkout } from '@/api/fetch-workout'
+import { updateWorkout } from '@/api/update-workout'
+import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { WorkoutForm } from './form'
@@ -12,14 +15,30 @@ export function Workout() {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  const { data: workout } = useQuery({
+    queryKey: ['workout', id],
+    queryFn: () => (id ? fetchWorkout(id) : Promise.reject()),
+    enabled: !!id,
+  })
+
   const handleSubmit = async (workout: WorkoutBody) => {
     setIsSubmitting(true)
-    await createWorkout(workout)
+
+    if (id) {
+      await updateWorkout({ id, workout })
+    } else {
+      await createWorkout(workout)
+    }
+
     setIsSubmitting(false)
     navigate('/workouts')
   }
 
   return (
-    <WorkoutForm handleSubmitForm={handleSubmit} isSubmitting={isSubmitting} />
+    <WorkoutForm
+      workout={workout}
+      handleSubmitForm={handleSubmit}
+      isSubmitting={isSubmitting}
+    />
   )
 }

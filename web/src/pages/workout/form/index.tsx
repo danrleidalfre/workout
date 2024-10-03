@@ -7,24 +7,38 @@ import {
   LoaderCircle,
   PlusCircle,
 } from 'lucide-react'
+import { useEffect } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { WorkoutFormExercise } from './exercise'
 
 type Props = {
+  workout?: Workout
   isSubmitting: boolean
   handleSubmitForm: (workout: Workout) => void
 }
 
-export function WorkoutForm({ isSubmitting, handleSubmitForm }: Props) {
+const defaultValues = {
+  title: '',
+  exercises: [{ exerciseId: '', series: [] }],
+}
+
+export function WorkoutForm({
+  workout,
+  isSubmitting,
+  handleSubmitForm,
+}: Props) {
   const navigate = useNavigate()
 
-  const { control, handleSubmit, register } = useForm<Workout>({
-    defaultValues: {
-      title: '',
-      exercises: [{ exerciseId: '', series: [] }],
-    },
+  const { control, handleSubmit, register, reset } = useForm<Workout>({
+    defaultValues: workout || defaultValues,
   })
+
+  useEffect(() => {
+    if (workout) {
+      reset(workout)
+    }
+  }, [workout, reset])
 
   const {
     fields: exerciseFields,
