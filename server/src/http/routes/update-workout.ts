@@ -19,8 +19,8 @@ export const updateWorkout: FastifyPluginAsyncZod = async app => {
               exerciseId: z.string(),
               series: z.array(
                 z.object({
-                  load: z.string(),
-                  reps: z.string(),
+                  load: z.coerce.number(),
+                  reps: z.coerce.number(),
                 })
               ),
             })
@@ -56,10 +56,12 @@ export const updateWorkout: FastifyPluginAsyncZod = async app => {
 
           await Promise.all(
             exercise.series.map(async serie => {
+              const { load, reps } = serie
+
               await db.insert(workoutExerciseSeries).values({
                 workoutExerciseId: workoutExercise.id,
-                load: Number.parseFloat(serie.load),
-                reps: Number.parseInt(serie.reps),
+                load,
+                reps,
               })
             })
           )

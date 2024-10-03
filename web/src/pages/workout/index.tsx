@@ -8,6 +8,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { WorkoutForm } from './form'
+import { WorkoutFormSkeleton } from './form/skeleton'
 
 export function Workout() {
   const { id } = useParams()
@@ -15,7 +16,7 @@ export function Workout() {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const { data: workout } = useQuery({
+  const { data: workout, isLoading } = useQuery({
     queryKey: ['workout', id],
     queryFn: () => (id ? fetchWorkout(id) : Promise.reject()),
     enabled: !!id,
@@ -35,10 +36,16 @@ export function Workout() {
   }
 
   return (
-    <WorkoutForm
-      workout={workout}
-      handleSubmitForm={handleSubmit}
-      isSubmitting={isSubmitting}
-    />
+    <>
+      {isLoading ? (
+        <WorkoutFormSkeleton />
+      ) : (
+        <WorkoutForm
+          workout={workout}
+          handleSubmitForm={handleSubmit}
+          isSubmitting={isSubmitting}
+        />
+      )}
+    </>
   )
 }
