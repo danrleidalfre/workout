@@ -21,7 +21,7 @@ export function Home() {
       <div className="grid grid-cols-2 gap-4">
         <div className="grid gap-4">
           <Card>
-            <CardHeader>
+            <CardHeader className="items-center">
               <CardTitle>Comparativo com o mês anterior</CardTitle>
             </CardHeader>
             <CardContent>
