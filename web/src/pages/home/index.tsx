@@ -40,7 +40,7 @@ export function Home() {
                   </span>
                   <ChevronUp className="size-10" />
                 </div>
-                <div className="flex items-center text-destructive">
+                <div className="flex items-center text-red-500">
                   <span className="flex flex-col items-center">
                     <span className="text-3xl font-bold">1h</span>
                     <span className="font-medium">duração</span>
