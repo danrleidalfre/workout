@@ -11,6 +11,7 @@
 ```bash
 cd server
 cp .env.example .env
+npm i
 docker compose up -d
 npx drizzle-kit generate
 npx drizzle-kit migrate
@@ -26,12 +27,22 @@ npm run dev
 - Axios
 - React Hook Form
 - Zod
+- Lucide Icons
 
 ```bash
 cd web
 cp .env.local.example .env.local
+npm i
 npm run dev
 ```
 
 ## Mobile
-- React Native
+- React Native + Typescript
+- NativeWind
+- Lucide Icons
+
+```bash
+cd mobile
+npm i
+npm run start
+```
