@@ -1,18 +1,16 @@
-import { Moon } from "@/components/ui/icons/moon";
-import { Sun } from "@/components/ui/icons/sun";
-import { useColorScheme } from "nativewind";
-import { TouchableOpacity } from "react-native";
+import { Play } from "@/components/ui/icons/play";
+import { Text, View } from "react-native";
 
 export function Home() {
-  const { colorScheme, setColorScheme } = useColorScheme();
-
   return (
-    <TouchableOpacity
-      className="flex-1 justify-center items-center dark:bg-neutral-800 bg-neutral-200"
-      onPress={() => setColorScheme(colorScheme === 'dark' ? 'light' : 'dark')}
-    >
-      {colorScheme === 'light' ? <Sun className="text-primary" /> : <Moon className="text-primary" />}
-    </TouchableOpacity>
-
+    <View className="flex-1 bg-foreground dark:bg-background px-10">
+      <View className="border border-border rounded-md p-5 flex-row justify-between items-center mt-5">
+        <View>
+          <Text className="text-muted dark:text-muted-foreground text-lg">Push</Text>
+          <Text className="text-muted dark:text-muted-foreground text-sm">Remada, Puxada, Rosca Direta</Text>
+        </View>
+        <Play className="text-primary" />
+      </View>
+    </View>
   )
 }
