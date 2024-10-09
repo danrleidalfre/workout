@@ -16,7 +16,7 @@ docker compose up -d
 npx drizzle-kit generate
 npx drizzle-kit migrate
 npm run seed
-npm run dev
+npm run server
 ```
 
 ## Web
@@ -33,7 +33,7 @@ npm run dev
 cd web
 cp .env.local.example .env.local
 npm i
-npm run dev
+npm run web
 ```
 
 ## Mobile
@@ -44,5 +44,5 @@ npm run dev
 ```bash
 cd mobile
 npm i
-npm run start
+npm run mobile
 ```
