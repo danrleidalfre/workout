@@ -9,6 +9,8 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
     "expo": "~51.0.28",
     "expo-status-bar": "~1.12.1",
     "lucide-react-native": "^0.447.0",
@@ -17,6 +19,7 @@
     "react-native": "0.74.5",
     "react-native-reanimated": "~3.10.1",
     "react-native-svg": "15.2.0",
+    "tailwind-merge": "^2.5.3",
     "tailwindcss": "^3.4.13"
   },
   "devDependencies": {
