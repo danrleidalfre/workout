@@ -63,6 +63,7 @@ interface ButtonProps
   label: string;
   labelClasses?: string;
   icon?: LucideIcon;
+  iconAfterLabel?: boolean
 }
 
 function Button({
@@ -72,6 +73,7 @@ function Button({
   variant,
   size,
   icon: Icon,
+  iconAfterLabel,
   ...props
 }: ButtonProps) {
   const iconSizes = {
@@ -86,7 +88,10 @@ function Button({
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     >
-      <View className='flex-row items-center gap-1'>
+      <View className={cn(
+        'flex-row items-center gap-1',
+        { 'flex-row-reverse': iconAfterLabel }
+      )}>
         {Icon && (
           <Icon
             size={iconSize}

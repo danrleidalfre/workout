@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Play } from "@/components/ui/icons/play";
+import { ChevronRight } from "@/components/ui/icons/chevron-right";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/lib/axios";
 import { useEffect, useState } from "react";
@@ -54,7 +54,12 @@ export function Home() {
           data={workouts}
           renderItem={({ item }) => (
             <View key={item.id} className="border-b border-primary p-5 flex-row justify-between items-center">
-              <Button label={item.title} icon={Play} onPress={() => handleNavigateToWorkout(item.id)} />
+              <Button
+                label={item.title}
+                icon={ChevronRight}
+                iconAfterLabel
+                onPress={() => handleNavigateToWorkout(item.id)}
+              />
               <View className="flex-row gap-1">
                 {item.groups.map(group => (
                   <Badge key={group} label={group} variant="secondary" />
