@@ -1,25 +1,69 @@
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Play } from "@/components/ui/icons/play";
-import { PlusCircle } from "@/components/ui/icons/plus";
-import { Search } from "@/components/ui/icons/search";
-import { Trash2 } from "@/components/ui/icons/trash";
-import { Text, View } from "react-native";
+import { Skeleton } from "@/components/ui/skeleton";
+import { api } from "@/lib/axios";
+import { useEffect, useState } from "react";
+import { FlatList, View } from "react-native";
+
+type Workout = {
+  id: string
+  title: string
+  groups: string[]
+}
 
 export function Home() {
+  const [workouts, setWorkouts] = useState<Workout[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+
+  async function fetchWorkouts() {
+    try {
+      setIsLoading(true)
+
+      const { data } = await api.get<Workout[]>('/workouts')
+
+      setWorkouts(data)
+      setIsLoading(false)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  function handleNavigateToWorkout(id: string) {
+    console.log(id);
+  }
+
+  useEffect(() => {
+    fetchWorkouts()
+  }, [])
+
   return (
-    <View className="flex-1 bg-foreground dark:bg-background px-10 gap-4 pt-4">
-      <View className="flex-row justify-between">
-        <Button label="Treino" icon={PlusCircle} />
-        <Button label="Pesquisar" variant="secondary" icon={Search} />
-        <Button label="Remover" variant="destructive" icon={Trash2} />
-      </View>
-      <View className="border border-border rounded-md p-4 flex-row justify-between items-center">
-        <View>
-          <Text className="text-muted dark:text-muted-foreground text-lg font-medium">Push</Text>
-          <Text className="text-muted dark:text-muted-foreground text-base font-light">Remada, Puxada, Rosca Direta</Text>
-        </View>
-        <Play size={28} strokeWidth={1} className="text-primary" />
-      </View>
+    <View className="flex-1 bg-foreground dark:bg-background">
+      {isLoading ? Array.from({ length: 10 }).map((_, i) => {
+        return (
+          <View key={i} className="border-b border-primary p-5 flex-row justify-between items-center">
+            <Skeleton className="h-10 w-24" />
+            <View className="flex-row gap-1">
+              <Skeleton className="h-7 w-16" />
+              <Skeleton className="h-7 w-14" />
+            </View>
+          </View>
+        )
+      }) : (
+        <FlatList
+          data={workouts}
+          renderItem={({ item }) => (
+            <View key={item.id} className="border-b border-primary p-5 flex-row justify-between items-center">
+              <Button label={item.title} icon={Play} onPress={() => handleNavigateToWorkout(item.id)} />
+              <View className="flex-row gap-1">
+                {item.groups.map(group => (
+                  <Badge key={group} label={group} variant="secondary" />
+                ))}
+              </View>
+            </View>
+          )}
+        />
+      )}
     </View>
   )
 }
