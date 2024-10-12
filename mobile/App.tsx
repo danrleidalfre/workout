@@ -1,13 +1,13 @@
-import { Header } from '@/components/header';
 import '@/global.css';
-import { Home } from '@/screens/home';
+import { AppLayout } from '@/layouts/app';
+import { Workouts } from '@/screens/workouts';
 import { StatusBar } from 'expo-status-bar';
 
 export default function App() {
   return (
     <>
-      <Header />
-      <Home />
+      <AppLayout />
+      <Workouts />
       <StatusBar />
     </>
   )

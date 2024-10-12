@@ -1,11 +1,11 @@
-import { Moon } from "@/components/ui/icons/moon";
-import { Sun } from "@/components/ui/icons/sun";
+import { Moon } from "@/components/icons/moon";
+import { Sun } from "@/components/icons/sun";
 import { getTheme, updateTheme } from "@/storage/theme";
 import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
 import { TouchableOpacity } from "react-native";
 
-export function ThemeToggle() {
+export function ToggleTheme() {
   const { colorScheme, setColorScheme } = useColorScheme();
 
   useEffect(() => {
