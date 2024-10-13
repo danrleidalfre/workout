@@ -3,14 +3,14 @@ import { Workouts } from "@/screens/workouts";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator, NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-export type AppRoutes = {
+export type RoutesProps = {
   workouts: undefined
   workout: { id: string }
 }
 
-export type AppNavigatorRoutesProps = NativeStackNavigationProp<AppRoutes>
+export type AppNavigatorRoutesProps = NativeStackNavigationProp<RoutesProps>
 
-const { Screen, Navigator } = createNativeStackNavigator<AppRoutes>()
+const { Screen, Navigator } = createNativeStackNavigator<RoutesProps>()
 
 export function Routes() {
   return (

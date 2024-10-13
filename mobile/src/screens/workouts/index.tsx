@@ -1,3 +1,4 @@
+import { Header } from "@/components/header";
 import { api } from "@/lib/axios";
 import { useEffect, useState } from "react";
 import { FlatList, View } from "react-native";
@@ -33,15 +34,18 @@ export function Workouts() {
   }, [])
 
   return (
-    <View className="flex-1 bg-foreground dark:bg-background px-8">
-      {isLoading ? <WorkoutCardSkeleton /> : (
-        <FlatList
-          data={workouts}
-          renderItem={({ item }) => (
-            <WorkoutCard key={item.id} workout={item} />
-          )}
-        />
-      )}
-    </View>
+    <>
+      <Header />
+      <View className="flex-1 bg-foreground dark:bg-background px-8">
+        {isLoading ? <WorkoutCardSkeleton /> : (
+          <FlatList
+            data={workouts}
+            renderItem={({ item }) => (
+              <WorkoutCard key={item.id} workout={item} />
+            )}
+          />
+        )}
+      </View>
+    </>
   )
 }
