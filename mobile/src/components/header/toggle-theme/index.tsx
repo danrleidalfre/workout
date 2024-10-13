@@ -3,7 +3,7 @@ import { Sun } from "@/components/icons/sun";
 import { getTheme, updateTheme } from "@/storage/theme";
 import { useColorScheme } from "nativewind";
 import { useEffect } from "react";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 
 export function ToggleTheme() {
   const { colorScheme, setColorScheme } = useColorScheme();
@@ -32,10 +32,12 @@ export function ToggleTheme() {
     <TouchableOpacity
       onPress={handleSetColorScheme}
     >
-      {colorScheme === 'light'
-        ? <Sun className="text-muted" size={28} strokeWidth={1} />
-        : <Moon className="text-muted" size={28} strokeWidth={1} />
-      }
+      <View className="size-10 items-center justify-center">
+        {colorScheme === 'light'
+          ? <Sun className="text-muted" size={28} strokeWidth={1} />
+          : <Moon className="text-muted" size={28} strokeWidth={1} />
+        }
+      </View>
     </TouchableOpacity>
   )
 }

@@ -2,6 +2,7 @@ import { Checkbox } from "@/components/checkbox";
 import { Header } from "@/components/header";
 import { Check } from "@/components/icons/check";
 import { Input } from "@/components/input";
+import { useHeaderTitle } from "@/hooks/useHeaderTitle";
 import { api } from "@/lib/axios";
 import { RoutesProps } from "@/routes";
 import { RouteProp, useRoute } from "@react-navigation/native";
@@ -25,6 +26,7 @@ type Workout = {
 export function Workout() {
   const { params } = useRoute<WorkoutScreenRouteProps>();
   const { id } = params;
+  const { onSetTitle } = useHeaderTitle()
 
   const [workout, setWorkout] = useState({} as Workout)
 
@@ -32,6 +34,7 @@ export function Workout() {
     try {
       const { data } = await api.get<Workout>(`/workouts/${id}`)
       setWorkout(data)
+      onSetTitle(data.title)
     } catch (error) {
       console.log(error);
     }
@@ -44,8 +47,7 @@ export function Workout() {
   return (
     <>
       <Header />
-      <View className="flex-1 bg-foreground dark:bg-background px-8 pt-4">
-        <Text className="text-muted dark:text-muted-foreground text-xl font-bold">{workout.title}</Text>
+      <View className="flex-1 bg-foreground dark:bg-background px-8 pt-4 gap-4">
         {workout.exercises?.map((exercise) => (
           <View key={exercise.exerciseId}>
             <Text className="text-muted dark:text-muted-foreground text-lg">{exercise.exerciseTitle}</Text>
