@@ -1,6 +1,6 @@
 import { api } from "@/lib/axios";
 import { useEffect, useState } from "react";
-import { FlatList } from "react-native";
+import { FlatList, View } from "react-native";
 import { WorkoutCard } from "./card";
 import { WorkoutCardSkeleton } from "./card/skeleton";
 
@@ -33,7 +33,7 @@ export function Workouts() {
   }, [])
 
   return (
-    <>
+    <View className="flex-1 bg-foreground dark:bg-background px-8">
       {isLoading ? <WorkoutCardSkeleton /> : (
         <FlatList
           data={workouts}
@@ -42,6 +42,6 @@ export function Workouts() {
           )}
         />
       )}
-    </>
+    </View>
   )
 }
