@@ -23,11 +23,13 @@ export function Header() {
   return (
     <View className="h-40 items-center justify-between flex-row bg-primary pt-14 px-8">
       {showTitle && (
-        <ChevronLeft
-          size={28}
-          className="text-muted"
-          onPress={handleGoBack}
-        />
+        <View className="size-10 items-center justify-center">
+          <ChevronLeft
+            size={28}
+            className="text-muted"
+            onPress={handleGoBack}
+          />
+        </View>
       )}
       <View className="items-center">
         <BicepsFlexed size={40} strokeWidth={1} className="text-muted" />

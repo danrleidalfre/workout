@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 
 import { cn } from '@/lib/utils';
+import { Check } from '../icons/check';
 
 interface CheckboxProps extends React.ComponentPropsWithoutRef<typeof View> {
   label?: string;
@@ -31,12 +32,15 @@ function Checkbox({
           className={cn(
             'size-10 border border-border rounded-md flex justify-center items-center',
             {
-              'bg-primary border-primary': isChecked,
+              'border-primary bg-primary': isChecked,
             },
             checkboxClasses
           )}
         >
-          {isChecked && <Text className="text-background text-xl">✓</Text>}
+          <Check className={cn(
+            'text-muted',
+            { 'dark:text-muted-foreground': !isChecked },
+          )} size={16} />
         </View>
       </TouchableOpacity>
       {label && (
