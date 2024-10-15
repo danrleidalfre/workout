@@ -8,18 +8,25 @@ interface CheckboxProps extends React.ComponentPropsWithoutRef<typeof View> {
   label?: string;
   labelClasses?: string;
   checkboxClasses?: string;
+  checked?: boolean;
+  onChange?: (checked: boolean) => void;
 }
+
 function Checkbox({
   label,
   labelClasses,
   checkboxClasses,
   className,
+  checked,
+  onChange,
   ...props
 }: CheckboxProps) {
-  const [isChecked, setChecked] = useState(false);
+  const [isChecked, setChecked] = useState(checked || false);
 
   const toggleCheckbox = () => {
-    setChecked(prev => !prev);
+    const newChecked = !isChecked;
+    setChecked(newChecked);
+    onChange?.(newChecked);
   };
 
   return (
@@ -37,10 +44,9 @@ function Checkbox({
             checkboxClasses
           )}
         >
-          <Check className={cn(
-            'text-muted',
-            { 'dark:text-muted-foreground': !isChecked },
-          )} size={16} />
+          {isChecked && (
+            <Check className={cn('text-muted', { 'dark:text-muted-foreground': !isChecked })} size={16} />
+          )}
         </View>
       </TouchableOpacity>
       {label && (

@@ -1,5 +1,6 @@
 import { Badge } from "@/components/badge";
 import { Button } from "@/components/button";
+import { ChevronRight } from "@/components/icons/chevron-right";
 import { AppNavigatorRoutesProps } from "@/routes";
 import { useNavigation } from "@react-navigation/native";
 import { Text, View } from "react-native";
@@ -29,6 +30,8 @@ export function WorkoutCard({ workout }: Props) {
       <Text className="text-muted dark:text-muted-foreground text-base line-clamp-1">{workout.exercises}</Text>
       <Button
         label="Iniciar"
+        iconAfterLabel
+        icon={ChevronRight}
         onPress={handleNavigateToWorkout}
       />
     </View>
