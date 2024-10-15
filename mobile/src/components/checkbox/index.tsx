@@ -37,16 +37,17 @@ function Checkbox({
       <TouchableOpacity onPress={toggleCheckbox}>
         <View
           className={cn(
-            'size-10 border border-border rounded-md flex justify-center items-center',
+            'size-10 border-0.5 border-border rounded-md flex justify-center items-center',
             {
               'border-primary bg-primary': isChecked,
             },
             checkboxClasses
           )}
         >
-          {isChecked && (
-            <Check className={cn('text-muted', { 'dark:text-muted-foreground': !isChecked })} size={16} />
-          )}
+          <Check className={cn(
+            'text-muted',
+            { 'dark:text-muted-foreground opacity-80': !isChecked },
+          )} size={16} />
         </View>
       </TouchableOpacity>
       {label && (
