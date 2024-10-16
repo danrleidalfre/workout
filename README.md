@@ -7,6 +7,7 @@
 - DrizzleORM
 - Fastify
 - Zod
+- dayjs
 
 ```bash
 cd server

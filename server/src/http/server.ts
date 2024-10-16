@@ -5,6 +5,7 @@ import {
   validatorCompiler,
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod'
+import { completionWorkout } from './routes/completion-workout'
 import { createExercise } from './routes/create-exercise'
 import { createWorkout } from './routes/create-workout'
 import { deleteExercise } from './routes/delete-exercise'
@@ -39,6 +40,8 @@ app.register(updateExercise)
 app.register(deleteExercise)
 
 app.register(fetchGroups)
+
+app.register(completionWorkout)
 
 app
   .listen({

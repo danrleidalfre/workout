@@ -55,8 +55,8 @@ export const workoutCompletions = pgTable('workout_completions', {
   workoutId: text('workout_id')
     .references(() => workouts.id, { onDelete: 'cascade' })
     .notNull(),
-  start: timestamp('start', { withTimezone: true }).notNull(),
-  end: timestamp('end', { withTimezone: true }).notNull(),
+  start: timestamp('start').notNull(),
+  end: timestamp('end').notNull(),
 })
 
 export const workoutCompletionSeries = pgTable('workout_completion_series', {
@@ -65,6 +65,9 @@ export const workoutCompletionSeries = pgTable('workout_completion_series', {
     .$defaultFn(() => createId()),
   workoutCompletionId: text('workout_completion_id')
     .references(() => workoutCompletions.id, { onDelete: 'cascade' })
+    .notNull(),
+  exerciseId: text('exercise_id')
+    .references(() => exercises.id, { onDelete: 'cascade' })
     .notNull(),
   reps: integer('reps').notNull(),
   load: real('load').notNull(),

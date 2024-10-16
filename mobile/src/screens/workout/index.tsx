@@ -20,7 +20,7 @@ type WorkoutScreenRouteProps = RouteProp<RoutesProps, 'workout'>;
 type Workout = {
   title: string
   start: string
-  end?: string
+  end: string
   exercises: {
     exerciseId: string
     exerciseTitle: string
@@ -74,11 +74,6 @@ export function Workout() {
     fetchWorkout();
   }, []);
 
-  const onSubmit = (workout: Workout) => {
-    workout.end = new Date().toString()
-    console.log(workout);
-  };
-
   const workout = watch();
 
   const calculateProgress = () => {
@@ -109,6 +104,11 @@ export function Workout() {
   };
 
   const progress = calculateProgress();
+
+  const onSubmit = async (workout: Workout) => {
+    workout.end = new Date().toString()
+    await api.post(`/workouts/${id}/completion`, { ...workout });
+  };
 
   return (
     <>

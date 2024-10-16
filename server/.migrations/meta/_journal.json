@@ -36,6 +36,20 @@
       "when": 1729039279614,
       "tag": "0004_lively_ultimo",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1729043867669,
+      "tag": "0005_sad_black_crow",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1729118047713,
+      "tag": "0006_handy_prima",
+      "breakpoints": true
     }
   ]
 }
