@@ -19,6 +19,8 @@ type WorkoutScreenRouteProps = RouteProp<RoutesProps, 'workout'>;
 
 type Workout = {
   title: string
+  start: string
+  end?: string
   exercises: {
     exerciseId: string
     exerciseTitle: string
@@ -49,6 +51,7 @@ export function Workout() {
 
       reset({
         title: data.title,
+        start: new Date().toString(),
         exercises: data.exercises.map((exercise) => ({
           ...exercise,
           series: exercise.series.map(({ load, reps, completed }) => ({
@@ -72,6 +75,7 @@ export function Workout() {
   }, []);
 
   const onSubmit = (workout: Workout) => {
+    workout.end = new Date().toString()
     console.log(workout);
   };
 
@@ -117,7 +121,7 @@ export function Workout() {
               {workout.exercises?.map((exercise, exerciseIndex) => (
                 <View key={exercise.exerciseId} className="gap-3">
                   <View className="flex-row items-center gap-3">
-                    <View className="size-10 items-center justify-center">
+                    <View className="items-center justify-center">
                       <Dumbbell className="text-primary -rotate-45" size={28} />
                     </View>
                     <Text className="text-primary font-semibold text-xl">
@@ -127,21 +131,17 @@ export function Workout() {
 
                   {exercise.series.map((_, serieIndex) => (
                     <View key={serieIndex} className="flex-row gap-3">
-                      <View className="size-10 items-center justify-center border-0.5 border-input rounded-md flex-[0.1]">
-                        <Text className="text-muted dark:text-muted-foreground">{serieIndex + 1}ª</Text>
-                      </View>
-
                       <Controller
                         name={`exercises.${exerciseIndex}.series.${serieIndex}.load`}
                         control={control}
                         render={({ field: { onChange, value } }) => (
-                          <View className="flex-row items-center flex-[0.4] gap-2" >
+                          <View className="flex-[0.45] flex-col justify-center">
                             <Input
                               value={value === 0 ? '' : String(value)}
                               onChangeText={onChange}
-                              className="flex-[0.85]"
+                              className="w-full"
                             />
-                            <Text className="text-muted dark:text-muted-foreground flex-[0.15]">
+                            <Text className="absolute right-4 text-base text-muted dark:text-muted-foreground">
                               kg
                             </Text>
                           </View>
@@ -152,13 +152,13 @@ export function Workout() {
                         name={`exercises.${exerciseIndex}.series.${serieIndex}.reps`}
                         control={control}
                         render={({ field: { onChange, value } }) => (
-                          <View className="flex-row items-center flex-[0.4] gap-2" >
+                          <View className="flex-[0.45] flex-col justify-center" >
                             <Input
                               value={value === 0 ? '' : String(value)}
                               onChangeText={onChange}
-                              className="flex-[0.75]"
+                              className="w-full"
                             />
-                            <Text className="text-muted dark:text-muted-foreground flex-[0.25]">
+                            <Text className="absolute right-4 text-base text-muted dark:text-muted-foreground">
                               reps
                             </Text>
                           </View>
