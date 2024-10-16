@@ -1,5 +1,5 @@
 import { createId } from '@paralleldrive/cuid2'
-import { integer, pgTable, real, text } from 'drizzle-orm/pg-core'
+import { integer, pgTable, real, text, timestamp } from 'drizzle-orm/pg-core'
 
 export const workouts = pgTable('workouts', {
   id: text('id')
@@ -46,4 +46,26 @@ export const workoutExerciseSeries = pgTable('workout_exercise_series', {
     .notNull(),
   reps: integer('reps').notNull(),
   load: real('load'),
+})
+
+export const workoutCompletions = pgTable('workout_completions', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  workoutId: text('workout_id')
+    .references(() => workouts.id, { onDelete: 'cascade' })
+    .notNull(),
+  start: timestamp('start', { withTimezone: true }).notNull(),
+  end: timestamp('end', { withTimezone: true }).notNull(),
+})
+
+export const workoutCompletionSeries = pgTable('workout_completion_series', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  workoutCompletionId: text('workout_completion_id')
+    .references(() => workoutCompletions.id, { onDelete: 'cascade' })
+    .notNull(),
+  reps: integer('reps').notNull(),
+  load: real('load').notNull(),
 })

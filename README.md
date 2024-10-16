@@ -40,6 +40,8 @@ npm run web
 - React Native + Typescript
 - NativeWind
 - Lucide Icons
+- Axios
+- React Hook Form
 
 ```bash
 cd mobile
