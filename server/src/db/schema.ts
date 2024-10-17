@@ -35,6 +35,7 @@ export const workoutExercises = pgTable('workout_exercises', {
   exerciseId: text('exercise_id')
     .references(() => exercises.id, { onDelete: 'cascade' })
     .notNull(),
+  order: integer('order').notNull(),
 })
 
 export const workoutExerciseSeries = pgTable('workout_exercise_series', {
@@ -45,7 +46,8 @@ export const workoutExerciseSeries = pgTable('workout_exercise_series', {
     .references(() => workoutExercises.id, { onDelete: 'cascade' })
     .notNull(),
   reps: integer('reps').notNull(),
-  load: real('load'),
+  load: real('load').notNull(),
+  order: integer('order').notNull(),
 })
 
 export const workoutCompletions = pgTable('workout_completions', {

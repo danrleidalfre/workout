@@ -36,6 +36,7 @@ export const fetchWorkouts: FastifyPluginAsyncZod = async app => {
         .leftJoin(exercises, eq(workoutExercises.exerciseId, exercises.id))
         .leftJoin(groups, eq(exercises.groupId, groups.id))
         .where(search ? ilike(workouts.title, `%${search}%`) : undefined)
+        .orderBy(workouts.title)
 
       return result.reduce((acc: Workout[], row) => {
         let workout = acc.find(w => w.title === row.workoutTitle)

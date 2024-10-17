@@ -48,20 +48,25 @@ export const updateWorkout: FastifyPluginAsyncZod = async app => {
       }
 
       await Promise.all(
-        exercises.map(async exercise => {
+        exercises.map(async (exercise, index) => {
           const [workoutExercise] = await db
             .insert(workoutExercises)
-            .values({ workoutId: id, exerciseId: exercise.exerciseId })
+            .values({
+              workoutId: id,
+              exerciseId: exercise.exerciseId,
+              order: index + 1,
+            })
             .returning({ id: workoutExercises.id })
 
           await Promise.all(
-            exercise.series.map(async serie => {
+            exercise.series.map(async (serie, index) => {
               const { load, reps } = serie
 
               await db.insert(workoutExerciseSeries).values({
                 workoutExerciseId: workoutExercise.id,
                 load,
                 reps,
+                order: index + 1,
               })
             })
           )

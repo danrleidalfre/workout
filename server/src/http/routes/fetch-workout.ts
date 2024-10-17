@@ -26,10 +26,12 @@ export const fetchWorkout: FastifyPluginAsyncZod = async app => {
         .select({
           workoutTitle: workouts.title,
           exerciseId: workoutExercises.exerciseId,
+          exerciseOrder: workoutExercises.order,
           exerciseTitle: exercises.title,
           serieId: workoutExerciseSeries.id,
           reps: workoutExerciseSeries.reps,
           load: workoutExerciseSeries.load,
+          order: workoutExerciseSeries.order,
         })
         .from(workouts)
         .leftJoin(workoutExercises, eq(workouts.id, workoutExercises.workoutId))
@@ -39,6 +41,7 @@ export const fetchWorkout: FastifyPluginAsyncZod = async app => {
           eq(workoutExercises.id, workoutExerciseSeries.workoutExerciseId)
         )
         .where(eq(workouts.id, id))
+        .orderBy(workoutExercises.order)
 
       return {
         title: result[0]?.workoutTitle || null,
@@ -60,6 +63,12 @@ export const fetchWorkout: FastifyPluginAsyncZod = async app => {
               reps: row.reps || 0,
               load: row.load,
               completed: false,
+            })
+
+            exercise.series.sort((a, b) => {
+              const serieA = result.find(r => r.serieId === a.serieId)
+              const serieB = result.find(r => r.serieId === b.serieId)
+              return (serieA?.order ?? 0) - (serieB?.order ?? 0)
             })
 
             return acc

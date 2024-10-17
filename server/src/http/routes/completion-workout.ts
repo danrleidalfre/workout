@@ -53,7 +53,7 @@ export const completionWorkout: FastifyPluginAsyncZod = async app => {
         exercises.map(async exercise => {
           exercise.series.map(async serie => {
             const { serieId, load, reps, completed } = serie
-            if (completed) {
+            if (completed && load > 0 && reps > 0) {
               await db
                 .update(workoutExerciseSeries)
                 .set({ load, reps })
