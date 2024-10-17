@@ -1,6 +1,11 @@
 import { db } from '@/db'
-import { workoutCompletions, workoutCompletionSeries } from '@/db/schema'
+import {
+  workoutCompletions,
+  workoutCompletionSeries,
+  workoutExerciseSeries,
+} from '@/db/schema'
 import { dayjs } from '@/lib/dayjs'
+import { eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 
@@ -20,6 +25,7 @@ export const completionWorkout: FastifyPluginAsyncZod = async app => {
               exerciseId: z.string(),
               series: z.array(
                 z.object({
+                  serieId: z.string(),
                   load: z.coerce.number(),
                   reps: z.coerce.number(),
                   completed: z.boolean(),
@@ -46,8 +52,13 @@ export const completionWorkout: FastifyPluginAsyncZod = async app => {
       await Promise.all(
         exercises.map(async exercise => {
           exercise.series.map(async serie => {
-            const { completed, load, reps } = serie
+            const { serieId, load, reps, completed } = serie
             if (completed) {
+              await db
+                .update(workoutExerciseSeries)
+                .set({ load, reps })
+                .where(eq(workoutExerciseSeries.id, serieId))
+
               await db.insert(workoutCompletionSeries).values({
                 workoutCompletionId: workoutCompletion.id,
                 exerciseId: exercise.exerciseId,

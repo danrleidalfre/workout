@@ -25,6 +25,7 @@ type Workout = {
     exerciseId: string
     exerciseTitle: string
     series: {
+      serieId: string
       load: number
       reps: number
       completed: boolean
@@ -39,9 +40,8 @@ export function Workout() {
   const { onSetTitle } = useHeaderTitle();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { control, handleSubmit, reset, watch } = useForm({
+  const { control, handleSubmit, reset, watch, formState: { isSubmitting } } = useForm({
     defaultValues: {} as Workout,
   });
 
@@ -56,7 +56,8 @@ export function Workout() {
         start: new Date().toString(),
         exercises: data.exercises.map((exercise) => ({
           ...exercise,
-          series: exercise.series.map(({ load, reps, completed }) => ({
+          series: exercise.series.map(({ serieId, load, reps, completed }) => ({
+            serieId,
             load,
             reps,
             completed,
@@ -111,15 +112,11 @@ export function Workout() {
     try {
       workout.end = new Date().toString()
 
-      setIsSubmitting(true)
-
       await api.post(`/workouts/${id}/completion`, { ...workout });
 
       navigation.navigate('workouts')
     } catch (error) {
       console.error(error);
-    } finally {
-      setIsSubmitting(false)
     }
   };
 
