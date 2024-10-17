@@ -2,6 +2,7 @@ import { cn } from '@/lib/utils';
 import { type VariantProps, cva } from 'class-variance-authority';
 import type { LucideIcon } from 'lucide-react-native';
 import { Text, TouchableOpacity, View } from 'react-native';
+import { LoaderCircle } from '../icons/loader';
 
 const buttonVariants = cva(
   'flex flex-row items-center justify-center rounded-md',
@@ -64,6 +65,7 @@ interface ButtonProps
   labelClasses?: string;
   icon?: LucideIcon;
   iconAfterLabel?: boolean
+  isLoading?: boolean
 }
 
 function Button({
@@ -74,6 +76,7 @@ function Button({
   size,
   icon: Icon,
   iconAfterLabel,
+  isLoading = false,
   ...props
 }: ButtonProps) {
   const iconSizes = {
@@ -85,18 +88,30 @@ function Button({
 
   return (
     <TouchableOpacity
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(
+        buttonVariants({ variant, size, className }),
+        { 'opacity-50': isLoading },
+      )}
+      disabled={isLoading}
       {...props}
     >
       <View className={cn(
         'flex-row items-center gap-1',
         { 'flex-row-reverse': iconAfterLabel }
       )}>
-        {Icon && (
+        {Icon && !isLoading && (
           <Icon
             size={iconSize}
             className={cn(iconVariants({ variant, className: labelClasses }))}
           />
+        )}
+        {isLoading && (
+          <View className='animate-spin'>
+            <LoaderCircle
+              size={iconSize}
+              className={cn(iconVariants({ variant, className: labelClasses }))}
+            />
+          </View>
         )}
         <Text
           className={cn(

@@ -13,10 +13,6 @@ type Props = {
 export function WorkoutCard({ workout }: Props) {
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
-  function handleNavigateToWorkout() {
-    navigation.navigate('workout', { id: workout.id })
-  }
-
   return (
     <View className="border-0.25 border-card dark:border-card-foreground p-4 justify-between mt-4 rounded-md gap-2">
       <View className="flex-row justify-between items-center w-full">
@@ -32,7 +28,7 @@ export function WorkoutCard({ workout }: Props) {
         label="Iniciar"
         iconAfterLabel
         icon={ChevronRight}
-        onPress={handleNavigateToWorkout}
+        onPress={() => navigation.navigate('workout', { id: workout.id })}
       />
     </View>
   )

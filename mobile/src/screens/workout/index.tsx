@@ -8,8 +8,8 @@ import { Input } from "@/components/input";
 import { Progress } from "@/components/progress";
 import { useHeaderTitle } from "@/hooks/useHeaderTitle";
 import { api } from "@/lib/axios";
-import { RoutesProps } from "@/routes";
-import { RouteProp, useRoute } from "@react-navigation/native";
+import { AppNavigatorRoutesProps, RoutesProps } from "@/routes";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { ScrollView, Text, View } from "react-native";
@@ -34,10 +34,12 @@ type Workout = {
 
 export function Workout() {
   const { params } = useRoute<WorkoutScreenRouteProps>();
+  const navigation = useNavigation<AppNavigatorRoutesProps>()
   const { id } = params;
   const { onSetTitle } = useHeaderTitle();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { control, handleSubmit, reset, watch } = useForm({
     defaultValues: {} as Workout,
@@ -64,7 +66,7 @@ export function Workout() {
 
       onSetTitle(data.title);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -106,8 +108,19 @@ export function Workout() {
   const progress = calculateProgress();
 
   const onSubmit = async (workout: Workout) => {
-    workout.end = new Date().toString()
-    await api.post(`/workouts/${id}/completion`, { ...workout });
+    try {
+      workout.end = new Date().toString()
+
+      setIsSubmitting(true)
+
+      await api.post(`/workouts/${id}/completion`, { ...workout });
+
+      navigation.navigate('workouts')
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsSubmitting(false)
+    }
   };
 
   return (
@@ -141,7 +154,7 @@ export function Workout() {
                               onChangeText={onChange}
                               className="w-full"
                             />
-                            <Text className="absolute right-4 text-base text-muted dark:text-muted-foreground">
+                            <Text className="absolute right-4 text-base text-muted dark:text-muted-foreground opacity-50">
                               kg
                             </Text>
                           </View>
@@ -158,7 +171,7 @@ export function Workout() {
                               onChangeText={onChange}
                               className="w-full"
                             />
-                            <Text className="absolute right-4 text-base text-muted dark:text-muted-foreground">
+                            <Text className="absolute right-4 text-base text-muted dark:text-muted-foreground opacity-50">
                               reps
                             </Text>
                           </View>
@@ -181,13 +194,20 @@ export function Workout() {
                 </View>
               ))}
             </View>
-            <View className="flex-row mt-4 gap-4 mb-60">
-              <Button label="Descartar" icon={Trash2} variant="destructive" className="flex-[0.5]" />
+            <View className="flex-row mt-6 gap-4 mb-60">
               <Button
-                label="Concluir"
+                label="Descartar"
+                icon={Trash2}
+                variant="destructive"
+                className="flex-[0.5]"
+                onPress={() => navigation.navigate('workouts')}
+              />
+              <Button
+                label={isSubmitting ? 'Finalizando...' : 'Finalizar'}
                 icon={CheckCircle2}
                 className="flex-[0.5]"
                 onPress={handleSubmit(onSubmit)}
+                isLoading={isSubmitting}
               />
             </View>
           </>
