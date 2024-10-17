@@ -10,6 +10,7 @@ const badgeVariants = cva(
       variant: {
         primary: 'bg-primary',
         secondary: 'bg-secondary-foreground dark:bg-secondary',
+        outline: 'border-0.5 border-primary',
         destructive: 'bg-destructive',
       },
     },
@@ -24,6 +25,7 @@ const badgeTextVariants = cva('font-medium text-center text-sm', {
     variant: {
       primary: 'text-primary-foreground',
       secondary: 'text-secondary dark:text-secondary-foreground',
+      outline: 'text-primary',
       destructive: 'text-destructive-foreground',
     },
   },

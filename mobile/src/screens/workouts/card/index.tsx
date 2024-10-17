@@ -19,7 +19,7 @@ export function WorkoutCard({ workout }: Props) {
         <Text className="text-muted dark:text-muted-foreground text-xl font-bold">{workout.title}</Text>
         <View className="flex-row gap-1">
           {workout.groups.map(group => (
-            <Badge key={group} label={group} variant="secondary" />
+            <Badge key={group} label={group} variant="outline" />
           ))}
         </View>
       </View>
