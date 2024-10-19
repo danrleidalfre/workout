@@ -1,3 +1,4 @@
+import { fetchSeriesByGroupCompletions } from '@/api/fetch-series-by-group-completions'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   type ChartConfig,
@@ -5,17 +6,10 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
+import { useQuery } from '@tanstack/react-query'
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from 'recharts'
 
-const chartData = [
-  { group: 'Pernas', series: 186 },
-  { group: 'Costas', series: 305 },
-  { group: 'Peito', series: 237 },
-  { group: 'Braços', series: 273 },
-  { group: 'Ombros', series: 209 },
-]
-
-const chartConfig = {
+const config = {
   series: {
     label: 'Séries',
     color: 'hsl(var(--chart-1))',
@@ -23,14 +17,20 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function HomeChartRadar() {
+  const { data } = useQuery({
+    queryKey: ['workouts-series-by-group-completions'],
+    queryFn: fetchSeriesByGroupCompletions,
+    staleTime: 60 * 1000,
+  })
+
   return (
     <Card>
       <CardHeader className="items-center">
         <CardTitle>Séries por agrupamento</CardTitle>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="mx-auto aspect-square">
-          <RadarChart data={chartData}>
+        <ChartContainer config={config} className="mx-auto aspect-square">
+          <RadarChart data={data}>
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <PolarAngleAxis dataKey="group" />
             <PolarGrid />

@@ -5,7 +5,7 @@ import {
   workouts,
 } from '@/db/schema'
 import { dayjs } from '@/lib/dayjs'
-import { countDistinct, eq, sum } from 'drizzle-orm'
+import { countDistinct, desc, eq, sum } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 
 export const fetchWorkoutsCompletions: FastifyPluginAsyncZod = async app => {
@@ -32,6 +32,7 @@ export const fetchWorkoutsCompletions: FastifyPluginAsyncZod = async app => {
         workoutCompletions.start,
         workoutCompletions.end
       )
+      .orderBy(desc(workoutCompletions.end))
 
     return completions.map(completion => ({
       id: completion.id,
