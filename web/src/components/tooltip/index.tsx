@@ -14,7 +14,7 @@ type Props = {
 export function Tooltip({ content, children }: Props) {
   return (
     <TooltipProvider>
-      <TooltipBase>
+      <TooltipBase delayDuration={100}>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent>{content}</TooltipContent>
       </TooltipBase>
