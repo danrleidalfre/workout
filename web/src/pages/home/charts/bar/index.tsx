@@ -1,3 +1,4 @@
+import { fetchVolumeByWeekCompletions } from '@/api/fetch-volume-by-week-completions'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   type ChartConfig,
@@ -5,19 +6,10 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
+import { useQuery } from '@tanstack/react-query'
 import { Bar, BarChart, XAxis } from 'recharts'
 
-const chartData = [
-  { month: '17/09 - 24/09', volume: 50 },
-  { month: '25/09 - 31/09', volume: 70 },
-  { month: '01/09 - 07/09', volume: 60 },
-  { month: '08/09 - 14/09', volume: 55 },
-  { month: '15/09 - 21/09', volume: 65 },
-  { month: '22/09 - 28/09', volume: 70 },
-  { month: 'Semana atual', volume: 30 },
-]
-
-const chartConfig = {
+const config = {
   volume: {
     label: 'Volume',
     color: 'hsl(var(--chart-1))',
@@ -25,15 +17,23 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function HomeChartBar() {
+  const { data } = useQuery({
+    queryKey: ['workouts-volume-by-week-completions'],
+    queryFn: fetchVolumeByWeekCompletions,
+    staleTime: 60 * 1000,
+  })
+
+  console.log(data)
+
   return (
     <Card>
       <CardHeader className="items-center">
         <CardTitle>Volume de treino</CardTitle>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
-            <XAxis dataKey="month" hide />
+        <ChartContainer config={config}>
+          <BarChart accessibilityLayer data={data}>
+            <XAxis dataKey="date" hide />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent />}
@@ -41,7 +41,7 @@ export function HomeChartBar() {
                 <div className="flex justify-between min-w-[120px] items-center text-xs text-muted-foreground">
                   Volume
                   <div className="flex font-medium text-foreground">
-                    {value}k
+                    {value} kg
                   </div>
                 </div>
               )}

@@ -14,6 +14,7 @@ import { fetchExercise } from './routes/fetch-exercise'
 import { fetchExercises } from './routes/fetch-exercises'
 import { fetchGroups } from './routes/fetch-groups'
 import { fetchSeriesByGroupCompletions } from './routes/fetch-series-by-group-completions'
+import { fetchVolumeByWeekCompletions } from './routes/fetch-volume-by-week-completions'
 import { fetchWorkout } from './routes/fetch-workout'
 import { fetchWorkouts } from './routes/fetch-workouts'
 import { fetchWorkoutsCompletions } from './routes/fetch-workouts-completions'
@@ -37,6 +38,7 @@ app.register(deleteWorkout)
 app.register(completionWorkout)
 app.register(fetchWorkoutsCompletions)
 app.register(fetchSeriesByGroupCompletions)
+app.register(fetchVolumeByWeekCompletions)
 
 app.register(createExercise)
 app.register(fetchExercise)
