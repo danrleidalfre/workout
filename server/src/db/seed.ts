@@ -2,12 +2,16 @@ import { client, db } from '.'
 import {
   exercises,
   groups,
+  workoutCompletions,
+  workoutCompletionSeries,
   workoutExercises,
   workoutExerciseSeries,
   workouts,
 } from './schema'
 
 async function seed() {
+  await db.delete(workoutCompletionSeries)
+  await db.delete(workoutCompletions)
   await db.delete(workoutExerciseSeries)
   await db.delete(workoutExercises)
   await db.delete(exercises)
