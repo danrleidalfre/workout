@@ -33,6 +33,7 @@ export const fetchWorkoutsCompletions: FastifyPluginAsyncZod = async app => {
         workoutCompletions.end
       )
       .orderBy(desc(workoutCompletions.end))
+      .limit(8)
 
     return completions.map(completion => ({
       id: completion.id,
