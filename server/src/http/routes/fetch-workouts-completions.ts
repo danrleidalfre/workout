@@ -32,7 +32,7 @@ export const fetchWorkoutsCompletions: FastifyPluginAsyncZod = async app => {
         workoutCompletions.end
       )
       .orderBy(desc(workoutCompletions.end))
-      .limit(8)
+      .limit(3)
 
     const completionWithVolume = await Promise.all(
       completions.map(async completion => {

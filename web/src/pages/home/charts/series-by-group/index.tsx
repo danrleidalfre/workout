@@ -16,7 +16,7 @@ const config = {
   },
 } satisfies ChartConfig
 
-export function HomeChartRadar() {
+export function HomeChartSeriesByGroup() {
   const { data } = useQuery({
     queryKey: ['workouts-series-by-group-completions'],
     queryFn: fetchSeriesByGroupCompletions,

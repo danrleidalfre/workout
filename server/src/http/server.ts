@@ -18,6 +18,7 @@ import { fetchSeriesByGroupCompletions } from './routes/fetch-series-by-group-co
 import { fetchVolumeByWeekCompletions } from './routes/fetch-volume-by-week-completions'
 import { fetchWorkout } from './routes/fetch-workout'
 import { fetchWorkouts } from './routes/fetch-workouts'
+import { fetchWorkoutsByMonthCompletions } from './routes/fetch-workouts-by-month-completions'
 import { fetchWorkoutsCompletions } from './routes/fetch-workouts-completions'
 import { updateExercise } from './routes/update-exercise'
 import { updateWorkout } from './routes/update-workout'
@@ -41,6 +42,7 @@ app.register(fetchWorkoutsCompletions)
 app.register(fetchSeriesByGroupCompletions)
 app.register(fetchVolumeByWeekCompletions)
 app.register(fetchDurationByWeekCompletions)
+app.register(fetchWorkoutsByMonthCompletions)
 
 app.register(createExercise)
 app.register(fetchExercise)

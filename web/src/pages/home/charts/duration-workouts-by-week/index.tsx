@@ -16,7 +16,7 @@ const config = {
   },
 } satisfies ChartConfig
 
-export function HomeChartArea() {
+export function HomeChartDurationWorkoutsByWeek() {
   const { data } = useQuery({
     queryKey: ['workouts-duration-by-week-completions'],
     queryFn: fetchDurationByWeekCompletions,

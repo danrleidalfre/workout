@@ -16,7 +16,7 @@ const config = {
   },
 } satisfies ChartConfig
 
-export function HomeChartBar() {
+export function HomeChartVolumeWorkoutsByWeek() {
   const { data } = useQuery({
     queryKey: ['workouts-volume-by-week-completions'],
     queryFn: fetchVolumeByWeekCompletions,
