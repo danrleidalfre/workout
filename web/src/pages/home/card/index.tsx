@@ -39,7 +39,7 @@ export function HomeCard() {
                   className="size-4 text-muted-foreground"
                 />
               </Tooltip>
-              <Tooltip content={`${workout.load} kg`}>
+              <Tooltip content={`${workout.load}kg`}>
                 <Weight
                   strokeWidth={1}
                   className="size-4 text-muted-foreground"

@@ -1,5 +1,4 @@
-import { Area, AreaChart, XAxis, YAxis } from 'recharts'
-
+import { fetchDurationByWeekCompletions } from '@/api/fetch-duration-by-week-completions'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   type ChartConfig,
@@ -7,39 +6,10 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
+import { useQuery } from '@tanstack/react-query'
+import { Area, AreaChart, XAxis, YAxis } from 'recharts'
 
-const chartData = [
-  {
-    date: '17/09 - 24/09',
-    time: 20,
-  },
-  {
-    date: '25/09 - 31/09',
-    time: 18,
-  },
-  {
-    date: '01/09 - 07/09',
-    time: 15,
-  },
-  {
-    date: '08/09 - 14/09',
-    time: 17,
-  },
-  {
-    date: '15/09 - 21/09',
-    time: 22,
-  },
-  {
-    date: '22/09 - 28/09',
-    time: 20,
-  },
-  {
-    date: 'Semana atual',
-    time: 10,
-  },
-]
-
-const chartConfig = {
+const config = {
   time: {
     label: 'Duração',
     color: 'hsl(var(--chart-1))',
@@ -47,16 +17,22 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function HomeChartArea() {
+  const { data } = useQuery({
+    queryKey: ['workouts-duration-by-week-completions'],
+    queryFn: fetchDurationByWeekCompletions,
+    staleTime: 60 * 1000,
+  })
+
   return (
     <Card>
       <CardHeader className="items-center">
         <CardTitle>Duração de treino</CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        <ChartContainer config={chartConfig}>
+        <ChartContainer config={config}>
           <AreaChart
             accessibilityLayer
-            data={chartData}
+            data={data}
             margin={{
               left: 0,
               right: 0,
@@ -64,7 +40,7 @@ export function HomeChartArea() {
               bottom: 0,
             }}
           >
-            <XAxis dataKey="date" hide />
+            <XAxis dataKey="week" hide />
             <YAxis domain={['dataMin - 5', 'dataMax + 2']} hide />
             <defs>
               <linearGradient id="fillTime" x1="0" y1="0" x2="0" y2="1">
@@ -81,7 +57,7 @@ export function HomeChartArea() {
               </linearGradient>
             </defs>
             <Area
-              dataKey="time"
+              dataKey="duration"
               type="natural"
               fill="url(#fillTime)"
               fillOpacity={0.4}

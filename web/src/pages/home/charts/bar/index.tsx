@@ -23,8 +23,6 @@ export function HomeChartBar() {
     staleTime: 60 * 1000,
   })
 
-  console.log(data)
-
   return (
     <Card>
       <CardHeader className="items-center">
@@ -33,7 +31,7 @@ export function HomeChartBar() {
       <CardContent>
         <ChartContainer config={config}>
           <BarChart accessibilityLayer data={data}>
-            <XAxis dataKey="date" hide />
+            <XAxis dataKey="week" hide />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent />}
@@ -41,7 +39,7 @@ export function HomeChartBar() {
                 <div className="flex justify-between min-w-[120px] items-center text-xs text-muted-foreground">
                   Volume
                   <div className="flex font-medium text-foreground">
-                    {value} kg
+                    {value}kg
                   </div>
                 </div>
               )}

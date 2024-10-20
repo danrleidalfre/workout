@@ -10,6 +10,7 @@ import { createExercise } from './routes/create-exercise'
 import { createWorkout } from './routes/create-workout'
 import { deleteExercise } from './routes/delete-exercise'
 import { deleteWorkout } from './routes/delete-workout'
+import { fetchDurationByWeekCompletions } from './routes/fetch-duration-by-week-completions'
 import { fetchExercise } from './routes/fetch-exercise'
 import { fetchExercises } from './routes/fetch-exercises'
 import { fetchGroups } from './routes/fetch-groups'
@@ -39,6 +40,7 @@ app.register(completionWorkout)
 app.register(fetchWorkoutsCompletions)
 app.register(fetchSeriesByGroupCompletions)
 app.register(fetchVolumeByWeekCompletions)
+app.register(fetchDurationByWeekCompletions)
 
 app.register(createExercise)
 app.register(fetchExercise)
