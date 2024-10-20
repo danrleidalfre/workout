@@ -5,7 +5,7 @@ import {
   workouts,
 } from '@/db/schema'
 import { dayjs } from '@/lib/dayjs'
-import { countDistinct, desc, eq, sum } from 'drizzle-orm'
+import { countDistinct, desc, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 
 export const fetchWorkoutsCompletions: FastifyPluginAsyncZod = async app => {
@@ -16,7 +16,6 @@ export const fetchWorkoutsCompletions: FastifyPluginAsyncZod = async app => {
         workout: workouts.title,
         start: workoutCompletions.start,
         end: workoutCompletions.end,
-        load: sum(workoutCompletionSeries.load),
         exercises: countDistinct(workoutCompletionSeries.exerciseId),
         series: countDistinct(workoutCompletionSeries.id),
       })
@@ -35,12 +34,34 @@ export const fetchWorkoutsCompletions: FastifyPluginAsyncZod = async app => {
       .orderBy(desc(workoutCompletions.end))
       .limit(8)
 
-    return completions.map(completion => ({
+    const completionWithVolume = await Promise.all(
+      completions.map(async completion => {
+        const loadAndReps = await db
+          .select({
+            load: workoutCompletionSeries.load,
+            reps: workoutCompletionSeries.reps,
+          })
+          .from(workoutCompletionSeries)
+          .where(eq(workoutCompletionSeries.workoutCompletionId, completion.id))
+
+        const totalVolume = loadAndReps.reduce(
+          (acc, { load, reps }) => acc + load * reps,
+          0
+        )
+
+        return {
+          ...completion,
+          totalVolume,
+        }
+      })
+    )
+
+    return completionWithVolume.map(completion => ({
       id: completion.id,
       workout: completion.workout,
       duration: dayjs(completion.end).from(completion.start, true),
       completedAgo: dayjs(completion.end).fromNow(),
-      load: Number(completion.load),
+      load: Number(completion.totalVolume),
       exercises: Number(completion.exercises),
       series: Number(completion.series),
     }))

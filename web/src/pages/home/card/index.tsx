@@ -22,13 +22,13 @@ export function HomeCard() {
         {workouts?.map(workout => (
           <div
             key={workout.id}
-            className="border-b pb-2 flex items-center justify-between"
+            className="border-b pb-3 flex items-center justify-between"
           >
             <div className="grid gap-1">
               <p className="font-bold text-base text-primary">
                 {workout.workout}
               </p>
-              <p className="text-sm font-medium text-muted-foreground">
+              <p className="text-xs font-medium text-muted-foreground">
                 {workout.completedAgo}
               </p>
             </div>
@@ -36,25 +36,25 @@ export function HomeCard() {
               <Tooltip content={workout.duration}>
                 <Clock
                   strokeWidth={1}
-                  className="size-4 text-muted-foreground"
+                  className="size-5 text-muted-foreground"
                 />
               </Tooltip>
               <Tooltip content={`${workout.load}kg`}>
                 <Weight
                   strokeWidth={1}
-                  className="size-4 text-muted-foreground"
+                  className="size-5 text-muted-foreground"
                 />
               </Tooltip>
               <Tooltip content={`${workout.series} séries`}>
                 <Repeat
                   strokeWidth={1}
-                  className="size-4 text-muted-foreground"
+                  className="size-5 text-muted-foreground"
                 />
               </Tooltip>
               <Tooltip content={`${workout.exercises} exercícios`}>
                 <Dumbbell
                   strokeWidth={1}
-                  className="size-4 text-muted-foreground"
+                  className="size-5 text-muted-foreground -rotate-45"
                 />
               </Tooltip>
             </div>
