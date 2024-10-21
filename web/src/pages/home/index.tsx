@@ -4,6 +4,7 @@ import { fetchVolumeByWeekCompletions } from '@/api/fetch-volume-by-week-complet
 import { fetchWorkoutsByMonthCompletions } from '@/api/fetch-workouts-by-month-completions'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useQuery } from '@tanstack/react-query'
+import { subMonths } from 'date-fns'
 import { HomeCard } from './card'
 import { HomeChartDurationWorkoutsByWeek } from './charts/duration-workouts-by-week'
 import { HomeChartSeriesByGroup } from './charts/series-by-group'
@@ -16,10 +17,15 @@ export function Home() {
     queryFn: fetchWorkoutsByMonthCompletions,
   })
 
-  const { isFetching: isLoadingSeriesByGroup } = useQuery({
-    queryKey: ['workouts-series-by-group-completions'],
-    queryFn: fetchSeriesByGroupCompletions,
-  })
+  const { data: initialDataSeriesByGroup, isFetching: isLoadingSeriesByGroup } =
+    useQuery({
+      queryKey: ['workouts-series-by-group-completions'],
+      queryFn: () =>
+        fetchSeriesByGroupCompletions({
+          start: subMonths(new Date(), 6),
+          end: new Date(),
+        }),
+    })
 
   const { isFetching: isLoadingDurationByWeek } = useQuery({
     queryKey: ['workouts-duration-by-week-completions'],
@@ -44,7 +50,7 @@ export function Home() {
       {isLoadingSeriesByGroup ? (
         <Skeleton className="size-full" />
       ) : (
-        <HomeChartSeriesByGroup />
+        <HomeChartSeriesByGroup initialData={initialDataSeriesByGroup} />
       )}
       <div className="grid gap-4">
         {isLoadingVolumeByWeek ? (

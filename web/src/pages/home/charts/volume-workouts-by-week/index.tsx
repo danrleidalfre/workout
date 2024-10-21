@@ -1,5 +1,11 @@
 import { fetchVolumeByWeekCompletions } from '@/api/fetch-volume-by-week-completions'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import {
   type ChartConfig,
   ChartContainer,
@@ -25,8 +31,9 @@ export function HomeChartVolumeWorkoutsByWeek() {
 
   return (
     <Card>
-      <CardHeader className="items-center">
+      <CardHeader className="flex-row items-center justify-between">
         <CardTitle>Volume de treino</CardTitle>
+        <CardDescription>nas últimas semanas</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={config}>

@@ -1,5 +1,11 @@
 import { fetchDurationByWeekCompletions } from '@/api/fetch-duration-by-week-completions'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import {
   type ChartConfig,
   ChartContainer,
@@ -25,8 +31,9 @@ export function HomeChartDurationWorkoutsByWeek() {
 
   return (
     <Card>
-      <CardHeader className="items-center">
+      <CardHeader className="flex-row items-center justify-between">
         <CardTitle>Duração de treino</CardTitle>
+        <CardDescription>nas últimas semanas</CardDescription>
       </CardHeader>
       <CardContent className="p-0">
         <ChartContainer config={config}>

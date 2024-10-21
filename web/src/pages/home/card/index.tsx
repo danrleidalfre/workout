@@ -13,7 +13,7 @@ export function HomeCard() {
 
   return (
     <Card>
-      <CardHeader className="items-center">
+      <CardHeader>
         <CardTitle>Últimos treinos realizados</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-6">

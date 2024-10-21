@@ -3,7 +3,13 @@
 import { Bar, BarChart, LabelList, XAxis, YAxis } from 'recharts'
 
 import { fetchWorkoutsByMonthCompletions } from '@/api/fetch-workouts-by-month-completions'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import { type ChartConfig, ChartContainer } from '@/components/ui/chart'
 import { useQuery } from '@tanstack/react-query'
 
@@ -26,8 +32,9 @@ export function HomeChartTotalWorkoutsByMonth() {
 
   return (
     <Card>
-      <CardHeader className="items-center">
+      <CardHeader className="flex-row items-center justify-between">
         <CardTitle>Total de treinos</CardTitle>
+        <CardDescription>nos últimos meses</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={config}>
