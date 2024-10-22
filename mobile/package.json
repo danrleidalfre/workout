@@ -15,7 +15,7 @@
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "expo": "~51.0.37",
+    "expo": "~51.0.38",
     "expo-status-bar": "~1.12.1",
     "lucide-react-native": "^0.447.0",
     "nativewind": "^4.0.1",

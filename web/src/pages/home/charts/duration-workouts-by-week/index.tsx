@@ -48,7 +48,7 @@ export function HomeChartDurationWorkoutsByWeek() {
             }}
           >
             <XAxis dataKey="week" hide />
-            <YAxis domain={['dataMin - 5', 'dataMax + 2']} hide />
+            <YAxis domain={['dataMin', 'dataMax + 0.1']} hide />
             <defs>
               <linearGradient id="fillTime" x1="0" y1="0" x2="0" y2="1">
                 <stop

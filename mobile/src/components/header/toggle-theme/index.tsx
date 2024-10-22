@@ -33,7 +33,7 @@ export function ToggleTheme() {
       onPress={handleSetColorScheme}
     >
       <View className="size-10 items-center justify-center">
-        {colorScheme === 'light'
+        {colorScheme === 'dark'
           ? <Sun className="text-muted" size={28} strokeWidth={1} />
           : <Moon className="text-muted" size={28} strokeWidth={1} />
         }
