@@ -13,33 +13,38 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { ScrollView, Text, View } from "react-native";
+import { CountdownRest } from "./countdown-rest";
 import { WorkoutSkeleton } from "./skeleton";
 
 type WorkoutScreenRouteProps = RouteProp<RoutesProps, 'workout'>;
 
 type Workout = {
-  title: string
-  start: string
-  end: string
+  title: string;
+  start: string;
+  end: string;
   exercises: {
-    exerciseId: string
-    exerciseTitle: string
+    exerciseId: string;
+    exerciseTitle: string;
+    rest: string;
     series: {
-      serieId: string
-      load: number
-      reps: number
-      completed: boolean
-    }[]
-  }[]
-}
+      serieId: string;
+      load: number;
+      reps: number;
+      completed: boolean;
+    }[];
+  }[];
+};
 
 export function Workout() {
   const { params } = useRoute<WorkoutScreenRouteProps>();
-  const navigation = useNavigation<AppNavigatorRoutesProps>()
+  const navigation = useNavigation<AppNavigatorRoutesProps>();
   const { id } = params;
   const { onSetTitle } = useHeaderTitle();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isCountdownActive, setIsCountdownActive] = useState(false);
+  const [currentRestTime, setCurrentRestTime] = useState(0);
+  const [currentExerciseIndex, setCurrentExerciseIndex] = useState<number | null>(null);
 
   const { control, handleSubmit, reset, watch, formState: { isSubmitting } } = useForm({
     defaultValues: {} as Workout,
@@ -110,14 +115,25 @@ export function Workout() {
 
   const onSubmit = async (workout: Workout) => {
     try {
-      workout.end = new Date().toString()
+      workout.end = new Date().toString();
 
       await api.post(`/workouts/${id}/completion`, { ...workout });
 
-      navigation.navigate('workouts')
+      navigation.navigate('workouts');
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleSerieComplete = (exerciseIndex: number, restTime: string) => {
+    setIsCountdownActive(true);
+    setCurrentRestTime(parseInt(restTime, 10));
+    setCurrentExerciseIndex(exerciseIndex);
+  };
+
+  const handleCountdownComplete = () => {
+    setIsCountdownActive(false);
+    setCurrentExerciseIndex(null);
   };
 
   return (
@@ -130,13 +146,20 @@ export function Workout() {
             <View className="gap-6">
               {workout.exercises?.map((exercise, exerciseIndex) => (
                 <View key={exercise.exerciseId} className="gap-3">
-                  <View className="flex-row items-center gap-3">
-                    <View className="items-center justify-center">
+                  <View className="flex-row justify-between items-center">
+                    <View className="flex flex-row items-center gap-3">
                       <Dumbbell className="text-primary -rotate-45" size={28} />
+                      <Text className="text-primary font-semibold text-xl">
+                        {exercise.exerciseTitle}
+                      </Text>
                     </View>
-                    <Text className="text-primary font-semibold text-xl">
-                      {exercise.exerciseTitle}
-                    </Text>
+                    {currentExerciseIndex === exerciseIndex && (
+                      <CountdownRest
+                        restTime={currentRestTime}
+                        start={isCountdownActive}
+                        onComplete={handleCountdownComplete}
+                      />
+                    )}
                   </View>
 
                   {exercise.series.map((_, serieIndex) => (
@@ -162,7 +185,7 @@ export function Workout() {
                         name={`exercises.${exerciseIndex}.series.${serieIndex}.reps`}
                         control={control}
                         render={({ field: { onChange, value } }) => (
-                          <View className="flex-[0.45] flex-col justify-center" >
+                          <View className="flex-[0.45] flex-col justify-center">
                             <Input
                               value={value === 0 ? '' : String(value)}
                               onChangeText={onChange}
@@ -181,7 +204,12 @@ export function Workout() {
                         render={({ field: { onChange, value } }) => (
                           <Checkbox
                             checked={value}
-                            onChange={onChange}
+                            onChange={(checked) => {
+                              onChange(checked);
+                              if (checked) {
+                                handleSerieComplete(exerciseIndex, exercise.rest);
+                              }
+                            }}
                             className="flex-[0.1]"
                           />
                         )}
@@ -191,6 +219,7 @@ export function Workout() {
                 </View>
               ))}
             </View>
+
             <View className="flex-row mt-6 gap-4 mb-60">
               <Button
                 label="Descartar"
