@@ -1,0 +1,1 @@
+ALTER TABLE "workout_exercises" ADD COLUMN "rest" integer NOT NULL;

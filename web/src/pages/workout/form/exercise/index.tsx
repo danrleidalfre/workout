@@ -1,5 +1,6 @@
 import type { Workout } from '@/api/create-workout'
 import { SelectExercises } from '@/components/select-exercises'
+import { SelectRestTime } from '@/components/select-rest-time'
 import { Button } from '@/components/ui/button'
 import { Trash2 } from 'lucide-react'
 import type { Control, UseFormRegister } from 'react-hook-form'
@@ -21,7 +22,7 @@ export function WorkoutFormExercise({
 }: Props) {
   return (
     <div className="grid gap-2">
-      <div className="grid grid-cols-[auto_1fr_auto] gap-2">
+      <div className="grid grid-cols-[auto_1fr_1fr_auto] gap-2">
         <div className="size-9 flex justify-center items-center border rounded-md text-sm bg-primary text-primary-foreground">
           {exerciseIndex + 1}°
         </div>
@@ -32,6 +33,16 @@ export function WorkoutFormExercise({
             <SelectExercises
               selectedExercise={field.value}
               onSelectedExercise={field.onChange}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name={`exercises.${exerciseIndex}.rest`}
+          render={({ field }) => (
+            <SelectRestTime
+              value={field.value}
+              onValueChange={field.onChange}
             />
           )}
         />

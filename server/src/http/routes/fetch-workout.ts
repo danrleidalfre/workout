@@ -27,6 +27,7 @@ export const fetchWorkout: FastifyPluginAsyncZod = async app => {
           workoutTitle: workouts.title,
           exerciseId: workoutExercises.exerciseId,
           exerciseOrder: workoutExercises.order,
+          rest: workoutExercises.rest,
           exerciseTitle: exercises.title,
           serieId: workoutExerciseSeries.id,
           reps: workoutExerciseSeries.reps,
@@ -53,6 +54,7 @@ export const fetchWorkout: FastifyPluginAsyncZod = async app => {
               exercise = {
                 exerciseId: row.exerciseId || '',
                 exerciseTitle: row.exerciseTitle || '',
+                rest: String(row.rest),
                 series: [],
               }
               acc.push(exercise)
@@ -76,6 +78,7 @@ export const fetchWorkout: FastifyPluginAsyncZod = async app => {
           [] as {
             exerciseId: string
             exerciseTitle: string
+            rest: string
             series: {
               serieId: string | null
               reps: number

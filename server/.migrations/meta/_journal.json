@@ -64,6 +64,13 @@
       "when": 1729204155966,
       "tag": "0008_harsh_kid_colt",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1729649594686,
+      "tag": "0009_narrow_black_bolt",
+      "breakpoints": true
     }
   ]
 }

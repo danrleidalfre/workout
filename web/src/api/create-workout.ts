@@ -7,6 +7,7 @@ type Series = {
 
 type Exercise = {
   exerciseId: string
+  rest: string
   series: Series[]
 }
 

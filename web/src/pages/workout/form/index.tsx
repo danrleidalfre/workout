@@ -20,7 +20,7 @@ type Props = {
 
 const defaultValues = {
   title: '',
-  exercises: [{ exerciseId: '', series: [] }],
+  exercises: [{ exerciseId: '', rest: '', series: [] }],
 }
 
 export function WorkoutForm({
@@ -63,6 +63,7 @@ export function WorkoutForm({
           onClick={() =>
             addExercise({
               exerciseId: '',
+              rest: '',
               series: [],
             })
           }

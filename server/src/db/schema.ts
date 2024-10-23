@@ -35,6 +35,7 @@ export const workoutExercises = pgTable('workout_exercises', {
   exerciseId: text('exercise_id')
     .references(() => exercises.id, { onDelete: 'cascade' })
     .notNull(),
+  rest: integer('rest').notNull(),
   order: integer('order').notNull(),
 })
 

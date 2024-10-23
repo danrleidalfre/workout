@@ -57,51 +57,61 @@ async function seed() {
       {
         workoutId: workoutsCreated[0].id,
         exerciseId: exercisesCreated[0].id,
+        rest: 120,
         order: 1,
       },
       {
         workoutId: workoutsCreated[0].id,
         exerciseId: exercisesCreated[1].id,
+        rest: 120,
         order: 2,
       },
       {
         workoutId: workoutsCreated[0].id,
         exerciseId: exercisesCreated[4].id,
+        rest: 120,
         order: 3,
       },
       {
         workoutId: workoutsCreated[0].id,
         exerciseId: exercisesCreated[6].id,
+        rest: 120,
         order: 4,
       },
       {
         workoutId: workoutsCreated[1].id,
         exerciseId: exercisesCreated[2].id,
+        rest: 120,
         order: 1,
       },
       {
         workoutId: workoutsCreated[1].id,
         exerciseId: exercisesCreated[3].id,
+        rest: 120,
         order: 2,
       },
       {
         workoutId: workoutsCreated[1].id,
         exerciseId: exercisesCreated[5].id,
+        rest: 120,
         order: 3,
       },
       {
         workoutId: workoutsCreated[2].id,
         exerciseId: exercisesCreated[7].id,
+        rest: 120,
         order: 1,
       },
       {
         workoutId: workoutsCreated[2].id,
         exerciseId: exercisesCreated[8].id,
+        rest: 120,
         order: 2,
       },
       {
         workoutId: workoutsCreated[2].id,
         exerciseId: exercisesCreated[9].id,
+        rest: 120,
         order: 3,
       },
     ])
