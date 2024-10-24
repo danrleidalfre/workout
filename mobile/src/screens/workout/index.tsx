@@ -2,6 +2,7 @@ import { Button } from "@/components/button";
 import { Checkbox } from "@/components/checkbox";
 import { Header } from "@/components/header";
 import { CheckCircle2 } from "@/components/icons/check-circle";
+import { Clock } from "@/components/icons/clock";
 import { Dumbbell } from "@/components/icons/dumbbell";
 import { Trash2 } from "@/components/icons/trash";
 import { Input } from "@/components/input";
@@ -13,7 +14,6 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { ScrollView, Text, View } from "react-native";
-import { CountdownRest } from "./countdown-rest";
 import { WorkoutSkeleton } from "./skeleton";
 
 type WorkoutScreenRouteProps = RouteProp<RoutesProps, 'workout'>;
@@ -45,6 +45,7 @@ export function Workout() {
   const [isCountdownActive, setIsCountdownActive] = useState(false);
   const [currentRestTime, setCurrentRestTime] = useState(0);
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState<number | null>(null);
+  const [timeLeft, setTimeLeft] = useState(0);
 
   const { control, handleSubmit, reset, watch, formState: { isSubmitting } } = useForm({
     defaultValues: {} as Workout,
@@ -129,11 +130,35 @@ export function Workout() {
     setIsCountdownActive(true);
     setCurrentRestTime(parseInt(restTime, 10));
     setCurrentExerciseIndex(exerciseIndex);
+    setTimeLeft(parseInt(restTime, 10));
   };
 
   const handleCountdownComplete = () => {
     setIsCountdownActive(false);
     setCurrentExerciseIndex(null);
+  };
+
+  useEffect(() => {
+    if (!isCountdownActive || timeLeft === 0) return;
+
+    const interval = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          handleCountdownComplete();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isCountdownActive, timeLeft]);
+
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${minutes}:${secs < 10 ? `0${secs}` : secs}`;
   };
 
   return (
@@ -153,12 +178,13 @@ export function Workout() {
                         {exercise.exerciseTitle}
                       </Text>
                     </View>
-                    {currentExerciseIndex === exerciseIndex && (
-                      <CountdownRest
-                        restTime={currentRestTime}
-                        start={isCountdownActive}
-                        onComplete={handleCountdownComplete}
-                      />
+                    {currentExerciseIndex === exerciseIndex && timeLeft > 0 && (
+                      <View className="items-center flex flex-row gap-1">
+                        <Clock size={16} className="text-muted dark:text-muted-foreground" />
+                        <Text className="font-semibold text-xl text-muted dark:text-muted-foreground">
+                          {formatTime(timeLeft)}
+                        </Text>
+                      </View>
                     )}
                   </View>
 
