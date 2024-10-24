@@ -64,6 +64,7 @@ export function WorkoutForm({
             addExercise({
               exerciseId: '',
               rest: '',
+              note: '',
               series: [],
             })
           }

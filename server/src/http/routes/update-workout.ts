@@ -18,6 +18,7 @@ export const updateWorkout: FastifyPluginAsyncZod = async app => {
             z.object({
               exerciseId: z.string(),
               rest: z.coerce.number(),
+              note: z.string().nullable(),
               series: z.array(
                 z.object({
                   load: z.coerce.number(),
@@ -57,6 +58,7 @@ export const updateWorkout: FastifyPluginAsyncZod = async app => {
               exerciseId: exercise.exerciseId,
               order: index + 1,
               rest: exercise.rest,
+              note: exercise.note,
             })
             .returning({ id: workoutExercises.id })
 

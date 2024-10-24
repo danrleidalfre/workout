@@ -71,6 +71,13 @@
       "when": 1729649594686,
       "tag": "0009_narrow_black_bolt",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1729735824808,
+      "tag": "0010_true_mulholland_black",
+      "breakpoints": true
     }
   ]
 }

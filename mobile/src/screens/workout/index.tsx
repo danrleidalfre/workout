@@ -26,6 +26,7 @@ type Workout = {
     exerciseId: string;
     exerciseTitle: string;
     rest: string;
+    note: string | null
     series: {
       serieId: string;
       load: number;
@@ -187,6 +188,12 @@ export function Workout() {
                       </View>
                     )}
                   </View>
+
+                  {exercise.note && (
+                    <Text className="text-base font-normal opacity-75 text-muted dark:text-muted-foreground">
+                      {exercise.note}
+                    </Text>
+                  )}
 
                   {exercise.series.map((_, serieIndex) => (
                     <View key={serieIndex} className="flex-row gap-3">

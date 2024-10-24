@@ -2,6 +2,7 @@ import type { Workout } from '@/api/create-workout'
 import { SelectExercises } from '@/components/select-exercises'
 import { SelectRestTime } from '@/components/select-rest-time'
 import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 import { Trash2 } from 'lucide-react'
 import type { Control, UseFormRegister } from 'react-hook-form'
 import { Controller } from 'react-hook-form'
@@ -54,6 +55,15 @@ export function WorkoutFormExercise({
           <Trash2 className="size-4" />
         </Button>
       </div>
+
+      <Controller
+        control={control}
+        name={`exercises.${exerciseIndex}.note`}
+        render={({ field }) => (
+          <Textarea placeholder="Observação" {...field} />
+        )}
+      />
+
 
       <WorkoutFormSeries
         exerciseIndex={exerciseIndex}
