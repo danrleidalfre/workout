@@ -36,7 +36,7 @@ export function Workouts() {
   return (
     <>
       <Header />
-      <View className="flex-1 bg-foreground dark:bg-background px-8">
+      <View className="flex-1 bg-foreground dark:bg-background px-4">
         {isLoading ? <WorkoutCardSkeleton /> : (
           <FlatList
             data={workouts}

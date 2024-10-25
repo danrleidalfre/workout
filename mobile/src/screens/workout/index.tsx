@@ -44,7 +44,6 @@ export function Workout() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isCountdownActive, setIsCountdownActive] = useState(false);
-  const [currentRestTime, setCurrentRestTime] = useState(0);
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState<number | null>(null);
   const [timeLeft, setTimeLeft] = useState(0);
 
@@ -129,7 +128,6 @@ export function Workout() {
 
   const handleSerieComplete = (exerciseIndex: number, restTime: string) => {
     setIsCountdownActive(true);
-    setCurrentRestTime(parseInt(restTime, 10));
     setCurrentExerciseIndex(exerciseIndex);
     setTimeLeft(parseInt(restTime, 10));
   };
@@ -174,23 +172,23 @@ export function Workout() {
                 <View key={exercise.exerciseId} className="gap-3">
                   <View className="flex-row justify-between items-center">
                     <View className="flex flex-row items-center gap-3">
-                      <Dumbbell className="text-primary -rotate-45" size={28} />
-                      <Text className="text-primary font-semibold text-xl">
+                      <Dumbbell className="text-primary dark:text-muted-foreground -rotate-45" size={28} />
+                      <Text className="text-primary dark:text-muted-foreground font-semibold text-2xl">
                         {exercise.exerciseTitle}
                       </Text>
                     </View>
                     {currentExerciseIndex === exerciseIndex && timeLeft > 0 && (
                       <View className="items-center flex flex-row gap-1">
-                        <Clock size={16} className="text-muted dark:text-muted-foreground" />
-                        <Text className="font-semibold text-xl text-muted dark:text-muted-foreground">
+                        <Text className={`font-semibold text-2xl ${timeLeft <= 10 ? 'text-destructive' : 'text-muted dark:text-muted-foreground'}`}>
                           {formatTime(timeLeft)}
                         </Text>
+                        <Clock size={16} className={`${timeLeft <= 10 ? 'text-destructive' : 'text-muted dark:text-muted-foreground'}`} />
                       </View>
                     )}
                   </View>
 
                   {exercise.note && (
-                    <Text className="text-base font-normal opacity-75 text-muted dark:text-muted-foreground">
+                    <Text className="opacity-80 text-xl font-normal text-muted dark:text-muted-foreground text-justify">
                       {exercise.note}
                     </Text>
                   )}
@@ -205,9 +203,10 @@ export function Workout() {
                             <Input
                               value={value === 0 ? '' : String(value)}
                               onChangeText={onChange}
+                              keyboardType="numeric"
                               className="w-full"
                             />
-                            <Text className="absolute right-4 text-base text-muted dark:text-muted-foreground opacity-50">
+                            <Text className="absolute right-4 text-base text-muted dark:text-muted-foreground opacity-50 dark:opacity-80">
                               kg
                             </Text>
                           </View>
@@ -222,9 +221,10 @@ export function Workout() {
                             <Input
                               value={value === 0 ? '' : String(value)}
                               onChangeText={onChange}
+                              keyboardType="numeric"
                               className="w-full"
                             />
-                            <Text className="absolute right-4 text-base text-muted dark:text-muted-foreground opacity-50">
+                            <Text className="absolute right-4 text-base text-muted dark:text-muted-foreground opacity-50 dark:opacity-80">
                               reps
                             </Text>
                           </View>

@@ -1,4 +1,3 @@
-import { Badge } from "@/components/badge";
 import { Button } from "@/components/button";
 import { ChevronRight } from "@/components/icons/chevron-right";
 import { AppNavigatorRoutesProps } from "@/routes";
@@ -14,16 +13,9 @@ export function WorkoutCard({ workout }: Props) {
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
   return (
-    <View className="border-0.25 border-card dark:border-card-foreground p-4 justify-between mt-4 rounded-md gap-2">
-      <View className="flex-row justify-between items-center w-full">
-        <Text className="text-muted dark:text-muted-foreground text-xl font-bold">{workout.title}</Text>
-        <View className="flex-row gap-1">
-          {workout.groups.map(group => (
-            <Badge key={group} label={group} variant="outline" />
-          ))}
-        </View>
-      </View>
-      <Text className="text-muted dark:text-muted-foreground text-base line-clamp-1">{workout.exercises}</Text>
+    <View className="py-2 px-4 mt-4">
+      <Text className="text-muted dark:text-muted-foreground text-2xl font-bold">{workout.title}</Text>
+      <Text className="text-muted dark:text-muted-foreground text-base font-medium line-clamp-1 mt-1 mb-2">{workout.exercises}</Text>
       <Button
         label="Iniciar"
         iconAfterLabel
