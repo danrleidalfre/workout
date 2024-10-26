@@ -10,9 +10,9 @@ import { Progress } from "@/components/progress";
 import { useHeaderTitle } from "@/hooks/useHeaderTitle";
 import { api } from "@/lib/axios";
 import { AppNavigatorRoutesProps, RoutesProps } from "@/routes";
-import { createWorkout, deleteWorkout } from "@/storage/workout";
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { createWorkout, deleteWorkout, getWorkout } from "@/storage/workout";
+import { RouteProp, useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
+import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { ScrollView, Text, View } from "react-native";
 import { WorkoutSkeleton } from "./skeleton";
@@ -52,41 +52,52 @@ export function Workout() {
     defaultValues: {} as Workout,
   });
 
-  async function fetchWorkout() {
-    try {
-      setIsLoading(true);
+  useFocusEffect(
+    useCallback(() => {
+      const fetchWorkout = async () => {
+        try {
+          setIsLoading(true);
 
-      const { data } = await api.get<Workout>(`/workouts/${id}`);
+          if (id) {
+            const { data } = await api.get<Workout>(`/workouts/${id}`);
 
-      onSetTitle(data.title);
+            onSetTitle(data.title);
 
-      const workout = {
-        title: data.title,
-        start: new Date().toString(),
-        end: '',
-        exercises: data.exercises.map((exercise) => ({
-          ...exercise,
-          series: exercise.series.map(({ serieId, load, reps, completed }) => ({
-            serieId,
-            load,
-            reps,
-            completed,
-          })),
-        })),
+            const workout = {
+              title: data.title,
+              start: new Date().toString(),
+              end: '',
+              exercises: data.exercises.map((exercise) => ({
+                ...exercise,
+                series: exercise.series.map(({ serieId, load, reps, completed }) => ({
+                  serieId,
+                  load,
+                  reps,
+                  completed,
+                })),
+              })),
+            }
+
+            reset(workout);
+
+            await createWorkout(workout)
+          } else {
+            const workout = await getWorkout()
+
+            onSetTitle(workout.title)
+
+            reset(workout)
+          }
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setIsLoading(false);
+        }
       }
 
-      reset(workout);
-      await createWorkout(workout)
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    fetchWorkout();
-  }, []);
+      fetchWorkout();
+    }, [id])
+  );
 
   const workout = watch();
 
