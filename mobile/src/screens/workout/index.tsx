@@ -7,6 +7,7 @@ import { Dumbbell } from "@/components/icons/dumbbell";
 import { Trash2 } from "@/components/icons/trash";
 import { Input } from "@/components/input";
 import { Progress } from "@/components/progress";
+import { ProgressDown } from "@/components/progress-down";
 import { useHeaderTitle } from "@/hooks/useHeaderTitle";
 import { api } from "@/lib/axios";
 import { AppNavigatorRoutesProps, RoutesProps } from "@/routes";
@@ -45,8 +46,8 @@ export function Workout() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isCountdownActive, setIsCountdownActive] = useState(false);
-  const [currentExerciseIndex, setCurrentExerciseIndex] = useState<number | null>(null);
   const [timeLeft, setTimeLeft] = useState(0);
+  const [restTime, setRestTime] = useState(0);
 
   const { control, handleSubmit, reset, watch, formState: { isSubmitting } } = useForm({
     defaultValues: {} as Workout,
@@ -142,16 +143,14 @@ export function Workout() {
     }
   };
 
-  const handleSerieComplete = async (exerciseIndex: number, restTime: string) => {
-    setIsCountdownActive(true);
-    setCurrentExerciseIndex(exerciseIndex);
-    setTimeLeft(parseInt(restTime, 10));
-    await createWorkout(workout)
-  };
+  const handleSerieComplete = async (restTime: string) => {
+    const time = parseInt(restTime, 10)
 
-  const handleCountdownComplete = () => {
-    setIsCountdownActive(false);
-    setCurrentExerciseIndex(null);
+    setRestTime(time)
+    setTimeLeft(time);
+    setIsCountdownActive(true);
+
+    await createWorkout(workout)
   };
 
   useEffect(() => {
@@ -161,7 +160,7 @@ export function Workout() {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(interval);
-          handleCountdownComplete();
+          setIsCountdownActive(false);
           return 0;
         }
         return prev - 1;
@@ -186,37 +185,29 @@ export function Workout() {
     <>
       <Header />
       <Progress value={progress} />
-      <ScrollView className="flex-1 bg-foreground dark:bg-background px-4 pt-4">
+      <ScrollView className="flex-1 bg-foreground dark:bg-background px-6 pt-4">
         {isLoading ? <WorkoutSkeleton /> : (
           <>
             <View className="gap-6">
               {workout.exercises?.map((exercise, exerciseIndex) => (
-                <View key={exercise.exerciseId} className="gap-3">
+                <View key={exercise.exerciseId} className="gap-2">
                   <View className="flex-row justify-between items-center">
                     <View className="flex flex-row items-center gap-3">
-                      <Dumbbell className="text-primary dark:text-muted-foreground -rotate-45" size={28} />
-                      <Text className="text-primary dark:text-muted-foreground font-semibold text-2xl">
+                      <Dumbbell className="text-muted dark:text-muted-foreground -rotate-45" size={28} />
+                      <Text className="text-muted dark:text-muted-foreground font-semibold text-2xl">
                         {exercise.exerciseTitle}
                       </Text>
                     </View>
-                    {currentExerciseIndex === exerciseIndex && timeLeft > 0 && (
-                      <View className="items-center flex flex-row gap-1">
-                        <Text className={`font-semibold text-2xl ${timeLeft <= 10 ? 'text-destructive' : 'text-muted dark:text-muted-foreground'}`}>
-                          {formatTime(timeLeft)}
-                        </Text>
-                        <Clock size={16} className={`${timeLeft <= 10 ? 'text-destructive' : 'text-muted dark:text-muted-foreground'}`} />
-                      </View>
-                    )}
                   </View>
 
                   {exercise.note && (
-                    <Text className="opacity-80 text-xl font-normal text-muted dark:text-muted-foreground text-justify">
+                    <Text className="opacity-80 text-xl font-normal text-muted dark:text-muted-foreground text-justify mb-1">
                       {exercise.note}
                     </Text>
                   )}
 
                   {exercise.series.map((_, serieIndex) => (
-                    <View key={serieIndex} className="flex-row gap-3">
+                    <View key={serieIndex} className="flex-row gap-2">
                       <Controller
                         name={`exercises.${exerciseIndex}.series.${serieIndex}.load`}
                         control={control}
@@ -262,7 +253,7 @@ export function Workout() {
                             onChange={(checked) => {
                               onChange(checked);
                               if (checked) {
-                                handleSerieComplete(exerciseIndex, exercise.rest);
+                                handleSerieComplete(exercise.rest);
                               }
                             }}
                             className="flex-[0.1]"
@@ -294,6 +285,17 @@ export function Workout() {
           </>
         )}
       </ScrollView>
+      {timeLeft > 0 && (
+        <View className="absolute bottom-0 left-0 right-0 bg-neutral-900 dark:bg-neutral-100 pb-8">
+          <ProgressDown value={(timeLeft / restTime) * 100} />
+          <View className="flex-row items-center justify-center gap-1 mt-4">
+            <Clock size={20} strokeWidth={3} className={(timeLeft / restTime) * 100 < 25 ? 'text-destructive' : 'text-muted dark:text-muted-foreground'} />
+            <Text className={`font-bold text-3xl ${(timeLeft / restTime) * 100 < 25 ? 'text-destructive' : 'text-muted dark:text-muted-foreground'}`}>
+              {formatTime(timeLeft)}
+            </Text>
+          </View>
+        </View>
+      )}
     </>
   );
 }
