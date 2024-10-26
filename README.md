@@ -16,7 +16,7 @@ Status|Funcionalidade
 ✅|Mobile - Temporizador com o tempo de descanso para cada conclusão de série 
 ✅|Mobile - Finalizar treino
 ✅|Mobile - Descartar treino
-❌|Mobile - Salvar em local storage o progresso do treino, para lembrete de continuar, caso o app for fechado
+✅|Mobile - Salvar em local storage o progresso do treino, para lembrete de continuar, caso o app for fechado
 ❌|Mobile/Server - Adicionar séries e exercícios no treino em andamento
 ❌|Mobile/Server - Remover séries e exercícios no treino em andamento
 ❌|Web/Mobile/Server - Autenticação
