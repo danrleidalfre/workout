@@ -1,13 +1,14 @@
 # Workout
 
 ## Roadmap
-✅|Funcionalidade
+Status|Funcionalidade
 :-:| -
-✅|Web - Tema Light e Dark
-✅|Web - CRUD de exercícios
-✅|Web - Montar treino: Exercícios, séries, repetições e tempo de descanso
-✅|Web - Gráficos: Últimos treinos, total de treinos nos últimos meses, séries por agrupamento (filtrar por data), volume e duração de treino semanal
-✅|Web - Filtros na listagem dos exercícios e treinos
+✅|Web - Tema Light, Dark e Padrão do Sistema
+✅|Web/Server - CRUD de exercícios
+✅|Web/Server - Montar treino: Exercícios, séries, repetições, tempo de descanso e observação por exercício
+✅|Web/Server - Gráficos: Últimos treinos, total de treinos nos últimos meses, séries por agrupamento (filtrar por data), volume e duração de treino semanal
+✅|Web/Server - Filtros na listagem dos exercícios e treinos
+❌|Web/Server - Ordenar exercícios
 ✅|Mobile - Tema Light e Dark
 ✅|Mobile - Iniciar treino
 ✅|Mobile - Definir carga e reps por exercícios
@@ -15,10 +16,10 @@
 ✅|Mobile - Temporizador com o tempo de descanso para cada conclusão de série 
 ✅|Mobile - Finalizar treino
 ✅|Mobile - Descartar treino
-❌|Web - Ordenar exercícios
-❌|Mobile - Adicionar séries e exercícios no treino em andamento
-❌|Mobile - Remover séries e exercícios no treino em andamento
-❌|Autenticação
+❌|Mobile - Salvar em local storage o progresso do treino, para lembrete de continuar, caso o app for fechado
+❌|Mobile/Server - Adicionar séries e exercícios no treino em andamento
+❌|Mobile/Server - Remover séries e exercícios no treino em andamento
+❌|Web/Mobile/Server - Autenticação
 
 ## Server
 - Node + Typescript

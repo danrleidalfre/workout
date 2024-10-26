@@ -10,6 +10,7 @@ import { Progress } from "@/components/progress";
 import { useHeaderTitle } from "@/hooks/useHeaderTitle";
 import { api } from "@/lib/axios";
 import { AppNavigatorRoutesProps, RoutesProps } from "@/routes";
+import { createWorkout, deleteWorkout } from "@/storage/workout";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -18,7 +19,7 @@ import { WorkoutSkeleton } from "./skeleton";
 
 type WorkoutScreenRouteProps = RouteProp<RoutesProps, 'workout'>;
 
-type Workout = {
+export type Workout = {
   title: string;
   start: string;
   end: string;
@@ -57,9 +58,12 @@ export function Workout() {
 
       const { data } = await api.get<Workout>(`/workouts/${id}`);
 
-      reset({
+      onSetTitle(data.title);
+
+      const workout = {
         title: data.title,
         start: new Date().toString(),
+        end: '',
         exercises: data.exercises.map((exercise) => ({
           ...exercise,
           series: exercise.series.map(({ serieId, load, reps, completed }) => ({
@@ -69,9 +73,10 @@ export function Workout() {
             completed,
           })),
         })),
-      });
+      }
 
-      onSetTitle(data.title);
+      reset(workout);
+      await createWorkout(workout)
     } catch (error) {
       console.error(error);
     } finally {
@@ -126,10 +131,11 @@ export function Workout() {
     }
   };
 
-  const handleSerieComplete = (exerciseIndex: number, restTime: string) => {
+  const handleSerieComplete = async (exerciseIndex: number, restTime: string) => {
     setIsCountdownActive(true);
     setCurrentExerciseIndex(exerciseIndex);
     setTimeLeft(parseInt(restTime, 10));
+    await createWorkout(workout)
   };
 
   const handleCountdownComplete = () => {
@@ -160,11 +166,16 @@ export function Workout() {
     return `${minutes}:${secs < 10 ? `0${secs}` : secs}`;
   };
 
+  const handleDiscardWorkout = async () => {
+    await deleteWorkout()
+    navigation.navigate('workouts')
+  }
+
   return (
     <>
       <Header />
       <Progress value={progress} />
-      <ScrollView className="flex-1 bg-foreground dark:bg-background px-8 pt-4">
+      <ScrollView className="flex-1 bg-foreground dark:bg-background px-4 pt-4">
         {isLoading ? <WorkoutSkeleton /> : (
           <>
             <View className="gap-6">
@@ -259,7 +270,7 @@ export function Workout() {
                 icon={Trash2}
                 variant="destructive"
                 className="flex-[0.5]"
-                onPress={() => navigation.navigate('workouts')}
+                onPress={handleDiscardWorkout}
               />
               <Button
                 label={isSubmitting ? 'Finalizando...' : 'Finalizar'}
