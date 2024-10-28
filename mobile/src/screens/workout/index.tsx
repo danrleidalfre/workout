@@ -223,7 +223,7 @@ export function Workout() {
                 <View key={exercise.exerciseId} className="gap-2">
                   <View className="flex-row justify-between items-center">
                     <View className="flex flex-row items-center gap-3">
-                      <Dumbbell className="text-muted dark:text-muted-foreground -rotate-45" size={28} />
+                      <Dumbbell className="text-muted dark:text-muted-foreground" size={28} />
                       <Text className="text-muted dark:text-muted-foreground font-semibold text-2xl">
                         {exercise.exerciseTitle}
                       </Text>
@@ -305,7 +305,13 @@ export function Workout() {
               ))}
             </View>
 
-            <View className="flex-row mt-6 gap-4 mb-60">
+            <Button
+              label="Adicionar exercício"
+              icon={Dumbbell}
+              className="my-6"
+            />
+
+            <View className="flex-row gap-4 mb-96">
               <Button
                 label="Descartar"
                 icon={Trash2}

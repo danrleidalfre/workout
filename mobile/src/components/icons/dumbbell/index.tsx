@@ -1,5 +1,6 @@
-import { Dumbbell } from 'lucide-react-native';
+import { Dumbbell as DumbbellBase } from 'lucide-react-native';
 import { iconWithClassName } from '..';
 
-iconWithClassName(Dumbbell);
+const Dumbbell = iconWithClassName(DumbbellBase, '-rotate-45');
+
 export { Dumbbell };

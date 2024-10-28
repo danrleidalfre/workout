@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import { type VariantProps, cva } from 'class-variance-authority';
 import type { LucideIcon } from 'lucide-react-native';
+import { FunctionComponent } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { LoaderCircle } from '../icons/loader';
 
@@ -63,7 +64,7 @@ interface ButtonProps
   VariantProps<typeof buttonVariants> {
   label: string;
   labelClasses?: string;
-  icon?: LucideIcon;
+  icon?: LucideIcon | FunctionComponent<any>;
   iconAfterLabel?: boolean
   isLoading?: boolean
 }

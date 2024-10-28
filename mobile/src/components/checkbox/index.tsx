@@ -3,7 +3,6 @@ import { Text, TouchableOpacity, View } from 'react-native';
 
 import { cn } from '@/lib/utils';
 import { Check } from '../icons/check';
-import { X } from '../icons/x';
 
 interface CheckboxProps extends React.ComponentPropsWithoutRef<typeof View> {
   label?: string;
@@ -57,11 +56,7 @@ function Checkbox({
             checkboxClasses
           )}
         >
-          {disabled ? (
-            <X className={cn(
-              'text-muted dark:text-muted-foreground opacity-80',
-            )} size={16} />
-          ) : (
+          {!disabled && (
             <Check className={cn(
               'text-muted',
               { 'dark:text-muted-foreground opacity-80': !isChecked },
