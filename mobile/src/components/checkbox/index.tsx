@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 
 import { cn } from '@/lib/utils';
@@ -25,6 +25,13 @@ function Checkbox({
   ...props
 }: CheckboxProps) {
   const [isChecked, setChecked] = useState(checked || false);
+
+  useEffect(() => {
+    if (disabled && isChecked) {
+      setChecked(false)
+      onChange?.(false);
+    }
+  }, [disabled])
 
   const toggleCheckbox = () => {
     if (!disabled) {
