@@ -8,7 +8,6 @@ Status|Funcionalidade
 ✅|Web/Server - Montar treino: Exercícios, séries, repetições, tempo de descanso e observação por exercício
 ✅|Web/Server - Gráficos: Últimos treinos, total de treinos nos últimos meses, séries por agrupamento (filtrar por data), volume e duração de treino semanal
 ✅|Web/Server - Filtros na listagem dos exercícios e treinos
-❌|Web/Server - Ordenar exercícios
 ✅|Mobile - Tema Light e Dark
 ✅|Mobile - Iniciar treino
 ✅|Mobile - Definir carga e reps por exercícios
@@ -17,8 +16,10 @@ Status|Funcionalidade
 ✅|Mobile - Finalizar treino
 ✅|Mobile - Descartar treino
 ✅|Mobile - Salvar em local storage o progresso do treino, para lembrete de continuar, caso o app for fechado
-❌|Mobile/Server - Adicionar séries e exercícios no treino em andamento
-❌|Mobile/Server - Remover séries e exercícios no treino em andamento
+✅|Mobile/Server - Adicionar séries no treino em andamento
+❌|Mobile/Server - Adicionar exercícios no treino em andamento
+❌|Mobile/Server - Remover séries no treino em andamento
+❌|Mobile/Server - Remover exercícios no treino em andamento
 ❌|Web/Mobile/Server - Autenticação
 
 ## Server

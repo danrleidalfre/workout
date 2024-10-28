@@ -187,6 +187,30 @@ export function Workout() {
     navigation.navigate('workouts')
   }
 
+  const handleAddSerie = (exerciseIndex: number) => {
+    const newSerie = {
+      serieId: '',
+      load: 0,
+      reps: 0,
+      completed: false,
+    };
+
+    const updatedExercises = workout.exercises.map((exercise, idx) => {
+      if (idx === exerciseIndex) {
+        return {
+          ...exercise,
+          series: [...exercise.series, newSerie],
+        };
+      }
+      return exercise;
+    });
+
+    reset({
+      ...workout,
+      exercises: updatedExercises,
+    });
+  };
+
   return (
     <>
       <Header />
@@ -275,6 +299,7 @@ export function Workout() {
                     label="Adicionar série"
                     variant="secondary"
                     icon={PlusCircle}
+                    onPress={() => handleAddSerie(exerciseIndex)}
                   />
                 </View>
               ))}
