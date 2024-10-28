@@ -4,6 +4,7 @@ import { Header } from "@/components/header";
 import { CheckCircle2 } from "@/components/icons/check-circle";
 import { Clock } from "@/components/icons/clock";
 import { Dumbbell } from "@/components/icons/dumbbell";
+import { PlusCircle } from "@/components/icons/plus";
 import { Trash2 } from "@/components/icons/trash";
 import { Input } from "@/components/input";
 import { Progress } from "@/components/progress";
@@ -136,6 +137,7 @@ export function Workout() {
       workout.end = new Date().toString();
 
       await api.post(`/workouts/${id}/completion`, { ...workout });
+      await deleteWorkout()
 
       navigation.navigate('workouts');
     } catch (error) {
@@ -144,6 +146,10 @@ export function Workout() {
   };
 
   const handleSerieComplete = async (restTime: string) => {
+    if (calculateProgress() === 100) {
+      return
+    }
+
     const time = parseInt(restTime, 10)
 
     setRestTime(time)
@@ -247,21 +253,29 @@ export function Workout() {
                       <Controller
                         name={`exercises.${exerciseIndex}.series.${serieIndex}.completed`}
                         control={control}
-                        render={({ field: { onChange, value } }) => (
-                          <Checkbox
-                            checked={value}
-                            onChange={(checked) => {
-                              onChange(checked);
-                              if (checked) {
+                        render={({ field: { onChange, value } }) => {
+                          const { load, reps } = workout.exercises[exerciseIndex].series[serieIndex];
+
+                          return (
+                            <Checkbox
+                              disabled={Number(load) <= 0 || Number(reps) <= 0}
+                              checked={value}
+                              onChange={(checked) => {
+                                onChange(checked);
                                 handleSerieComplete(exercise.rest);
-                              }
-                            }}
-                            className="flex-[0.1]"
-                          />
-                        )}
+                              }}
+                              className="flex-[0.1]"
+                            />)
+                        }}
                       />
                     </View>
                   ))}
+
+                  <Button
+                    label="Adicionar série"
+                    variant="secondary"
+                    icon={PlusCircle}
+                  />
                 </View>
               ))}
             </View>

@@ -22,7 +22,7 @@ function ProgressDown({
   return (
     <RnView
       className={cn(
-        'h-0.5 w-full overflow-hidden bg-neutral-800 dark:bg-neutral-200',
+        'h-1 w-full overflow-hidden bg-neutral-800 dark:bg-neutral-200',
         className
       )}
     >

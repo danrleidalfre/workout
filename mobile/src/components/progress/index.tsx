@@ -29,7 +29,6 @@ function Progress({
       <Animated.View
         className={cn(
           'bg-primary h-full',
-          { 'rounded-e-full': props.value < 100 }
         )}
         style={{
           width: widthAnim.interpolate({
