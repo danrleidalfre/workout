@@ -13,7 +13,7 @@ export function WorkoutCard({ workout }: Props) {
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
   return (
-    <View className="px-6 py-4 mt-4 bg-neutral-900 dark:bg-neutral-100 rounded-md">
+    <View className="px-6 py-4 mt-4 bg-secondary-foreground dark:bg-secondary rounded-md">
       <Text className="text-muted dark:text-muted-foreground text-2xl font-bold">{workout.title}</Text>
       <Text className="text-muted dark:text-muted-foreground text-base font-medium line-clamp-1 mb-2">{workout.exercises}</Text>
       <Button

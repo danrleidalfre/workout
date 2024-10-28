@@ -30,7 +30,7 @@ const labelVariants = cva('text-center font-medium', {
   variants: {
     variant: {
       primary: 'text-primary-foreground',
-      secondary: 'text-secondary dark:text-secondary-foreground',
+      secondary: 'text-muted dark:text-muted-foreground',
       destructive: 'text-destructive-foreground',
     },
     size: {
@@ -49,7 +49,7 @@ const iconVariants = cva('', {
   variants: {
     variant: {
       primary: 'text-primary-foreground',
-      secondary: 'text-secondary dark:text-secondary-foreground',
+      secondary: 'text-muted dark:text-muted-foreground',
       destructive: 'text-destructive-foreground',
     },
   },

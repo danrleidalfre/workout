@@ -325,7 +325,7 @@ export function Workout() {
         )}
       </ScrollView>
       {timeLeft > 0 && (
-        <View className="absolute bottom-0 left-0 right-0 bg-neutral-900 dark:bg-neutral-100 pb-8">
+        <View className="absolute bottom-0 left-0 right-0 bg-secondary-foreground dark:bg-secondary pb-8">
           <ProgressDown value={(timeLeft / restTime) * 100} />
           <View className="flex-row items-center justify-center gap-1 mt-4">
             <Clock size={20} strokeWidth={3} className={(timeLeft / restTime) * 100 < 25 ? 'text-destructive' : 'text-muted dark:text-muted-foreground'} />

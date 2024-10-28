@@ -51,7 +51,7 @@ function Checkbox({
           className={cn(
             'size-10 rounded-md flex justify-center items-center',
             {
-              'bg-neutral-900 dark:bg-neutral-100': !isChecked,
+              'bg-secondary-foreground dark:bg-secondary': !isChecked,
               'bg-primary': isChecked,
             },
             checkboxClasses
