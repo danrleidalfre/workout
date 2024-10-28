@@ -9,6 +9,7 @@ import { Trash2 } from "@/components/icons/trash";
 import { Input } from "@/components/input";
 import { Progress } from "@/components/progress";
 import { ProgressDown } from "@/components/progress-down";
+import { Select } from "@/components/select";
 import { useHeaderTitle } from "@/hooks/useHeaderTitle";
 import { api } from "@/lib/axios";
 import { AppNavigatorRoutesProps, RoutesProps } from "@/routes";
@@ -30,6 +31,7 @@ export type Workout = {
     exerciseTitle: string;
     rest: string;
     note: string | null
+    isNew: boolean
     series: {
       serieId: string;
       load: number;
@@ -38,6 +40,11 @@ export type Workout = {
     }[];
   }[];
 };
+
+type Exercise = {
+  id: string
+  title: string
+}
 
 export function Workout() {
   const { params } = useRoute<WorkoutScreenRouteProps>();
@@ -49,6 +56,8 @@ export function Workout() {
   const [isCountdownActive, setIsCountdownActive] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
   const [restTime, setRestTime] = useState(0);
+
+  const [exercises, setExercises] = useState<Exercise[]>([])
 
   const { control, handleSubmit, reset, watch, formState: { isSubmitting } } = useForm({
     defaultValues: {} as Workout,
@@ -71,6 +80,7 @@ export function Workout() {
               end: '',
               exercises: data.exercises.map((exercise) => ({
                 ...exercise,
+                isNew: false,
                 series: exercise.series.map(({ serieId, load, reps, completed }) => ({
                   serieId,
                   load,
@@ -100,6 +110,19 @@ export function Workout() {
       fetchWorkout();
     }, [id])
   );
+
+  useEffect(() => {
+    const fetchExercises = async () => {
+      try {
+        const { data } = await api.get<Exercise[]>('/exercises');
+        setExercises(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchExercises();
+  }, [])
 
   const workout = watch();
 
@@ -211,6 +234,27 @@ export function Workout() {
     });
   };
 
+  const handleAddExercise = () => {
+    const newExercise = {
+      isNew: true,
+      rest: '60',
+      note: null,
+      series: [
+        {
+          serieId: '',
+          load: 0,
+          reps: 0,
+          completed: false,
+        }
+      ],
+    };
+
+    reset({
+      ...workout,
+      exercises: [...workout.exercises, newExercise],
+    });
+  };
+
   return (
     <>
       <Header />
@@ -220,13 +264,51 @@ export function Workout() {
           <>
             <View className="gap-6">
               {workout.exercises?.map((exercise, exerciseIndex) => (
-                <View key={exercise.exerciseId} className="gap-2">
+                <View key={exerciseIndex} className="gap-2">
                   <View className="flex-row justify-between items-center">
-                    <View className="flex flex-row items-center gap-3">
-                      <Dumbbell className="text-muted dark:text-muted-foreground" size={28} />
-                      <Text className="text-muted dark:text-muted-foreground font-semibold text-2xl">
-                        {exercise.exerciseTitle}
-                      </Text>
+                    <View className="flex flex-row items-center gap-3 w-full">
+                      <Dumbbell className="text-muted dark:text-muted-foreground -rotate-45" size={28} />
+                      {exercise.exerciseId && !exercise.isNew ? (
+                        <Text className="text-muted dark:text-muted-foreground font-semibold text-2xl">
+                          {exercise.exerciseTitle}
+                        </Text>
+                      ) : (
+                        <Controller
+                          name={`exercises.${exerciseIndex}.exerciseId`}
+                          control={control}
+                          render={({ field: { onChange, value } }) => (
+                            <View className="flex-1">
+                              <Select
+                                options={exercises}
+                                selectedValue={value}
+                                onSelect={(selectedValue) => {
+                                  const selectedExercise = exercises.find(ex => ex.id === selectedValue);
+                                  if (selectedExercise) {
+                                    onChange(selectedExercise.id);
+                                    const updatedExercises = workout.exercises.map((ex, idx) => {
+                                      if (idx === exerciseIndex) {
+                                        return {
+                                          ...ex,
+                                          exerciseId: selectedExercise.id,
+                                          exerciseTitle: selectedExercise.title,
+                                        };
+                                      }
+                                      return ex;
+                                    });
+                                    reset({
+                                      ...workout,
+                                      exercises: updatedExercises,
+                                    });
+                                  }
+                                }}
+                                placeholder="Selecione o exercício"
+                                labelKey="title"
+                                valueKey="id"
+                              />
+                            </View>
+                          )}
+                        />
+                      )}
                     </View>
                   </View>
 
@@ -308,6 +390,10 @@ export function Workout() {
             <Button
               label="Adicionar exercício"
               icon={Dumbbell}
+              onPress={handleAddExercise}
+              labelClasses="text-primary dark:text-primary"
+              iconClasses="-rotate-45"
+              variant="secondary"
               className="my-6"
             />
 

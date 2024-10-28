@@ -1,7 +1,6 @@
 import { cn } from '@/lib/utils';
 import { type VariantProps, cva } from 'class-variance-authority';
 import type { LucideIcon } from 'lucide-react-native';
-import { FunctionComponent } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { LoaderCircle } from '../icons/loader';
 
@@ -64,14 +63,16 @@ interface ButtonProps
   VariantProps<typeof buttonVariants> {
   label: string;
   labelClasses?: string;
-  icon?: LucideIcon | FunctionComponent<any>;
-  iconAfterLabel?: boolean
-  isLoading?: boolean
+  iconClasses?: string;
+  icon?: LucideIcon;
+  iconAfterLabel?: boolean;
+  isLoading?: boolean;
 }
 
 function Button({
   label,
   labelClasses,
+  iconClasses,
   className,
   variant,
   size,
@@ -103,14 +104,14 @@ function Button({
         {Icon && !isLoading && (
           <Icon
             size={iconSize}
-            className={cn(iconVariants({ variant, className: labelClasses }))}
+            className={cn(iconVariants({ variant }), labelClasses, iconClasses)}
           />
         )}
         {isLoading && (
           <View className='animate-spin'>
             <LoaderCircle
               size={iconSize}
-              className={cn(iconVariants({ variant, className: labelClasses }))}
+              className={cn(iconVariants({ variant }), labelClasses)}
             />
           </View>
         )}

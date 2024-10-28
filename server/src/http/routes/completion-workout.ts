@@ -24,6 +24,7 @@ export const completionWorkout: FastifyPluginAsyncZod = async app => {
           exercises: z.array(
             z.object({
               exerciseId: z.string(),
+              isNew: z.boolean(),
               series: z.array(
                 z.object({
                   serieId: z.string(),
@@ -51,7 +52,15 @@ export const completionWorkout: FastifyPluginAsyncZod = async app => {
         .returning({ id: workoutCompletions.id })
 
       await Promise.all(
-        exercises.map(async exercise => {
+        exercises.map(async (exercise, index) => {
+          if (exercise.isNew) {
+            await db.insert(workoutExercises).values({
+              workoutId: id,
+              exerciseId: exercise.exerciseId,
+              order: index + 1,
+              rest: 60
+            })
+          }
           exercise.series.map(async (serie, index) => {
             const { serieId, load, reps, completed } = serie
             if (completed && load > 0 && reps > 0) {
