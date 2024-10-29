@@ -14,6 +14,7 @@ import { useHeaderTitle } from "@/hooks/useHeaderTitle";
 import { api } from "@/lib/axios";
 import { AppNavigatorRoutesProps, RoutesProps } from "@/routes";
 import { createWorkout, deleteWorkout, getWorkout } from "@/storage/workout";
+import notifee from '@notifee/react-native';
 import { RouteProp, useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -183,13 +184,29 @@ export function Workout() {
   };
 
   useEffect(() => {
-    if (!isCountdownActive || timeLeft === 0) return;
+    if (!isCountdownActive || timeLeft === 0) {
+      return;
+    }
 
     const interval = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(interval);
           setIsCountdownActive(false);
+
+          (async () => {
+
+            await notifee.requestPermission();
+
+            await notifee.displayNotification({
+              id: '1',
+              title: 'Workout',
+              body: 'Tempo de descanso acabou',
+            });
+
+            await notifee.cancelNotification('1')
+          })();
+
           return 0;
         }
         return prev - 1;
@@ -198,6 +215,7 @@ export function Workout() {
 
     return () => clearInterval(interval);
   }, [isCountdownActive, timeLeft]);
+
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -368,7 +386,9 @@ export function Workout() {
                               checked={value}
                               onChange={(checked) => {
                                 onChange(checked);
-                                handleSerieComplete(exercise.rest);
+                                if (checked) {
+                                  handleSerieComplete(exercise.rest);
+                                }
                               }}
                               className="flex-[0.1]"
                             />)
