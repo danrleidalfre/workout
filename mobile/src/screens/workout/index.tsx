@@ -19,7 +19,10 @@ import { RouteProp, useFocusEffect, useNavigation, useRoute } from "@react-navig
 import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { ScrollView, Text, View } from "react-native";
+import BackgroundTimer from 'react-native-background-timer';
 import { WorkoutSkeleton } from "./skeleton";
+
+
 
 type WorkoutScreenRouteProps = RouteProp<RoutesProps, 'workout'>;
 
@@ -183,19 +186,23 @@ export function Workout() {
     await createWorkout(workout)
   };
 
+  notifee.onBackgroundEvent(async ({ type, detail }) => { });
+
   useEffect(() => {
     if (!isCountdownActive || timeLeft === 0) {
       return;
     }
 
-    const interval = setInterval(() => {
+    BackgroundTimer.start();
+
+    const interval = BackgroundTimer.setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
-          clearInterval(interval);
+          BackgroundTimer.clearInterval(interval);
           setIsCountdownActive(false);
+          BackgroundTimer.stop();
 
           (async () => {
-
             await notifee.requestPermission();
 
             await notifee.displayNotification({
@@ -204,7 +211,7 @@ export function Workout() {
               body: 'Tempo de descanso acabou',
             });
 
-            await notifee.cancelNotification('1')
+            await notifee.cancelNotification('1');
           })();
 
           return 0;
@@ -213,8 +220,12 @@ export function Workout() {
       });
     }, 1000);
 
-    return () => clearInterval(interval);
+    return () => {
+      BackgroundTimer.clearInterval(interval);
+      BackgroundTimer.stop();
+    };
   }, [isCountdownActive, timeLeft]);
+
 
 
   const formatTime = (seconds: number) => {
