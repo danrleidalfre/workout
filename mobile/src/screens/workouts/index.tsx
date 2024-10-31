@@ -7,7 +7,7 @@ import { AppNavigatorRoutesProps } from "@/routes";
 import { Workout as WorkoutForm } from "@/screens/workout";
 import { deleteWorkout, getWorkout } from "@/storage/workout";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { FlatList, Text, View } from "react-native";
 import { WorkoutCard } from "./card";
 import { WorkoutCardSkeleton } from "./card/skeleton";
@@ -26,22 +26,25 @@ export function Workouts() {
   const [workoutAlreadyStarted, setWorkoutAlreadyStarted] = useState({} as WorkoutForm)
   const [isLoading, setIsLoading] = useState(false)
 
-  async function fetchWorkouts() {
-    try {
-      setIsLoading(true)
+  useFocusEffect(
+    useCallback(() => {
+      const fetchWorkouts = async () => {
+        try {
+          setIsLoading(true);
 
-      const { data } = await api.get<Workout[]>('/workouts')
+          const { data } = await api.get<Workout[]>('/workouts');
 
-      setWorkouts(data)
-      setIsLoading(false)
-    } catch (error) {
-      console.log(error);
-    }
-  }
+          setWorkouts(data);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
 
-  useEffect(() => {
-    fetchWorkouts();
-  }, [])
+      fetchWorkouts();
+    }, [])
+  );
 
   useFocusEffect(
     useCallback(() => {

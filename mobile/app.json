@@ -37,6 +37,12 @@
           }
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "6c52f0e1-f65d-4970-9ef6-7afd898c54e6"
+      }
+    },
+    "owner": "danrleidalfre"
   }
 }
