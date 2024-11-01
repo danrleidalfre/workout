@@ -11,7 +11,7 @@ import { ProgressUp } from "@/components/progress/up";
 import { Select } from "@/components/select";
 import { api } from "@/libs/axios";
 import { AppNavigatorRoutesProps, RoutesProps } from "@/routes";
-import { deleteWorkoutStorage, getWorkoutStorage, setWorkoutStorage } from "@/storages/workout";
+import { getWorkoutStorage, removeWorkoutStorage, setWorkoutStorage } from "@/storages/workout";
 import { RouteProp, useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -174,7 +174,7 @@ export function Workout() {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(interval);
-          setIsCountdownActive(false); 
+          setIsCountdownActive(false);
           return 0;
         }
         return prev - 1;
@@ -183,7 +183,7 @@ export function Workout() {
 
     return () => clearInterval(interval);
   }, [isCountdownActive, timeLeft]);
-  
+
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -195,7 +195,7 @@ export function Workout() {
       workout.end = new Date().toString();
 
       await api.post(`/workouts/${id}/completion`, { ...workout });
-      await deleteWorkoutStorage()
+      await removeWorkoutStorage()
 
       navigation.navigate('workouts');
     } catch (error) {
@@ -218,7 +218,7 @@ export function Workout() {
   };
 
   const handleDiscardWorkout = async () => {
-    await deleteWorkoutStorage()
+    await removeWorkoutStorage()
     navigation.navigate('workouts')
   }
 

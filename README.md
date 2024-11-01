@@ -17,8 +17,8 @@ Status|Funcionalidade
 ✅|Mobile - Descartar treino
 ✅|Mobile - Salvar em local storage o progresso do treino, para lembrete de continuar, caso o app for fechado
 ✅|Mobile/Server - Adicionar séries no treino em andamento
-✅|Mobile/Server - Adicionar exercícios no treino em andamento
-✅|Mobile - Notificar via Push quando tempo de descanso acabar (mesmo em background)
+⏳|Mobile/Server - Adicionar exercícios no treino em andamento
+❌|Mobile - Notificar via Push quando tempo de descanso acabar (mesmo em background)
 ❌|Mobile - Notificação Sonora quando tempo de descanso acabar (mesmo em background)
 ❌|Web/Mobile/Server - Autenticação
 

@@ -4,7 +4,7 @@ import { Trash2 } from "@/components/icons/trash";
 import { api } from "@/libs/axios";
 import { AppNavigatorRoutesProps } from "@/routes";
 import { Workout as WorkoutForm } from "@/screens/workout";
-import { deleteWorkoutStorage, getWorkoutStorage } from "@/storages/workout";
+import { getWorkoutStorage, removeWorkoutStorage } from "@/storages/workout";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useCallback, useState } from "react";
 import { FlatList, Text, View } from "react-native";
@@ -49,7 +49,7 @@ export function Workouts() {
     useCallback(() => {
       const getWorkout = async () => {
         const workout = await getWorkoutStorage()
-        setWorkoutAlreadyStarted(workout) 
+        setWorkoutAlreadyStarted(workout)
       }
 
       getWorkout();
@@ -58,7 +58,7 @@ export function Workouts() {
 
   const handleDiscardWorkout = async () => {
     setWorkoutAlreadyStarted({} as WorkoutForm);
-    await deleteWorkoutStorage()
+    await removeWorkoutStorage()
   }
 
   return (

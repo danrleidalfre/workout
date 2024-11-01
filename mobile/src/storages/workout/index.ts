@@ -11,6 +11,6 @@ export async function getWorkoutStorage(): Promise<Workout> {
   return storage ? JSON.parse(storage) : {}
 }
 
-export async function deleteWorkoutStorage(): Promise<void> {
+export async function removeWorkoutStorage(): Promise<void> {
   await AsyncStorage.removeItem(WORKOUT_STORAGE)
 }
