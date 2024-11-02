@@ -2,7 +2,7 @@ import { cn } from '@/libs/utils';
 import { useEffect, useRef } from 'react';
 import { Animated, View as RnView, type View } from 'react-native';
 
-function ProgressDown({
+function Progress({
   className,
   ...props
 }: { className?: string; value: number } & React.ComponentPropsWithoutRef<
@@ -13,7 +13,7 @@ function ProgressDown({
   useEffect(() => {
     Animated.timing(widthAnim, {
       toValue: props.value,
-      duration: 1000,
+      duration: 250,
       useNativeDriver: false,
     }).start();
   }, [widthAnim, props.value]);
@@ -21,18 +21,14 @@ function ProgressDown({
   return (
     <RnView
       className={cn(
-        'h-1 w-full overflow-hidden bg-secondary dark:bg-secondary-foreground',
+        'h-2 w-full rounded-full overflow-hidden bg-secondary dark:bg-secondary-foreground border border-primary',
         className
       )}
     >
       <Animated.View
-        className={
-          cn(
-            'h-full',
-            { 'bg-destructive': props.value < 25 },
-            { 'bg-primary': props.value >= 25 }
-          )
-        }
+        className={cn(
+          'bg-primary h-full',
+        )}
         style={{
           width: widthAnim.interpolate({
             inputRange: [0, 100],
@@ -44,4 +40,4 @@ function ProgressDown({
   );
 }
 
-export { ProgressDown };
+export { Progress };

@@ -4,10 +4,11 @@ import { CheckCircle2 } from "@/components/icons/check-circle";
 import { Clock } from "@/components/icons/clock";
 import { Dumbbell } from "@/components/icons/dumbbell";
 import { PlusCircle } from "@/components/icons/plus";
+import { Repeat } from "@/components/icons/repeat";
 import { Trash2 } from "@/components/icons/trash";
+import { Weight } from "@/components/icons/weight";
 import { Input } from "@/components/input";
-import { ProgressDown } from "@/components/progress/down";
-import { ProgressUp } from "@/components/progress/up";
+import { Progress } from "@/components/progress";
 import { Select } from "@/components/select";
 import { restTimes } from "@/constants/rest-times";
 import { api } from "@/libs/axios";
@@ -58,8 +59,10 @@ export function Workout() {
   const [timeLeft, setTimeLeft] = useState(0);
   const [restTime, setRestTime] = useState(0);
 
-  const [exercises, setExercises] = useState<Exercise[]>([])
-  const [newExercise, setNewExercise] = useState({} as ExerciseWorkout)
+  const [exercises, setExercises] = useState<Exercise[]>([]);
+  const [newExercise, setNewExercise] = useState({} as ExerciseWorkout);
+
+  const [workoutDuration, setWorkoutDuration] = useState("");
 
   const { control, handleSubmit, reset, watch, formState: { isSubmitting } } = useForm({
     defaultValues: {} as Workout,
@@ -97,8 +100,6 @@ export function Workout() {
           } else {
             const workout = await getWorkoutStorage()
 
-            console.log(workout.id);
-
             reset(workout)
           }
         } catch (error) {
@@ -126,6 +127,14 @@ export function Workout() {
   }, [])
 
   const workout = watch();
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setWorkoutDuration(calculateWorkoutDuration());
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [workout.start]);
 
   const calculateProgress = () => {
     if (!workout.exercises) return 0;
@@ -283,14 +292,17 @@ export function Workout() {
     (exercise) => !workout.exercises?.some((e) => e.exerciseId === exercise.id)
   );
 
-  const calculateWorkoutDuration = (start: string, end: string) => {
-    const startDate = new Date(start);
-    const endDate = new Date(end || new Date().toString());
+  const calculateWorkoutDuration = () => {
+    const startDate = new Date(workout.start);
+    const endDate = new Date();
     const durationInMs = endDate.getTime() - startDate.getTime();
-    const minutes = Math.floor(durationInMs / 1000 / 60);
-    const hours = Math.floor(minutes / 60);
-    const remainingMinutes = minutes % 60;
-    return `${hours}h:${remainingMinutes < 10 ? `0${remainingMinutes}` : remainingMinutes}m`;
+    const seconds = Math.floor((durationInMs / 1000) % 60);
+    const minutes = Math.floor((durationInMs / 1000 / 60) % 60);
+    const hours = Math.floor(durationInMs / 1000 / 3600);
+
+    return hours > 1
+      ? `${hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`
+      : `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
   };
 
   const calculateCompletedWeight = () => {
@@ -324,15 +336,27 @@ export function Workout() {
 
   return (
     <>
-      <View className="flex-row py-3 px-6 gap-2 bg-secondary dark:bg-secondary-foreground">
+      <View className="flex-row p-3 gap-2 bg-secondary dark:bg-secondary-foreground border-b border-border">
         <View className="flex-[0.8] justify-evenly">
           <View className="flex-row justify-between">
-            <Text className="text-base text-primary font-semibold">{calculateWorkoutDuration(workout.start, workout.end)}</Text>
-            <Text className="text-base text-primary font-semibold">{calculateCompletedWeight()}kg</Text>
-            <Text className="text-base text-primary font-semibold">{calculateCompletedExercises()}/{calculateExerciseCount()} exercícios</Text>
-            <Text className="text-base text-primary font-semibold">{calculateCompletedSeries()}/{calculateTotalSeries()} séries</Text>
+            <View className="flex-row gap-1 items-center">
+              <Clock size={14} className="text-base text-primary" />
+              <Text className="text-base text-primary">{workoutDuration}</Text>
+            </View>
+            <View className="flex-row gap-1 items-center">
+              <Weight size={14} className="text-base text-primary" />
+              <Text className="text-base text-primary">{calculateCompletedWeight() / 1000}k</Text>
+            </View>
+            <View className="flex-row gap-1 items-center">
+              <Dumbbell size={14} className="text-base text-primary -rotate-45" />
+              <Text className="text-base text-primary">{calculateCompletedExercises()} de {calculateExerciseCount()}</Text>
+            </View>
+            <View className="flex-row gap-1 items-center">
+              <Repeat size={14} className="text-base text-primary" />
+              <Text className="text-base text-primary">{calculateCompletedSeries()} de {calculateTotalSeries()}</Text>
+            </View>
           </View>
-          <ProgressUp value={progress} />
+          <Progress value={progress} />
         </View>
         <Button
           label={isSubmitting ? '' : 'Finalizar'}
@@ -483,8 +507,7 @@ export function Workout() {
         )}
       </ScrollView>
       {timeLeft > 0 && (
-        <View className="absolute bottom-0 left-0 right-0 bg-secondary dark:bg-secondary-foreground pb-8">
-          <ProgressDown value={(timeLeft / restTime) * 100} />
+        <View className="absolute bottom-0 left-0 right-0 bg-secondary dark:bg-secondary-foreground pb-8 border-t border-border">
           <View className="flex-row items-center justify-center gap-1 mt-4">
             <Clock size={20} strokeWidth={3} className={(timeLeft / restTime) * 100 < 25 ? 'text-destructive' : 'text-muted-foreground dark:text-muted'} />
             <Text className={`font-bold text-3xl ${(timeLeft / restTime) * 100 < 25 ? 'text-destructive' : 'text-muted-foreground dark:text-muted'}`}>
