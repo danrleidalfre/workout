@@ -18,7 +18,7 @@ Status|Funcionalidade
 ✅|Mobile/Server - Adicionar séries no treino em andamento
 ✅|Mobile/Server - Adicionar exercícios no treino em andamento
 ⏳|Mobile - Notificações quando tempo de descanso acabar
-❌|Mobile - Tempo de descanso e notificações e background
+❌|Mobile - Tempo de descanso e notificações em background
 ❌|Web/Mobile/Server - Autenticação
 
 ## Server
