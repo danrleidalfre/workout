@@ -1,6 +1,4 @@
 import { Button } from "@/components/button";
-import { ChevronRight } from "@/components/icons/right";
-import { Trash2 } from "@/components/icons/trash";
 import { api } from "@/libs/axios";
 import { AppNavigatorRoutesProps } from "@/routes";
 import { Workout as WorkoutForm } from "@/screens/workout";
@@ -62,23 +60,21 @@ export function Workouts() {
   }
 
   return (
-    <View className="px-6">
+    <View className="px-6 flex-1">
       {workoutAlreadyStarted.title && (
-        <View className="px-6 mt-4 rounded-md">
+        <View className="px-6 py-4 mt-2 rounded-md">
           <View className="flex-row justify-between items-center">
             <Text className="text-muted-foreground dark:text-muted text-2xl font-bold">{workoutAlreadyStarted.title}</Text>
             <Text className="text-muted-foreground dark:text-muted text-base font-medium">em andamento</Text>
           </View>
           <View className="flex-row gap-4 mt-2">
             <Button
-              icon={Trash2}
               label="Descartar"
               variant="destructive"
               className="flex-[0.5]"
               onPress={handleDiscardWorkout}
             />
             <Button
-              icon={ChevronRight}
               iconAfterLabel
               label="Continuar"
               className="flex-[0.5]"

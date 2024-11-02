@@ -1,0 +1,18 @@
+export const restTimes = [
+  { value: '0', label: 'Nenhum' },
+  { value: '30', label: '30s' },
+  { value: '45', label: '45s' },
+  { value: '60', label: '1 minuto' },
+  { value: '75', label: '1 minuto e 15s' },
+  { value: '90', label: '1 minuto e 30s' },
+  { value: '105', label: '1 minuto e 45s' },
+  { value: '120', label: '2 minutos' },
+  { value: '135', label: '2 minutos e 15s' },
+  { value: '150', label: '2 minutos e 30s' },
+  { value: '165', label: '2 minutos e 45s' },
+  { value: '180', label: '3 minutos' },
+  { value: '210', label: '3 minutos e 30s' },
+  { value: '240', label: '4 minutos' },
+  { value: '270', label: '4 minutos e 30s' },
+  { value: '330', label: '5 minutos' },
+]

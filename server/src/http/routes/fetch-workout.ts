@@ -24,6 +24,7 @@ export const fetchWorkout: FastifyPluginAsyncZod = async app => {
 
       const result = await db
         .select({
+          id: workouts.id,
           workoutTitle: workouts.title,
           exerciseId: workoutExercises.exerciseId,
           exerciseOrder: workoutExercises.order,
@@ -46,7 +47,8 @@ export const fetchWorkout: FastifyPluginAsyncZod = async app => {
         .orderBy(workoutExercises.order)
 
       return {
-        title: result[0]?.workoutTitle || null,
+        id: result[0]?.id,
+        title: result[0]?.workoutTitle,
         exercises: result.reduce(
           (acc, row) => {
             let exercise = acc.find(e => e.exerciseId === row.exerciseId)

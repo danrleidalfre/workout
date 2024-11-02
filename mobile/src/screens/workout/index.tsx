@@ -1,42 +1,46 @@
 import { Button } from "@/components/button";
 import { Checkbox } from "@/components/checkbox";
 import { CheckCircle2 } from "@/components/icons/check-circle";
+import { Clock } from "@/components/icons/clock";
 import { Dumbbell } from "@/components/icons/dumbbell";
 import { PlusCircle } from "@/components/icons/plus";
-import { Timer } from "@/components/icons/timer";
 import { Trash2 } from "@/components/icons/trash";
 import { Input } from "@/components/input";
 import { ProgressDown } from "@/components/progress/down";
 import { ProgressUp } from "@/components/progress/up";
 import { Select } from "@/components/select";
+import { restTimes } from "@/constants/rest-times";
 import { api } from "@/libs/axios";
 import { AppNavigatorRoutesProps, RoutesProps } from "@/routes";
 import { getWorkoutStorage, removeWorkoutStorage, setWorkoutStorage } from "@/storages/workout";
 import { RouteProp, useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { AppState, ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { WorkoutSkeleton } from "./skeleton";
 
 type WorkoutScreenRouteProps = RouteProp<RoutesProps, 'workout'>;
 
+type ExerciseWorkout = {
+  exerciseId: string;
+  exerciseTitle: string;
+  rest: string;
+  note: string | null
+  isNew: boolean
+  series: {
+    serieId: string;
+    load: number;
+    reps: number;
+    completed: boolean;
+  }[];
+}
+
 export type Workout = {
+  id: string
   title: string;
   start: string;
   end: string;
-  exercises: {
-    exerciseId: string;
-    exerciseTitle: string;
-    rest: string;
-    note: string | null
-    isNew: boolean
-    series: {
-      serieId: string;
-      load: number;
-      reps: number;
-      completed: boolean;
-    }[];
-  }[];
+  exercises: ExerciseWorkout[];
 };
 
 type Exercise = {
@@ -49,15 +53,13 @@ export function Workout() {
   const navigation = useNavigation<AppNavigatorRoutesProps>();
   const { id } = params;
 
-  const appState = useRef(AppState.currentState);
-  const backgroundTimeRef = useRef(0);
-
   const [isLoading, setIsLoading] = useState(false);
   const [isCountdownActive, setIsCountdownActive] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
   const [restTime, setRestTime] = useState(0);
 
   const [exercises, setExercises] = useState<Exercise[]>([])
+  const [newExercise, setNewExercise] = useState({} as ExerciseWorkout)
 
   const { control, handleSubmit, reset, watch, formState: { isSubmitting } } = useForm({
     defaultValues: {} as Workout,
@@ -73,6 +75,7 @@ export function Workout() {
             const { data } = await api.get<Workout>(`/workouts/${id}`);
 
             const workout = {
+              id: data.id,
               title: data.title,
               start: new Date().toString(),
               end: '',
@@ -93,6 +96,8 @@ export function Workout() {
             await setWorkoutStorage(workout)
           } else {
             const workout = await getWorkoutStorage()
+
+            console.log(workout.id);
 
             reset(workout)
           }
@@ -152,22 +157,6 @@ export function Workout() {
   const progress = calculateProgress();
 
   useEffect(() => {
-    const subscription = AppState.addEventListener("change", nextAppState => {
-      if (appState.current === "active" && nextAppState.match(/inactive|background/)) {
-        backgroundTimeRef.current = Date.now();
-      } else if (appState.current.match(/inactive|background/) && nextAppState === "active") {
-        const elapsedTime = Math.floor((Date.now() - backgroundTimeRef.current) / 1000);
-        setTimeLeft((prevTime) => Math.max(prevTime - elapsedTime, 0));
-      }
-      appState.current = nextAppState;
-    });
-
-    return () => {
-      subscription.remove();
-    };
-  }, []);
-
-  useEffect(() => {
     if (!isCountdownActive || timeLeft === 0) return;
 
     const interval = setInterval(() => {
@@ -194,7 +183,7 @@ export function Workout() {
     try {
       workout.end = new Date().toString();
 
-      await api.post(`/workouts/${id}/completion`, { ...workout });
+      await api.post(`/workouts/${workout.id}/completion`, { ...workout });
       await removeWorkoutStorage()
 
       navigation.navigate('workouts');
@@ -246,10 +235,30 @@ export function Workout() {
     });
   };
 
+  const handleExerciseSelect = (exerciseId: string | number) => {
+    const exercise = exercises.find((e) => e.id === String(exerciseId));
+    if (exercise) {
+      setNewExercise((prev) => ({
+        ...prev,
+        exerciseId: exercise.id,
+        exerciseTitle: exercise.title,
+      }));
+    }
+  };
+
+  const handleRestTimeSelect = (rest: string | number) => {
+    setNewExercise((prev) => ({
+      ...prev,
+      rest: String(rest),
+    }));
+  };
+
   const handleAddExercise = () => {
-    const newExercise = {
+    if (!newExercise.exerciseId || !newExercise.rest) return;
+
+    const exerciseToAdd: ExerciseWorkout = {
+      ...newExercise,
       isNew: true,
-      rest: '60',
       note: null,
       series: [
         {
@@ -263,9 +272,16 @@ export function Workout() {
 
     reset({
       ...workout,
-      exercises: [...workout.exercises, newExercise],
+      exercises: [...workout.exercises, exerciseToAdd],
     });
+
+    // Limpe o `newExercise` após adicionar
+    setNewExercise({} as ExerciseWorkout);
   };
+
+  const availableExercises = exercises?.filter(
+    (exercise) => !workout.exercises?.some((e) => e.exerciseId === exercise.id)
+  );
 
   return (
     <>
@@ -277,49 +293,11 @@ export function Workout() {
               {workout.exercises?.map((exercise, exerciseIndex) => (
                 <View key={exerciseIndex} className="gap-2">
                   <View className="flex-row justify-between items-center">
-                    <View className="flex flex-row items-center gap-3 w-full">
+                    <View className="flex-row items-center gap-3 w-full">
                       <Dumbbell className="text-muted-foreground dark:text-muted -rotate-45" size={28} />
-                      {exercise.exerciseId && !exercise.isNew ? (
-                        <Text className="text-muted-foreground dark:text-muted font-semibold text-2xl">
-                          {exercise.exerciseTitle}
-                        </Text>
-                      ) : (
-                        <Controller
-                          name={`exercises.${exerciseIndex}.exerciseId`}
-                          control={control}
-                          render={({ field: { onChange, value } }) => (
-                            <View className="flex-1">
-                              <Select
-                                options={exercises}
-                                selectedValue={value}
-                                onSelect={(selectedValue) => {
-                                  const selectedExercise = exercises.find(ex => ex.id === selectedValue);
-                                  if (selectedExercise) {
-                                    onChange(selectedExercise.id);
-                                    const updatedExercises = workout.exercises.map((ex, idx) => {
-                                      if (idx === exerciseIndex) {
-                                        return {
-                                          ...ex,
-                                          exerciseId: selectedExercise.id,
-                                          exerciseTitle: selectedExercise.title,
-                                        };
-                                      }
-                                      return ex;
-                                    });
-                                    reset({
-                                      ...workout,
-                                      exercises: updatedExercises,
-                                    });
-                                  }
-                                }}
-                                placeholder="Selecione o exercício"
-                                labelKey="title"
-                                valueKey="id"
-                              />
-                            </View>
-                          )}
-                        />
-                      )}
+                      <Text className="text-muted-foreground dark:text-muted font-semibold text-2xl">
+                        {exercise.exerciseTitle}
+                      </Text>
                     </View>
                   </View>
 
@@ -400,17 +378,43 @@ export function Workout() {
               ))}
             </View>
 
-            <Button
-              label="Adicionar exercício"
-              icon={Dumbbell}
-              onPress={handleAddExercise}
-              labelClasses="text-primary dark:text-primary"
-              iconClasses="-rotate-45"
-              variant="secondary"
-              className="mt-4 mb-2"
-            />
+            <View className="gap-2 mt-6">
+              <View className="flex-row gap-2">
+                <View className="flex-[0.5]">
+                  <Select
+                    options={availableExercises}
+                    selectedValue={newExercise.exerciseId}
+                    onSelect={handleExerciseSelect}
+                    placeholder="Selecione o exercício"
+                    labelKey="title"
+                    valueKey="id"
+                    icon={Dumbbell}
+                    iconClasses="-rotate-45 text-primary"
+                  />
+                </View>
+                <View className="flex-[0.5]">
+                  <Select
+                    options={restTimes}
+                    selectedValue={newExercise.rest}
+                    onSelect={handleRestTimeSelect}
+                    placeholder="Selecione o descanso"
+                    labelKey="label"
+                    valueKey="value"
+                    icon={Clock}
+                    iconClasses="text-primary"
+                  />
+                </View>
+              </View>
+              <Button
+                label="Adicionar exercício"
+                icon={PlusCircle}
+                onPress={handleAddExercise}
+                labelClasses="text-primary dark:text-primary"
+                variant="secondary"
+              />
+            </View>
 
-            <View className="flex-row gap-4 mb-96">
+            <View className="flex-row gap-2 mb-96 mt-6">
               <Button
                 label="Descartar"
                 icon={Trash2}
@@ -433,7 +437,7 @@ export function Workout() {
         <View className="absolute bottom-0 left-0 right-0 bg-secondary dark:bg-secondary-foreground pb-8">
           <ProgressDown value={(timeLeft / restTime) * 100} />
           <View className="flex-row items-center justify-center gap-1 mt-4">
-            <Timer size={20} strokeWidth={3} className={(timeLeft / restTime) * 100 < 25 ? 'text-destructive' : 'text-muted-foreground dark:text-muted'} />
+            <Clock size={20} strokeWidth={3} className={(timeLeft / restTime) * 100 < 25 ? 'text-destructive' : 'text-muted-foreground dark:text-muted'} />
             <Text className={`font-bold text-3xl ${(timeLeft / restTime) * 100 < 25 ? 'text-destructive' : 'text-muted-foreground dark:text-muted'}`}>
               {formatTime(timeLeft)}
             </Text>

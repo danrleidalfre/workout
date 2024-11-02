@@ -1,4 +1,5 @@
 import { cn } from '@/libs/utils';
+import { LucideIcon } from 'lucide-react-native';
 import React, { useRef, useState } from 'react';
 import {
   FlatList,
@@ -42,6 +43,8 @@ export interface SelectProps {
   placeholder: string;
   labelKey: string;
   valueKey: string;
+  icon?: LucideIcon;
+  iconClasses?: string;
 }
 
 export const Select = ({
@@ -54,11 +57,13 @@ export const Select = ({
   placeholder,
   labelKey,
   valueKey,
+  icon: Icon,
+  iconClasses,
 }: SelectProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [dropdownPosition, setDropdownPosition] =
     useState<LayoutRectangle | null>(null);
-  const selectButtonRef = useRef<View>(null);
+  const selectButtonRef = useRef<TouchableOpacity>(null);
 
   const new_options = convertToOptions(options, labelKey, valueKey);
 
@@ -80,9 +85,9 @@ export const Select = ({
   };
 
   return (
-    <View className={cn('flex flex-col gap-1.5')}>
+    <View className={cn('gap-1.5')}>
       {label && (
-        <Text className={cn('text-base text-muted-foreground dark:text-muted', labelClasses)}>
+        <Text className={cn('text-base text-primary', labelClasses)}>
           {label}
         </Text>
       )}
@@ -90,11 +95,17 @@ export const Select = ({
         ref={selectButtonRef}
         className={cn(
           selectClasses,
-          'px-4 h-10 flex-row items-center rounded-md text-muted-foreground dark:text-muted bg-secondary dark:bg-secondary-foreground'
+          'gap-1 flex-row px-4 min-h-10 justify-center items-center rounded-md text-muted-foreground dark:text-muted bg-secondary dark:bg-secondary-foreground'
         )}
         onPress={openDropdown}
       >
-        <Text className="text-base text-muted-foreground dark:text-muted">
+        {Icon && (
+          <Icon
+            size={16}
+            className={cn(labelClasses, iconClasses)}
+          />
+        )}
+        <Text className={cn('text-base text-primary', labelClasses)}>
           {selectedValue
             ? new_options.find(option => option.value === selectedValue)?.label
             : placeholder}

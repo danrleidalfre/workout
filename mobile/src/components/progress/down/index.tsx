@@ -13,7 +13,7 @@ function ProgressDown({
   useEffect(() => {
     Animated.timing(widthAnim, {
       toValue: props.value,
-      duration: 0,
+      duration: 1000,
       useNativeDriver: false,
     }).start();
   }, [widthAnim, props.value]);

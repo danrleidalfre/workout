@@ -41,7 +41,6 @@ export const completionWorkout: FastifyPluginAsyncZod = async app => {
     async request => {
       const { id } = request.params
       const { start, end, exercises } = request.body
-
       const [workoutCompletion] = await db
         .insert(workoutCompletions)
         .values({
