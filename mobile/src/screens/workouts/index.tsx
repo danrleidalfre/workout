@@ -60,7 +60,7 @@ export function Workouts() {
   }
 
   return (
-    <View className="px-6 flex-1">
+    <View className="flex-1 px-6">
       {workoutAlreadyStarted.title && (
         <View className="px-6 py-4 mt-2 rounded-md">
           <View className="flex-row justify-between items-center">

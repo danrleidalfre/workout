@@ -21,7 +21,7 @@ function ProgressUp({
   return (
     <RnView
       className={cn(
-        'h-2 w-full overflow-hidden bg-secondary dark:bg-secondary-foreground',
+        'h-2 w-full rounded-full overflow-hidden bg-secondary dark:bg-secondary-foreground border border-primary',
         className
       )}
     >

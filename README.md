@@ -3,12 +3,11 @@
 ## Roadmap
 Status|Funcionalidade
 :-:| -
-✅|Web - Tema Light, Dark e Padrão do Sistema
 ✅|Web/Server - CRUD de exercícios
 ✅|Web/Server - Montar treino: Exercícios, séries, repetições, tempo de descanso e observação por exercício
 ✅|Web/Server - Gráficos: Últimos treinos, total de treinos nos últimos meses, séries por agrupamento (filtrar por data), volume e duração de treino semanal
 ✅|Web/Server - Filtros na listagem dos exercícios e treinos
-✅|Mobile - Tema Light e Dark
+✅|Web/Mobile - Tema Light, Dark e Auto
 ✅|Mobile - Iniciar treino
 ✅|Mobile - Definir carga e reps por exercícios
 ✅|Mobile - Marcar série como concluída

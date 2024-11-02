@@ -283,9 +283,65 @@ export function Workout() {
     (exercise) => !workout.exercises?.some((e) => e.exerciseId === exercise.id)
   );
 
+  const calculateWorkoutDuration = (start: string, end: string) => {
+    const startDate = new Date(start);
+    const endDate = new Date(end || new Date().toString());
+    const durationInMs = endDate.getTime() - startDate.getTime();
+    const minutes = Math.floor(durationInMs / 1000 / 60);
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    return `${hours}h:${remainingMinutes < 10 ? `0${remainingMinutes}` : remainingMinutes}m`;
+  };
+
+  const calculateCompletedWeight = () => {
+    return workout.exercises?.reduce((total, exercise) => {
+      const completedWeight = exercise.series.reduce((acc, serie) => {
+        return serie.completed ? acc + (serie.load * serie.reps) : acc;
+      }, 0);
+      return total + completedWeight;
+    }, 0) || 0;
+  };
+
+  const calculateCompletedExercises = () => {
+    return workout.exercises?.reduce((count, exercise) => {
+      const isExerciseCompleted = exercise.series.every((serie) => serie.completed);
+      return isExerciseCompleted ? count + 1 : count;
+    }, 0) || 0;
+  };
+
+  const calculateCompletedSeries = () => {
+    return workout.exercises?.reduce((total, exercise) => {
+      const completedSeriesCount = exercise.series.filter((serie) => serie.completed).length;
+      return total + completedSeriesCount;
+    }, 0) || 0;
+  };
+
+  const calculateExerciseCount = () => workout.exercises?.length || 0;
+
+  const calculateTotalSeries = () => {
+    return workout.exercises?.reduce((total, exercise) => total + exercise.series.length, 0) || 0;
+  };
+
   return (
     <>
-      <ProgressUp value={progress} />
+      <View className="flex-row py-3 px-6 gap-2 bg-secondary dark:bg-secondary-foreground">
+        <View className="flex-[0.8] justify-evenly">
+          <View className="flex-row justify-between">
+            <Text className="text-base text-primary font-semibold">{calculateWorkoutDuration(workout.start, workout.end)}</Text>
+            <Text className="text-base text-primary font-semibold">{calculateCompletedWeight()}kg</Text>
+            <Text className="text-base text-primary font-semibold">{calculateCompletedExercises()}/{calculateExerciseCount()} exercícios</Text>
+            <Text className="text-base text-primary font-semibold">{calculateCompletedSeries()}/{calculateTotalSeries()} séries</Text>
+          </View>
+          <ProgressUp value={progress} />
+        </View>
+        <Button
+          label={isSubmitting ? '' : 'Finalizar'}
+          icon={CheckCircle2}
+          onPress={handleSubmit(onSubmit)}
+          isLoading={isSubmitting}
+          className="flex-[0.2]"
+        />
+      </View>
       <ScrollView showsVerticalScrollIndicator={false} className="px-6 pt-4">
         {isLoading ? <WorkoutSkeleton /> : (
           <>
@@ -416,18 +472,11 @@ export function Workout() {
 
             <View className="flex-row gap-2 mb-96 mt-6">
               <Button
-                label="Descartar"
+                label="Descartar treino"
                 icon={Trash2}
                 variant="destructive"
-                className="flex-[0.5]"
+                className="flex-1"
                 onPress={handleDiscardWorkout}
-              />
-              <Button
-                label={isSubmitting ? 'Finalizando...' : 'Finalizar'}
-                icon={CheckCircle2}
-                className="flex-[0.5]"
-                onPress={handleSubmit(onSubmit)}
-                isLoading={isSubmitting}
               />
             </View>
           </>
