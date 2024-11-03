@@ -17,8 +17,8 @@ Status|Funcionalidade
 ✅|Mobile - Salvar em local storage o progresso do treino, para lembrete de continuar, caso o app for fechado
 ✅|Mobile/Server - Adicionar séries no treino em andamento
 ✅|Mobile/Server - Adicionar exercícios no treino em andamento
-⏳|Mobile - Notificações quando tempo de descanso acabar
-❌|Mobile - Tempo de descanso e notificações em background
+✅|Mobile - Notificação via push quando tempo de descanso acabar
+⏳|Mobile - Tempo de descanso e notificações em background
 ❌|Web/Mobile/Server - Autenticação
 
 ## Server
@@ -65,7 +65,6 @@ npm run web
 - Lucide Icons
 - Axios
 - React Hook Form
-- Notifee
 
 ```bash
 cd mobile

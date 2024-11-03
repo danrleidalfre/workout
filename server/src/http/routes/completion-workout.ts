@@ -25,6 +25,7 @@ export const completionWorkout: FastifyPluginAsyncZod = async app => {
             z.object({
               exerciseId: z.string(),
               isNew: z.boolean(),
+              rest: z.coerce.number(),
               series: z.array(
                 z.object({
                   serieId: z.string(),
@@ -57,7 +58,7 @@ export const completionWorkout: FastifyPluginAsyncZod = async app => {
               workoutId: id,
               exerciseId: exercise.exerciseId,
               order: index + 1,
-              rest: 60
+              rest: exercise.rest
             })
           }
           exercise.series.map(async (serie, index) => {

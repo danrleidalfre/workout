@@ -15,6 +15,7 @@ import { api } from "@/libs/axios";
 import { AppNavigatorRoutesProps, RoutesProps } from "@/routes";
 import { getWorkoutStorage, removeWorkoutStorage, setWorkoutStorage } from "@/storages/workout";
 import { RouteProp, useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
+import * as Notifications from 'expo-notifications';
 import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { ScrollView, Text, View } from "react-native";
@@ -49,6 +50,14 @@ type Exercise = {
   title: string
 }
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
+
 export function Workout() {
   const { params } = useRoute<WorkoutScreenRouteProps>();
   const navigation = useNavigation<AppNavigatorRoutesProps>();
@@ -58,10 +67,8 @@ export function Workout() {
   const [isCountdownActive, setIsCountdownActive] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
   const [restTime, setRestTime] = useState(0);
-
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [newExercise, setNewExercise] = useState({} as ExerciseWorkout);
-
   const [workoutDuration, setWorkoutDuration] = useState("");
 
   const { control, handleSubmit, reset, watch, formState: { isSubmitting } } = useForm({
@@ -92,22 +99,20 @@ export function Workout() {
                   completed,
                 })),
               })),
-            }
+            };
 
             reset(workout);
-
-            await setWorkoutStorage(workout)
+            await setWorkoutStorage(workout);
           } else {
-            const workout = await getWorkoutStorage()
-
-            reset(workout)
+            const workout = await getWorkoutStorage();
+            reset(workout);
           }
         } catch (error) {
           console.error(error);
         } finally {
           setIsLoading(false);
         }
-      }
+      };
 
       fetchWorkout();
     }, [id])
@@ -121,10 +126,18 @@ export function Workout() {
       } catch (error) {
         console.error(error);
       }
-    }
+    };
 
     fetchExercises();
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    const requestPermissions = async () => {
+      await Notifications.requestPermissionsAsync();
+    };
+
+    requestPermissions();
+  }, []);
 
   const workout = watch();
 
@@ -173,6 +186,9 @@ export function Workout() {
         if (prev <= 1) {
           clearInterval(interval);
           setIsCountdownActive(false);
+
+          Notifications.cancelAllScheduledNotificationsAsync();
+
           return 0;
         }
         return prev - 1;
@@ -193,7 +209,7 @@ export function Workout() {
       workout.end = new Date().toString();
 
       await api.post(`/workouts/${workout.id}/completion`, { ...workout });
-      await removeWorkoutStorage()
+      await removeWorkoutStorage();
 
       navigation.navigate('workouts');
     } catch (error) {
@@ -203,22 +219,33 @@ export function Workout() {
 
   const handleSerieComplete = async (restTime: string) => {
     if (calculateProgress() === 100) {
-      return
+      return;
     }
 
-    const time = parseInt(restTime, 10)
+    const time = parseInt(restTime, 10);
 
-    setRestTime(time)
+    setRestTime(time);
     setTimeLeft(time);
     setIsCountdownActive(true);
 
-    await setWorkoutStorage(workout)
+    await setWorkoutStorage(workout);
+
+    Notifications.cancelAllScheduledNotificationsAsync();
+
+    Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Fim do descanso",
+        body: "Está na hora de começar a próxima série!",
+        data: { workoutId: workout.id },
+      },
+      trigger: { seconds: time },
+    });
   };
 
   const handleDiscardWorkout = async () => {
-    await removeWorkoutStorage()
-    navigation.navigate('workouts')
-  }
+    await removeWorkoutStorage();
+    navigation.navigate('workouts');
+  };
 
   const handleAddSerie = (exerciseIndex: number) => {
     const newSerie = {
@@ -275,7 +302,7 @@ export function Workout() {
           load: 0,
           reps: 0,
           completed: false,
-        }
+        },
       ],
     };
 
@@ -284,7 +311,6 @@ export function Workout() {
       exercises: [...workout.exercises, exerciseToAdd],
     });
 
-    // Limpe o `newExercise` após adicionar
     setNewExercise({} as ExerciseWorkout);
   };
 
@@ -333,6 +359,8 @@ export function Workout() {
   const calculateTotalSeries = () => {
     return workout.exercises?.reduce((total, exercise) => total + exercise.series.length, 0) || 0;
   };
+
+  if (isLoading) return <WorkoutSkeleton />;
 
   return (
     <>
