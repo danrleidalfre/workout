@@ -364,7 +364,7 @@ export function Workout() {
 
   return (
     <>
-      <View className="flex-row p-3 gap-2 bg-secondary dark:bg-secondary-foreground border-b border-border">
+      <View className="flex-row p-3 gap-2 bg-secondary dark:bg-secondary-foreground border-b border-background dark:border-foreground">
         <View className="flex-[0.8] justify-evenly">
           <View className="flex-row justify-between">
             <View className="flex-row gap-1 items-center">
@@ -535,7 +535,7 @@ export function Workout() {
         )}
       </ScrollView>
       {timeLeft > 0 && (
-        <View className="absolute bottom-0 left-0 right-0 bg-secondary dark:bg-secondary-foreground pb-8 border-t border-border">
+        <View className="absolute bottom-0 left-0 right-0 bg-secondary dark:bg-secondary-foreground pb-8 border-t border-background dark:border-foreground">
           <View className="flex-row items-center justify-center gap-1 mt-4">
             <Clock size={20} strokeWidth={3} className={(timeLeft / restTime) * 100 < 25 ? 'text-destructive' : 'text-muted-foreground dark:text-muted'} />
             <Text className={`font-bold text-3xl ${(timeLeft / restTime) * 100 < 25 ? 'text-destructive' : 'text-muted-foreground dark:text-muted'}`}>
