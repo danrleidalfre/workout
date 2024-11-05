@@ -7,9 +7,13 @@ interface ThemeContextProps {
   changeTheme: (newTheme: Theme) => void;
 }
 
+type ProvidersProps = {
+  children: ReactNode;
+}
+
 const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
 
-export const ThemeProvider = ({ children }: { children: ReactNode }) => {
+export const ThemeProvider = ({ children }: ProvidersProps) => {
   const { theme, changeTheme } = useTheme();
 
   return (
