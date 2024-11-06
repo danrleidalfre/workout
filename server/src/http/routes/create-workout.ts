@@ -38,7 +38,13 @@ export const createWorkout: FastifyPluginAsyncZod = async app => {
         exercises.map(async (exercise, index) => {
           const [workoutExercise] = await db
             .insert(workoutExercises)
-            .values({ workoutId: workout.id, exerciseId: exercise.exerciseId, rest: exercise.rest, note: exercise.note || null, order: index + 1 })
+            .values({
+              workoutId: workout.id,
+              exerciseId: exercise.exerciseId,
+              rest: exercise.rest,
+              note: exercise.note || null,
+              order: index + 1,
+            })
             .returning({ id: workoutExercises.id })
 
           await Promise.all(
@@ -49,7 +55,7 @@ export const createWorkout: FastifyPluginAsyncZod = async app => {
                 workoutExerciseId: workoutExercise.id,
                 load,
                 reps,
-                order: index + 1
+                order: index + 1,
               })
             })
           )

@@ -37,7 +37,7 @@ export const workoutExercises = pgTable('workout_exercises', {
     .notNull(),
   rest: integer('rest').notNull(),
   order: integer('order').notNull(),
-  note: text('note')
+  note: text('note'),
 })
 
 export const workoutExerciseSeries = pgTable('workout_exercise_series', {

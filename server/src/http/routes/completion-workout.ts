@@ -58,7 +58,7 @@ export const completionWorkout: FastifyPluginAsyncZod = async app => {
               workoutId: id,
               exerciseId: exercise.exerciseId,
               order: index + 1,
-              rest: exercise.rest
+              rest: exercise.rest,
             })
           }
           exercise.series.map(async (serie, index) => {
@@ -70,7 +70,8 @@ export const completionWorkout: FastifyPluginAsyncZod = async app => {
                   .set({ load, reps })
                   .where(eq(workoutExerciseSeries.id, serieId))
               } else {
-                const [workoutExercise] = await db.select({ id: workoutExercises.id })
+                const [workoutExercise] = await db
+                  .select({ id: workoutExercises.id })
                   .from(workoutExercises)
                   .where(
                     and(
@@ -83,7 +84,7 @@ export const completionWorkout: FastifyPluginAsyncZod = async app => {
                   workoutExerciseId: workoutExercise.id,
                   load,
                   reps,
-                  order: index + 1
+                  order: index + 1,
                 })
               }
 
