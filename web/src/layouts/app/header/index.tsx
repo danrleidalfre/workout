@@ -1,6 +1,6 @@
 import { Separator } from '@/components/ui/separator'
+import { SignedIn, UserButton } from '@clerk/clerk-react'
 import { BicepsFlexed, Dumbbell, Home, Trophy } from 'lucide-react'
-import { Account } from './account'
 import { NavLink } from './nav-link'
 import { ToggleTheme } from './toggle-theme'
 
@@ -30,7 +30,9 @@ export function Header() {
 
       <div className="flex gap-4">
         <ToggleTheme />
-        <Account />
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
       </div>
     </header>
   )

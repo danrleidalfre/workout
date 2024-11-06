@@ -29,7 +29,7 @@ export function ToggleTheme() {
         >
           <DropdownMenuRadioItem value="light">Light</DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="dark">Dark</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="system">Sistema</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="system">Auto</DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
