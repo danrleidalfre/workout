@@ -13,6 +13,7 @@ import { createUser } from './routes/create-user'
 import { createWorkout } from './routes/create-workout'
 import { deleteExercise } from './routes/delete-exercise'
 import { deleteWorkout } from './routes/delete-workout'
+import { fetchAuthenticateUser } from './routes/fetch-authenticate-user'
 import { fetchDurationByWeekCompletions } from './routes/fetch-duration-by-week-completions'
 import { fetchExercise } from './routes/fetch-exercise'
 import { fetchExercises } from './routes/fetch-exercises'
@@ -61,6 +62,7 @@ app.register(fetchGroups)
 
 app.register(createUser)
 app.register(authenticateUser)
+app.register(fetchAuthenticateUser)
 
 app
   .listen({
