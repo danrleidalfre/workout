@@ -22,13 +22,6 @@ Status|Funcionalidade
 ❌|Web/Mobile/Server - Autenticação
 
 ## Server
-- Node + Typescript
-- Docker
-- Postgres
-- DrizzleORM
-- Fastify
-- Zod
-- dayjs
 
 ```bash
 cd server
@@ -42,15 +35,6 @@ npm run server
 ```
 
 ## Web
-- React + Typescript
-- Tailwind
-- shadcn/ui
-- React Query
-- Axios
-- React Hook Form
-- Zod
-- Lucide Icons
-- date-fns
 
 ```bash
 cd web
@@ -60,15 +44,9 @@ npm run web
 ```
 
 ## Mobile
-- React Native + Typescript
-- NativeWind
-- Lucide Icons
-- Axios
-- React Hook Form
 
 ```bash
 cd mobile
 npm i
-cp .env.example .env
 npm run mobile
 ```
