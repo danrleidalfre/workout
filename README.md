@@ -18,8 +18,8 @@ Status|Funcionalidade
 ✅|Mobile/Server - Adicionar séries no treino em andamento
 ✅|Mobile/Server - Adicionar exercícios no treino em andamento
 ✅|Mobile - Notificação via push quando tempo de descanso acabar
-⏳|Web/Mobile/Server - Autenticação com Google OAuth2
 ❌|Mobile - Tempo de descanso e notificações em background
+❌|Web/Mobile/Server - Autenticação
 
 ## Server
 - Node + Typescript
@@ -65,7 +65,6 @@ npm run web
 - Lucide Icons
 - Axios
 - React Hook Form
-- Clerk
 
 ```bash
 cd mobile
