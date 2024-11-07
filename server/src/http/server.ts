@@ -1,10 +1,12 @@
 import fastifyCors from '@fastify/cors'
+import fastifyJwt from '@fastify/jwt'
 import fastify from 'fastify'
 import {
   serializerCompiler,
   validatorCompiler,
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod'
+import { authenticateUser } from './routes/authenticate-user'
 import { completionWorkout } from './routes/completion-workout'
 import { createExercise } from './routes/create-exercise'
 import { createUser } from './routes/create-user'
@@ -33,6 +35,10 @@ app.register(fastifyCors, {
   origin: '*',
 })
 
+app.register(fastifyJwt, {
+  secret: 'super-secret-jwt',
+})
+
 app.register(createWorkout)
 app.register(fetchWorkouts)
 app.register(fetchWorkout)
@@ -54,6 +60,7 @@ app.register(deleteExercise)
 app.register(fetchGroups)
 
 app.register(createUser)
+app.register(authenticateUser)
 
 app
   .listen({

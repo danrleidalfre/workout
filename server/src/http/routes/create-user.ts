@@ -20,12 +20,9 @@ export const createUser: FastifyPluginAsyncZod = async app => {
     async (request, reply) => {
       const { name, email, password } = request.body
 
-      const userWithSameEmail = await db
-        .select()
-        .from(users)
-        .where(eq(users.email, email))
+      const [user] = await db.select().from(users).where(eq(users.email, email))
 
-      if (userWithSameEmail[0]) {
+      if (user) {
         return reply.status(400).send({ message: 'User already exists' })
       }
 
