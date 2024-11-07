@@ -1,6 +1,15 @@
 import { createId } from '@paralleldrive/cuid2'
 import { integer, pgTable, real, text, timestamp } from 'drizzle-orm/pg-core'
 
+export const users = pgTable('users', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  name: text('name').notNull(),
+  email: text('email').unique().notNull(),
+  password: text('password').notNull(),
+})
+
 export const workouts = pgTable('workouts', {
   id: text('id')
     .primaryKey()

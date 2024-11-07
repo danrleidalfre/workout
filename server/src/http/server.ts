@@ -7,6 +7,7 @@ import {
 } from 'fastify-type-provider-zod'
 import { completionWorkout } from './routes/completion-workout'
 import { createExercise } from './routes/create-exercise'
+import { createUser } from './routes/create-user'
 import { createWorkout } from './routes/create-workout'
 import { deleteExercise } from './routes/delete-exercise'
 import { deleteWorkout } from './routes/delete-workout'
@@ -51,6 +52,8 @@ app.register(updateExercise)
 app.register(deleteExercise)
 
 app.register(fetchGroups)
+
+app.register(createUser)
 
 app
   .listen({

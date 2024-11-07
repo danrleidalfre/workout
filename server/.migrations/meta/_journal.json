@@ -78,6 +78,20 @@
       "when": 1729735824808,
       "tag": "0010_true_mulholland_black",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1730943276828,
+      "tag": "0011_massive_the_fury",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1730943807398,
+      "tag": "0012_strange_scorpion",
+      "breakpoints": true
     }
   ]
 }
