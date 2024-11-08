@@ -6,6 +6,12 @@ export const api = axios.create({
 })
 
 api.interceptors.request.use(async config => {
+  const token = localStorage.getItem('token')
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+
   await new Promise(resolve =>
     setTimeout(resolve, Math.round(Math.random() * 0))
   )

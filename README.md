@@ -20,6 +20,9 @@ Status|Funcionalidade
 ✅|Mobile - Notificação via push quando tempo de descanso acabar
 ⏳|Web/Mobile/Server - Autenticação
 ❌|Mobile - Tempo de descanso e notificações em background
+❌|Web/Mobile/Server - Tratamento de erros
+❌|Web/Mobile - Validação dos forms
+❌|Server - Documentação da API com Swagger
 
 ## Server
 
