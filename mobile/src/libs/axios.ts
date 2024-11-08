@@ -1,3 +1,4 @@
+import { getTokenStorage } from "@/storages/token";
 import axios from "axios";
 
 const api = axios.create({
@@ -5,6 +6,12 @@ const api = axios.create({
 })
 
 api.interceptors.request.use(async config => {
+  const token = await getTokenStorage()
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+
   await new Promise(resolve =>
     setTimeout(resolve, Math.round(Math.random() * 0))
   )

@@ -8,11 +8,11 @@ import { Text, TouchableOpacity, View } from "react-native";
 
 type ScreensRouteProps = RouteProp<RoutesProps>;
 
-interface AppLayoutProps {
+type Props = {
   children: ReactNode;
 }
 
-export function AppLayout({ children }: AppLayoutProps) {
+export function AppLayout({ children }: Props) {
   const route = useRoute<ScreensRouteProps>();
   const navigation = useNavigation<AppNavigatorRoutesProps>();
 
@@ -23,7 +23,7 @@ export function AppLayout({ children }: AppLayoutProps) {
       <View className="items-center justify-between flex-row bg-primary pt-16 p-6">
         {showGoBack && (
           <TouchableOpacity className="size-10 items-center justify-center" onPress={() => navigation.goBack()}>
-            <ChevronLeft size={32} className="text-muted" />
+            <ChevronLeft size={28} className="text-muted" />
           </TouchableOpacity>
         )}
         <View className="size-10 items-center justify-center">
@@ -33,7 +33,7 @@ export function AppLayout({ children }: AppLayoutProps) {
           <Text className="text-muted font-bold text-2xl">Treinos</Text>
         )}
         <TouchableOpacity className="size-10 items-center justify-center" onPress={() => navigation.navigate('profile')}>
-          <CircleUserRound size={40} strokeWidth={1} className="text-muted" />
+          <CircleUserRound size={28} strokeWidth={1} className="text-muted" />
         </TouchableOpacity>
       </View>
       <View className="flex-1 bg-background dark:bg-foreground">{children}</View>

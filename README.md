@@ -18,7 +18,8 @@ Status|Funcionalidade
 ✅|Mobile/Server - Adicionar séries no treino em andamento
 ✅|Mobile/Server - Adicionar exercícios no treino em andamento
 ✅|Mobile - Notificação via push quando tempo de descanso acabar
-⏳|Web/Mobile/Server - Autenticação
+✅|Web/Mobile/Server - Autenticação com e-mail e senha
+⏳|Server - Adequar para receber e retornar informações com base no usuário logado
 ❌|Mobile - Tempo de descanso e notificações em background
 ❌|Web/Mobile/Server - Tratamento de erros
 ❌|Web/Mobile - Validação dos forms

@@ -3,10 +3,9 @@ import { Profile } from "@/screens/profile";
 import { Workout } from "@/screens/workout";
 import { Workouts } from "@/screens/workouts";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { RoutesProps } from "..";
 
 export function AppRoutes() {
-  const { Screen, Navigator } = createNativeStackNavigator<RoutesProps>();
+  const { Screen, Navigator } = createNativeStackNavigator();
 
   return (
     <Navigator screenOptions={{ headerShown: false }}>
@@ -32,5 +31,5 @@ export function AppRoutes() {
         )}
       </Screen>
     </Navigator>
-  );
+  )
 }
