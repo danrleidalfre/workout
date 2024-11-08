@@ -12,7 +12,7 @@ import { Progress } from "@/components/progress";
 import { Select } from "@/components/select";
 import { restTimes } from "@/constants/rest-times";
 import { api } from "@/libs/axios";
-import { AppNavigatorRoutesProps, RoutesProps } from "@/routes";
+import { NavigationRoutes, RoutesProps } from "@/routes";
 import { getWorkoutStorage, removeWorkoutStorage, setWorkoutStorage } from "@/storages/workout";
 import { RouteProp, useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import * as Notifications from 'expo-notifications';
@@ -60,7 +60,7 @@ Notifications.setNotificationHandler({
 
 export function Workout() {
   const { params } = useRoute<WorkoutScreenRouteProps>();
-  const navigation = useNavigation<AppNavigatorRoutesProps>();
+  const navigation = useNavigation<NavigationRoutes>();
   const { id } = params;
 
   const [isLoading, setIsLoading] = useState(false);

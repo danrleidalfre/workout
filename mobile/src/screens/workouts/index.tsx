@@ -1,6 +1,6 @@
 import { Button } from "@/components/button";
 import { api } from "@/libs/axios";
-import { AppNavigatorRoutesProps } from "@/routes";
+import { NavigationRoutes } from "@/routes";
 import { Workout as WorkoutForm } from "@/screens/workout";
 import { getWorkoutStorage, removeWorkoutStorage } from "@/storages/workout";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
@@ -17,7 +17,7 @@ export type Workout = {
 }
 
 export function Workouts() {
-  const navigation = useNavigation<AppNavigatorRoutesProps>();
+  const navigation = useNavigation<NavigationRoutes>();
 
   const [workouts, setWorkouts] = useState<Workout[]>([])
   const [workoutAlreadyStarted, setWorkoutAlreadyStarted] = useState({} as WorkoutForm)

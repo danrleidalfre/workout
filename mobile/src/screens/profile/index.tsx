@@ -1,25 +1,24 @@
 import { Button } from "@/components/button";
 import { LogOut } from "@/components/icons/logout";
 import { useAuth } from "@/contexts/auth";
-import { AppNavigatorRoutesProps } from "@/routes";
-import { getUserStorage, User } from "@/storages/user";
+import { NavigationRoutes } from "@/routes";
+import { User } from "@/storages/user";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { ToggleTheme } from "./toggle-theme";
 
 export function Profile() {
-  const navigation = useNavigation<AppNavigatorRoutesProps>();
-  const { logout } = useAuth();
-  const [user, setUser] = useState<User>({} as User);
+  const navigation = useNavigation<NavigationRoutes>();
+  const { logout, getUser } = useAuth();
+  const [user, setUser] = useState({} as User)
 
   useEffect(() => {
-    const getUser = async () => {
-      const storedUser = await getUserStorage();
-      setUser(storedUser);
+    const fetchUser = async () => {
+      const user = await getUser();
+      setUser(user);
     };
-
-    getUser();
+    fetchUser();
   }, []);
 
   const onLogout = async () => {

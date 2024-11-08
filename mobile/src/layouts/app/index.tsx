@@ -1,7 +1,7 @@
 import { BicepsFlexed } from "@/components/icons/biceps";
 import { ChevronLeft } from "@/components/icons/left";
 import { CircleUserRound } from "@/components/icons/user";
-import { AppNavigatorRoutesProps, RoutesProps } from "@/routes";
+import { NavigationRoutes, RoutesProps } from "@/routes";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { ReactNode } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
@@ -14,7 +14,7 @@ type Props = {
 
 export function AppLayout({ children }: Props) {
   const route = useRoute<ScreensRouteProps>();
-  const navigation = useNavigation<AppNavigatorRoutesProps>();
+  const navigation = useNavigation<NavigationRoutes>();
 
   const showGoBack = route.name !== "workouts";
 

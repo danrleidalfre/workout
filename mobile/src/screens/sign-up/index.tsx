@@ -3,7 +3,7 @@ import { ChevronLeft } from "@/components/icons/left";
 import { Input } from "@/components/input";
 import { useAuth } from "@/contexts/auth";
 import { api } from "@/libs/axios";
-import { AppNavigatorRoutesProps } from "@/routes";
+import { NavigationRoutes } from "@/routes";
 import { useNavigation } from "@react-navigation/native";
 import { Controller, useForm } from "react-hook-form";
 import { View } from "react-native";
@@ -17,7 +17,7 @@ type SignUpForm = {
 
 export function SignUp() {
   const { login, setUser } = useAuth();
-  const navigation = useNavigation<AppNavigatorRoutesProps>();
+  const navigation = useNavigation<NavigationRoutes>();
 
   const { control, handleSubmit, reset, formState: { isSubmitting } } = useForm<SignUpForm>({
     defaultValues: { name: "", email: "", password: "", passwordConfirm: "" },

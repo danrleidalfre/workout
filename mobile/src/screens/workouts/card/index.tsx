@@ -1,6 +1,6 @@
 import { Button } from "@/components/button";
 import { ChevronRight } from "@/components/icons/right";
-import { AppNavigatorRoutesProps } from "@/routes";
+import { NavigationRoutes } from "@/routes";
 import { useNavigation } from "@react-navigation/native";
 import { Text, View } from "react-native";
 import { Workout } from "..";
@@ -10,7 +10,7 @@ type Props = {
 }
 
 export function WorkoutCard({ workout }: Props) {
-  const navigation = useNavigation<AppNavigatorRoutesProps>()
+  const navigation = useNavigation<NavigationRoutes>()
 
   return (
     <View className="px-6 py-4 mt-4 bg-secondary dark:bg-secondary-foreground rounded-md">

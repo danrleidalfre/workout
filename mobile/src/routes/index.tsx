@@ -13,14 +13,14 @@ export type RoutesProps = {
   profile: undefined;
 };
 
-export type AppNavigatorRoutesProps = NativeStackNavigationProp<RoutesProps>;
+export type NavigationRoutes = NativeStackNavigationProp<RoutesProps>;
 
 export function Routes() {
   const { isAuthenticated } = useAuth();
 
   return (
     <NavigationContainer>
-      {!isAuthenticated ? <AuthRoutes /> : <AppRoutes />}
+      {isAuthenticated ? <AppRoutes /> : <AuthRoutes />}
     </NavigationContainer>
   );
 }

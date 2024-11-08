@@ -1,5 +1,5 @@
 import { getTokenStorage, removeTokenStorage, setTokenStorage } from "@/storages/token";
-import { setUserStorage, User } from "@/storages/user";
+import { getUserStorage, removeUserStorage, setUserStorage, User } from "@/storages/user";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 type AuthContextData = {
@@ -7,6 +7,7 @@ type AuthContextData = {
   login: (token: string) => Promise<void>;
   logout: () => Promise<void>;
   setUser: (user: User) => Promise<void>;
+  getUser: () => Promise<User>;
 };
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -30,6 +31,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     await removeTokenStorage();
+    await removeUserStorage()
     setIsAuthenticated(false);
   };
 
@@ -37,8 +39,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await setUserStorage(user);
   }
 
+  const getUser = async () => {
+    return await getUserStorage();
+  }
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, setUser }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, setUser, getUser }}>
       {children}
     </AuthContext.Provider>
   );
