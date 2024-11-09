@@ -1,6 +1,6 @@
 import { db } from '@/db'
 import { exercises } from '@/db/schema'
-import { eq } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
 
@@ -18,9 +18,19 @@ export const updateExercise: FastifyPluginAsyncZod = async app => {
         }),
       },
     },
-    async request => {
+    async (request, reply) => {
       const { id } = request.params
       const { title, groupId } = request.body
+      const userId = await request.getCurrentUserId()
+
+      const [exercise] = await db
+        .select()
+        .from(exercises)
+        .where(and(eq(exercises.id, id), eq(exercises.userId, userId)))
+
+      if (!exercise) {
+        return reply.code(401).send({ message: 'Unauthorized' })
+      }
 
       await db
         .update(exercises)

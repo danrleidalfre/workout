@@ -1,15 +1,19 @@
 import { db } from '@/db'
 import {
+  exercises,
   workoutCompletions,
   workoutCompletionSeries,
   workouts,
 } from '@/db/schema'
 import { dayjs } from '@/lib/dayjs'
-import { countDistinct, desc, eq } from 'drizzle-orm'
+import { and, countDistinct, desc, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
+import { auth } from '../middlewares/auth'
 
 export const fetchWorkoutsCompletions: FastifyPluginAsyncZod = async app => {
-  app.get('/workouts/completions', async () => {
+  app.register(auth).get('/workouts/completions', async request => {
+    const userId = await request.getCurrentUserId()
+
     const completions = await db
       .select({
         id: workoutCompletions.id,
@@ -25,6 +29,8 @@ export const fetchWorkoutsCompletions: FastifyPluginAsyncZod = async app => {
         workoutCompletionSeries,
         eq(workoutCompletionSeries.workoutCompletionId, workoutCompletions.id)
       )
+      .leftJoin(exercises, eq(workoutCompletionSeries.exerciseId, exercises.id))
+      .where(and(eq(workouts.userId, userId), eq(exercises.userId, userId)))
       .groupBy(
         workoutCompletions.id,
         workouts.title,

@@ -1,11 +1,12 @@
 import { db } from '@/db'
 import { workoutExercises, workoutExerciseSeries, workouts } from '@/db/schema'
-import { eq } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
+import { auth } from '../middlewares/auth'
 
 export const updateWorkout: FastifyPluginAsyncZod = async app => {
-  app.put(
+  app.register(auth).put(
     '/workouts/:id',
     {
       schema: {
@@ -30,9 +31,20 @@ export const updateWorkout: FastifyPluginAsyncZod = async app => {
         }),
       },
     },
-    async request => {
+    async (request, reply) => {
       const { id } = request.params
       const { title, exercises } = request.body
+
+      const userId = await request.getCurrentUserId()
+
+      const [workout] = await db
+        .select()
+        .from(workouts)
+        .where(and(eq(workouts.id, id), eq(workouts.userId, userId)))
+
+      if (!workout) {
+        return reply.code(401).send({ message: 'Unauthorized' })
+      }
 
       await db.update(workouts).set({ title }).where(eq(workouts.id, id))
 

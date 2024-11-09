@@ -1,8 +1,9 @@
 import { db } from '@/db'
 import { exercises, groups, workoutExercises, workouts } from '@/db/schema'
-import { eq, ilike } from 'drizzle-orm'
+import { and, eq, ilike } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
+import { auth } from '../middlewares/auth'
 
 interface Workout {
   id: string
@@ -12,7 +13,7 @@ interface Workout {
 }
 
 export const fetchWorkouts: FastifyPluginAsyncZod = async app => {
-  app.get(
+  app.register(auth).get(
     '/workouts',
     {
       schema: {
@@ -23,6 +24,7 @@ export const fetchWorkouts: FastifyPluginAsyncZod = async app => {
     },
     async request => {
       const { search } = request.query
+      const userId = await request.getCurrentUserId()
 
       const result = await db
         .select({
@@ -35,7 +37,12 @@ export const fetchWorkouts: FastifyPluginAsyncZod = async app => {
         .leftJoin(workoutExercises, eq(workouts.id, workoutExercises.workoutId))
         .leftJoin(exercises, eq(workoutExercises.exerciseId, exercises.id))
         .leftJoin(groups, eq(exercises.groupId, groups.id))
-        .where(search ? ilike(workouts.title, `%${search}%`) : undefined)
+        .where(
+          and(
+            search ? ilike(exercises.title, `%${search}%`) : undefined,
+            eq(exercises.userId, userId)
+          )
+        )
         .orderBy(workouts.title)
 
       return result.reduce((acc: Workout[], row) => {

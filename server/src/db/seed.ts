@@ -1,7 +1,9 @@
+import { hash } from 'bcryptjs'
 import { client, db } from '.'
 import {
   exercises,
   groups,
+  users,
   workoutCompletions,
   workoutCompletionSeries,
   workoutExercises,
@@ -17,13 +19,27 @@ async function seed() {
   await db.delete(exercises)
   await db.delete(groups)
   await db.delete(workouts)
+  await db.delete(users)
 
-  const workoutsCreated = await db
-    .insert(workouts)
-    .values([{ title: 'Push' }, { title: 'Pull' }, { title: 'Legs' }])
+  const passwordHash = await hash('admin', 6)
+
+  const [user] = await db
+    .insert(users)
+    .values([
+      { name: 'Admin', email: 'admin@admin.com', password: passwordHash },
+    ])
     .returning()
 
-  const groupsCreated = await db
+  const [pushWorkout, pullWorkout, legsWorkout] = await db
+    .insert(workouts)
+    .values([
+      { title: 'Push', userId: user.id },
+      { title: 'Pull', userId: user.id },
+      { title: 'Legs', userId: user.id },
+    ])
+    .returning()
+
+  const [chest, back, shoulders, biceps, triceps, legs] = await db
     .insert(groups)
     .values([
       { title: 'Peito' },
@@ -35,19 +51,30 @@ async function seed() {
     ])
     .returning()
 
-  const exercisesCreated = await db
+  const [
+    chestPress,
+    fly,
+    row,
+    lat,
+    shoulderPress,
+    curl,
+    skullcrusher,
+    squat,
+    deadlift,
+    stiff,
+  ] = await db
     .insert(exercises)
     .values([
-      { title: 'Supino', groupId: groupsCreated[0].id },
-      { title: 'Crucifixo', groupId: groupsCreated[0].id },
-      { title: 'Remada', groupId: groupsCreated[1].id },
-      { title: 'Puxada', groupId: groupsCreated[1].id },
-      { title: 'Desenvolvimento', groupId: groupsCreated[2].id },
-      { title: 'Rosca Direta', groupId: groupsCreated[3].id },
-      { title: 'Tríceps Testa', groupId: groupsCreated[4].id },
-      { title: 'Agachamento Livre', groupId: groupsCreated[5].id },
-      { title: 'Levantamento Terra', groupId: groupsCreated[5].id },
-      { title: 'Stiff', groupId: groupsCreated[5].id },
+      { title: 'Supino', groupId: chest.id, userId: user.id },
+      { title: 'Crucifixo', groupId: chest.id, userId: user.id },
+      { title: 'Remada', groupId: back.id, userId: user.id },
+      { title: 'Puxada', groupId: back.id, userId: user.id },
+      { title: 'Desenvolvimento', groupId: shoulders.id, userId: user.id },
+      { title: 'Rosca Direta', groupId: biceps.id, userId: user.id },
+      { title: 'Tríceps Testa', groupId: triceps.id, userId: user.id },
+      { title: 'Agachamento Livre', groupId: legs.id, userId: user.id },
+      { title: 'Levantamento Terra', groupId: legs.id, userId: user.id },
+      { title: 'Stiff', groupId: legs.id, userId: user.id },
     ])
     .returning()
 
@@ -55,62 +82,62 @@ async function seed() {
     .insert(workoutExercises)
     .values([
       {
-        workoutId: workoutsCreated[0].id,
-        exerciseId: exercisesCreated[0].id,
+        workoutId: pushWorkout.id,
+        exerciseId: chestPress.id,
         rest: 120,
         order: 1,
       },
       {
-        workoutId: workoutsCreated[0].id,
-        exerciseId: exercisesCreated[1].id,
+        workoutId: pushWorkout.id,
+        exerciseId: fly.id,
         rest: 120,
         order: 2,
       },
       {
-        workoutId: workoutsCreated[0].id,
-        exerciseId: exercisesCreated[4].id,
+        workoutId: pushWorkout.id,
+        exerciseId: shoulderPress.id,
         rest: 120,
         order: 3,
       },
       {
-        workoutId: workoutsCreated[0].id,
-        exerciseId: exercisesCreated[6].id,
+        workoutId: pushWorkout.id,
+        exerciseId: skullcrusher.id,
         rest: 120,
         order: 4,
       },
       {
-        workoutId: workoutsCreated[1].id,
-        exerciseId: exercisesCreated[2].id,
+        workoutId: pullWorkout.id,
+        exerciseId: row.id,
         rest: 120,
         order: 1,
       },
       {
-        workoutId: workoutsCreated[1].id,
-        exerciseId: exercisesCreated[3].id,
+        workoutId: pullWorkout.id,
+        exerciseId: lat.id,
         rest: 120,
         order: 2,
       },
       {
-        workoutId: workoutsCreated[1].id,
-        exerciseId: exercisesCreated[5].id,
+        workoutId: pullWorkout.id,
+        exerciseId: curl.id,
         rest: 120,
         order: 3,
       },
       {
-        workoutId: workoutsCreated[2].id,
-        exerciseId: exercisesCreated[7].id,
+        workoutId: legsWorkout.id,
+        exerciseId: squat.id,
         rest: 120,
         order: 1,
       },
       {
-        workoutId: workoutsCreated[2].id,
-        exerciseId: exercisesCreated[8].id,
+        workoutId: legsWorkout.id,
+        exerciseId: deadlift.id,
         rest: 120,
         order: 2,
       },
       {
-        workoutId: workoutsCreated[2].id,
-        exerciseId: exercisesCreated[9].id,
+        workoutId: legsWorkout.id,
+        exerciseId: stiff.id,
         rest: 120,
         order: 3,
       },

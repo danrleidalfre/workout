@@ -14,6 +14,7 @@ export const workouts = pgTable('workouts', {
   id: text('id')
     .primaryKey()
     .$defaultFn(() => createId()),
+  userId: text('user_id').references(() => users.id),
   title: text('title').notNull(),
 })
 
@@ -31,6 +32,7 @@ export const exercises = pgTable('exercises', {
   groupId: text('group_id')
     .references(() => groups.id)
     .notNull(),
+  userId: text('user_id').references(() => users.id),
   title: text('title').notNull(),
 })
 

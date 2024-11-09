@@ -2,9 +2,10 @@ import { db } from '@/db'
 import { workoutExercises, workoutExerciseSeries, workouts } from '@/db/schema'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
+import { auth } from '../middlewares/auth'
 
 export const createWorkout: FastifyPluginAsyncZod = async app => {
-  app.post(
+  app.register(auth).post(
     '/workouts',
     {
       schema: {
@@ -28,10 +29,11 @@ export const createWorkout: FastifyPluginAsyncZod = async app => {
     },
     async request => {
       const { title, exercises } = request.body
+      const userId = await request.getCurrentUserId()
 
       const [workout] = await db
         .insert(workouts)
-        .values({ title })
+        .values({ title, userId })
         .returning({ id: workouts.id })
 
       await Promise.all(

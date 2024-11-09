@@ -4,14 +4,16 @@ import {
   workoutCompletionSeries,
   workoutExercises,
   workoutExerciseSeries,
+  workouts,
 } from '@/db/schema'
 import { dayjs } from '@/lib/dayjs'
 import { and, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
+import { auth } from '../middlewares/auth'
 
 export const completionWorkout: FastifyPluginAsyncZod = async app => {
-  app.post(
+  app.register(auth).post(
     '/workouts/:id/completion',
     {
       schema: {
@@ -39,9 +41,20 @@ export const completionWorkout: FastifyPluginAsyncZod = async app => {
         }),
       },
     },
-    async request => {
+    async (request, reply) => {
       const { id } = request.params
       const { start, end, exercises } = request.body
+      const userId = await request.getCurrentUserId()
+
+      const [workout] = await db
+        .select()
+        .from(workouts)
+        .where(and(eq(workouts.id, id), eq(workouts.userId, userId)))
+
+      if (!workout) {
+        return reply.code(401).send({ message: 'Unauthorized' })
+      }
+
       const [workoutCompletion] = await db
         .insert(workoutCompletions)
         .values({

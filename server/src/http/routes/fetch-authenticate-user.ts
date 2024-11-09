@@ -6,7 +6,7 @@ import { auth } from '../middlewares/auth'
 
 export const fetchAuthenticateUser: FastifyPluginAsyncZod = async app => {
   app.register(auth).get('/sessions', {}, async (request, reply) => {
-    const currentUserId = await request.getCurrentUserId()
+    const userId = await request.getCurrentUserId()
 
     const [user] = await db
       .select({
@@ -15,7 +15,7 @@ export const fetchAuthenticateUser: FastifyPluginAsyncZod = async app => {
         email: users.email,
       })
       .from(users)
-      .where(eq(users.id, currentUserId))
+      .where(eq(users.id, userId))
 
     if (!user) {
       return reply.status(400).send({ message: 'User not found' })

@@ -1,6 +1,9 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 
 export const useAuth = () => {
+  const queryClient = useQueryClient()
+
   const [isAuthenticated, setIsAuthenticated] = useState(
     !!localStorage.getItem('token')
   )
@@ -18,6 +21,7 @@ export const useAuth = () => {
   const logout = () => {
     localStorage.removeItem('token')
     setIsAuthenticated(false)
+    queryClient.invalidateQueries()
   }
 
   return { isAuthenticated, login, logout }

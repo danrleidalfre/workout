@@ -4,11 +4,13 @@ import {
   groups,
   workoutCompletions,
   workoutCompletionSeries,
+  workouts,
 } from '@/db/schema'
 import { dayjs } from '@/lib/dayjs'
-import { between, count, eq } from 'drizzle-orm'
+import { and, between, count, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
+import { auth } from '../middlewares/auth'
 
 interface SeriesByGroup {
   series: number
@@ -17,7 +19,7 @@ interface SeriesByGroup {
 
 export const fetchSeriesByGroupCompletions: FastifyPluginAsyncZod =
   async app => {
-    app.get(
+    app.register(auth).get(
       '/workouts/series-by-group-completions',
       {
         schema: {
@@ -29,6 +31,7 @@ export const fetchSeriesByGroupCompletions: FastifyPluginAsyncZod =
       },
       async request => {
         const { start, end } = request.query
+        const userId = await request.getCurrentUserId()
 
         const seriesByGroup: SeriesByGroup[] = await db
           .select({
@@ -48,12 +51,17 @@ export const fetchSeriesByGroupCompletions: FastifyPluginAsyncZod =
               workoutCompletionSeries.workoutCompletionId
             )
           )
+          .leftJoin(workouts, eq(workoutCompletions.workoutId, workouts.id))
           .groupBy(groups.id)
           .where(
-            between(
-              workoutCompletions.end,
-              dayjs(`${start} 21:00:00`).toDate(),
-              dayjs(`${end} 20:59:59`).toDate()
+            and(
+              between(
+                workoutCompletions.end,
+                dayjs(`${start} 21:00:00`).toDate(),
+                dayjs(`${end} 20:59:59`).toDate()
+              ),
+              eq(workouts.userId, userId),
+              eq(exercises.userId, userId)
             )
           )
 

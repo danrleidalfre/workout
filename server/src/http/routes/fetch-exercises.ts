@@ -3,9 +3,10 @@ import { exercises, groups } from '@/db/schema'
 import { and, eq, ilike } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import z from 'zod'
+import { auth } from '../middlewares/auth'
 
 export const fetchExercises: FastifyPluginAsyncZod = async app => {
-  app.get(
+  app.register(auth).get(
     '/exercises',
     {
       schema: {
@@ -17,6 +18,7 @@ export const fetchExercises: FastifyPluginAsyncZod = async app => {
     },
     async request => {
       const { groupId, search } = request.query
+      const userId = await request.getCurrentUserId()
 
       return await db
         .select({
@@ -30,7 +32,8 @@ export const fetchExercises: FastifyPluginAsyncZod = async app => {
         .where(
           and(
             search ? ilike(exercises.title, `%${search}%`) : undefined,
-            groupId ? eq(exercises.groupId, groupId) : undefined
+            groupId ? eq(exercises.groupId, groupId) : undefined,
+            eq(exercises.userId, userId)
           )
         )
     }
