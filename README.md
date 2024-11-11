@@ -30,7 +30,7 @@ Status|Funcionalidade
 ✅|Mobile/Server - Adicionar séries no treino em andamento
 ✅|Mobile/Server - Adicionar exercícios no treino em andamento
 ✅|Web/Mobile/Server - Autenticação com e-mail e senha
-⏳|Server - Documentação da API com Swagger
+✅|Server - Documentação da API com Swagger
 ❌|Web/Mobile/Server - Tratamento de erros
 ❌|Web/Mobile - Validação dos forms
 ❌|Mobile - Tempo de descanso e notificações em background (Expo Bare)
@@ -48,6 +48,7 @@ npx drizzle-kit migrate
 npm run seed
 npm run server
 ```
+Endpoints disponíveis [Swagger API Docs](http://localhost:3333/docs)
 
 ## Web
 ```bash
@@ -56,6 +57,7 @@ cp .env.local.example .env.local
 npm i
 npm run web
 ```
+Acessar a [Aplicação Web](http://localhost:5173/login)
 
 ## Mobile
 ```bash
