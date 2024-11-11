@@ -9,17 +9,27 @@ export const createExercise: FastifyPluginAsyncZod = async app => {
     '/exercises',
     {
       schema: {
+        tags: ['Exercícios'],
+        summary: 'Cria um exercício',
+        security: [{ bearerAuth: [] }],
         body: z.object({
           title: z.string(),
           groupId: z.string(),
         }),
+        response: {
+          201: z.object({
+            message: z.string(),
+          }),
+        },
       },
     },
-    async request => {
+    async (request, reply) => {
       const { title, groupId } = request.body
       const userId = await request.getCurrentUserId()
 
       await db.insert(exercises).values({ title, groupId, userId })
+
+      return reply.status(201).send({ message: 'Exercício criado com sucesso' })
     }
   )
 }

@@ -15,9 +15,35 @@ export const fetchWorkout: FastifyPluginAsyncZod = async app => {
     '/workouts/:id',
     {
       schema: {
+        tags: ['Treinos'],
+        summary: 'Busca um treino',
+        security: [{ bearerAuth: [] }],
         params: z.object({
           id: z.string(),
         }),
+        response: {
+          200: z.object({
+            id: z.string(),
+            title: z.string(),
+            exercises: z.array(
+              z.object({
+                exerciseId: z.string(),
+                exerciseTitle: z.string(),
+                rest: z.string(),
+                note: z.string().nullable(),
+                series: z.array(
+                  z.object({
+                    serieId: z.string().nullable(),
+                    reps: z.number(),
+                    load: z.number().nullable(),
+                    completed: z.boolean(),
+                  })
+                ),
+              })
+            ),
+          }),
+          401: z.object({ message: z.string() }),
+        },
       },
     },
     async (request, reply) => {
@@ -57,7 +83,7 @@ export const fetchWorkout: FastifyPluginAsyncZod = async app => {
         .where(eq(workouts.id, id))
         .orderBy(workoutExercises.order)
 
-      return {
+      const workoutResult = {
         id: result[0]?.id,
         title: result[0]?.workoutTitle,
         exercises: result.reduce(
@@ -104,6 +130,8 @@ export const fetchWorkout: FastifyPluginAsyncZod = async app => {
           }[]
         ),
       }
+
+      return reply.status(200).send(workoutResult)
     }
   )
 }

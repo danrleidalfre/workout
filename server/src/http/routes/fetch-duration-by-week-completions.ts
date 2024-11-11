@@ -3,13 +3,29 @@ import { workoutCompletions, workouts } from '@/db/schema'
 import { dayjs } from '@/lib/dayjs'
 import { and, between, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
+import z from 'zod'
 import { auth } from '../middlewares/auth'
 
 export const fetchDurationByWeekCompletions: FastifyPluginAsyncZod =
   async app => {
-    app
-      .register(auth)
-      .get('/workouts/duration-by-week-completions', async request => {
+    app.register(auth).get(
+      '/workouts/duration-by-week-completions',
+      {
+        schema: {
+          tags: ['Treinos'],
+          summary: 'Busca a duração de treino em horas agrupado por semana',
+          security: [{ bearerAuth: [] }],
+          response: {
+            200: z.array(
+              z.object({
+                week: z.string(),
+                duration: z.number(),
+              })
+            ),
+          },
+        },
+      },
+      async (request, reply) => {
         const userId = await request.getCurrentUserId()
 
         const weeks = Array.from({ length: 7 }, (_, index) => {
@@ -25,7 +41,7 @@ export const fetchDurationByWeekCompletions: FastifyPluginAsyncZod =
           }
         }).reverse()
 
-        return await Promise.all(
+        const durationByWeek = await Promise.all(
           weeks.map(async week => {
             const startAndEndByWeek = await db
               .select({
@@ -59,5 +75,8 @@ export const fetchDurationByWeekCompletions: FastifyPluginAsyncZod =
             }
           })
         )
-      })
+
+        return reply.status(200).send(durationByWeek)
+      }
+    )
   }

@@ -10,10 +10,18 @@ export const authenticateUser: FastifyPluginAsyncZod = async app => {
     '/sessions',
     {
       schema: {
+        tags: ['Autenticação'],
+        summary: 'Autentica um usuário com e-mail e senha',
         body: z.object({
           email: z.string().email(),
           password: z.string(),
         }),
+        response: {
+          201: z.string(),
+          400: z.object({
+            message: z.string(),
+          }),
+        },
       },
     },
     async (request, reply) => {
@@ -31,7 +39,7 @@ export const authenticateUser: FastifyPluginAsyncZod = async app => {
         return reply.status(400).send({ message: 'Invalid credential' })
       }
 
-      return await reply.jwtSign(
+      const token = await reply.jwtSign(
         {
           sub: user.id,
         },
@@ -41,6 +49,8 @@ export const authenticateUser: FastifyPluginAsyncZod = async app => {
           },
         }
       )
+
+      return reply.status(201).send(token)
     }
   )
 }

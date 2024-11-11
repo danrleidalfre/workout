@@ -3,13 +3,29 @@ import { workoutCompletions, workouts } from '@/db/schema'
 import { dayjs } from '@/lib/dayjs'
 import { and, between, count, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
+import z from 'zod'
 import { auth } from '../middlewares/auth'
 
 export const fetchWorkoutsByMonthCompletions: FastifyPluginAsyncZod =
   async app => {
-    app
-      .register(auth)
-      .get('/workouts/workouts-by-month-completions', async request => {
+    app.register(auth).get(
+      '/workouts/workouts-by-month-completions',
+      {
+        schema: {
+          tags: ['Treinos'],
+          summary: 'Busca a quantidade de treinos agrupado por mês',
+          security: [{ bearerAuth: [] }],
+          response: {
+            200: z.array(
+              z.object({
+                month: z.string(),
+                workouts: z.number(),
+              })
+            ),
+          },
+        },
+      },
+      async (request, reply) => {
         const userId = await request.getCurrentUserId()
 
         const months = Array.from({ length: 6 }, (_, index) => {
@@ -28,7 +44,7 @@ export const fetchWorkoutsByMonthCompletions: FastifyPluginAsyncZod =
           }
         }).reverse()
 
-        return await Promise.all(
+        const workoutsByMonth = await Promise.all(
           months.map(async month => {
             const [workoutByMonth] = await db
               .select({
@@ -49,5 +65,8 @@ export const fetchWorkoutsByMonthCompletions: FastifyPluginAsyncZod =
             }
           })
         )
-      })
+
+        return reply.status(200).send(workoutsByMonth)
+      }
+    )
   }

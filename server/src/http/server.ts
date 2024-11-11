@@ -1,7 +1,10 @@
 import fastifyCors from '@fastify/cors'
 import fastifyJwt from '@fastify/jwt'
+import fastifySwagger from '@fastify/swagger'
+import fastifySwaggerUi from '@fastify/swagger-ui'
 import fastify from 'fastify'
 import {
+  jsonSchemaTransform,
   serializerCompiler,
   validatorCompiler,
   type ZodTypeProvider,
@@ -32,6 +35,29 @@ const app = fastify().withTypeProvider<ZodTypeProvider>()
 app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)
 
+app.register(fastifySwagger, {
+  openapi: {
+    info: {
+      title: 'Workout API',
+      version: '1.0.0',
+    },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+  },
+  transform: jsonSchemaTransform,
+})
+
+app.register(fastifySwaggerUi, {
+  routePrefix: '/docs',
+})
+
 app.register(fastifyCors, {
   origin: '*',
 })
@@ -39,6 +65,10 @@ app.register(fastifyCors, {
 app.register(fastifyJwt, {
   secret: 'super-secret-jwt',
 })
+
+app.register(createUser)
+app.register(authenticateUser)
+app.register(fetchAuthenticateUser)
 
 app.register(createWorkout)
 app.register(fetchWorkouts)
@@ -59,10 +89,6 @@ app.register(updateExercise)
 app.register(deleteExercise)
 
 app.register(fetchGroups)
-
-app.register(createUser)
-app.register(authenticateUser)
-app.register(fetchAuthenticateUser)
 
 app
   .listen({

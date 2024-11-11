@@ -17,6 +17,9 @@ export const completionWorkout: FastifyPluginAsyncZod = async app => {
     '/workouts/:id/completion',
     {
       schema: {
+        tags: ['Treinos'],
+        summary: 'Finaliza um treino',
+        security: [{ bearerAuth: [] }],
         params: z.object({
           id: z.string(),
         }),
@@ -39,6 +42,10 @@ export const completionWorkout: FastifyPluginAsyncZod = async app => {
             })
           ),
         }),
+        response: {
+          200: z.object({ message: z.string() }),
+          401: z.object({ message: z.string() }),
+        },
       },
     },
     async (request, reply) => {
@@ -111,6 +118,10 @@ export const completionWorkout: FastifyPluginAsyncZod = async app => {
           })
         })
       )
+
+      return reply
+        .status(200)
+        .send({ message: 'Treino finalizado com sucesso' })
     }
   )
 }

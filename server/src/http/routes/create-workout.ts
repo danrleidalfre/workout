@@ -9,6 +9,9 @@ export const createWorkout: FastifyPluginAsyncZod = async app => {
     '/workouts',
     {
       schema: {
+        tags: ['Treinos'],
+        summary: 'Cria um treino',
+        security: [{ bearerAuth: [] }],
         body: z.object({
           title: z.string(),
           exercises: z.array(
@@ -25,9 +28,12 @@ export const createWorkout: FastifyPluginAsyncZod = async app => {
             })
           ),
         }),
+        response: {
+          201: z.object({ message: z.string() }),
+        },
       },
     },
-    async request => {
+    async (request, reply) => {
       const { title, exercises } = request.body
       const userId = await request.getCurrentUserId()
 
@@ -63,6 +69,8 @@ export const createWorkout: FastifyPluginAsyncZod = async app => {
           )
         })
       )
+
+      return reply.status(201).send({ message: 'Treino criado com sucesso' })
     }
   )
 }

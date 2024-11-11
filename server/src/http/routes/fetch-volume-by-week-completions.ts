@@ -7,13 +7,29 @@ import {
 import { dayjs } from '@/lib/dayjs'
 import { and, between, eq } from 'drizzle-orm'
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
+import z from 'zod'
 import { auth } from '../middlewares/auth'
 
 export const fetchVolumeByWeekCompletions: FastifyPluginAsyncZod =
   async app => {
-    app
-      .register(auth)
-      .get('/workouts/volume-by-week-completions', async request => {
+    app.register(auth).get(
+      '/workouts/volume-by-week-completions',
+      {
+        schema: {
+          tags: ['Treinos'],
+          summary: 'Busca o volume em kg agrupado por semana',
+          security: [{ bearerAuth: [] }],
+          response: {
+            200: z.array(
+              z.object({
+                week: z.string(),
+                volume: z.number(),
+              })
+            ),
+          },
+        },
+      },
+      async (request, reply) => {
         const userId = await request.getCurrentUserId()
 
         const weeks = Array.from({ length: 7 }, (_, index) => {
@@ -29,7 +45,7 @@ export const fetchVolumeByWeekCompletions: FastifyPluginAsyncZod =
           }
         }).reverse()
 
-        return await Promise.all(
+        const volumeByWeek = await Promise.all(
           weeks.map(async week => {
             const loadAndRepsByWeek = await db
               .select({
@@ -65,5 +81,8 @@ export const fetchVolumeByWeekCompletions: FastifyPluginAsyncZod =
             }
           })
         )
-      })
+
+        return reply.status(200).send(volumeByWeek)
+      }
+    )
   }

@@ -10,17 +10,30 @@ export const fetchExercises: FastifyPluginAsyncZod = async app => {
     '/exercises',
     {
       schema: {
+        tags: ['Exercícios'],
+        summary: 'Busca os exercícios cadastrados',
+        security: [{ bearerAuth: [] }],
         querystring: z.object({
           groupId: z.string().optional(),
           search: z.string().optional(),
         }),
+        response: {
+          200: z.array(
+            z.object({
+              id: z.string(),
+              title: z.string(),
+              group: z.string().nullable(),
+              groupId: z.string().nullable(),
+            })
+          ),
+        },
       },
     },
-    async request => {
+    async (request, reply) => {
       const { groupId, search } = request.query
       const userId = await request.getCurrentUserId()
 
-      return await db
+      const exercisesResponse = await db
         .select({
           id: exercises.id,
           title: exercises.title,
@@ -36,6 +49,8 @@ export const fetchExercises: FastifyPluginAsyncZod = async app => {
             eq(exercises.userId, userId)
           )
         )
+
+      return reply.status(200).send(exercisesResponse)
     }
   )
 }

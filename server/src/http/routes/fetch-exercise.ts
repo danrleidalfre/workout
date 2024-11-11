@@ -10,9 +10,22 @@ export const fetchExercise: FastifyPluginAsyncZod = async app => {
     '/exercises/:id',
     {
       schema: {
+        tags: ['Exercícios'],
+        summary: 'Busca um exercício',
+        security: [{ bearerAuth: [] }],
         params: z.object({
           id: z.string(),
         }),
+        response: {
+          200: z.object({
+            id: z.string(),
+            exercise: z.string(),
+            group: z.string().nullable(),
+          }),
+          401: z.object({
+            message: z.string(),
+          }),
+        },
       },
     },
     async (request, reply) => {
@@ -28,7 +41,7 @@ export const fetchExercise: FastifyPluginAsyncZod = async app => {
         return reply.code(401).send({ message: 'Unauthorized' })
       }
 
-      const exercise = await db
+      const [exercise] = await db
         .select({
           id: exercises.id,
           exercise: exercises.title,
@@ -38,7 +51,7 @@ export const fetchExercise: FastifyPluginAsyncZod = async app => {
         .leftJoin(groups, eq(exercises.groupId, groups.id))
         .where(eq(exercises.id, id))
 
-      return exercise[0]
+      return reply.status(200).send(exercise)
     }
   )
 }

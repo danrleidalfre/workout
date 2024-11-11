@@ -10,11 +10,21 @@ export const createUser: FastifyPluginAsyncZod = async app => {
     '/users',
     {
       schema: {
+        tags: ['Autenticação'],
+        summary: 'Cria um usuário',
         body: z.object({
           name: z.string(),
           email: z.string().email(),
           password: z.string(),
         }),
+        response: {
+          201: z.object({
+            message: z.string(),
+          }),
+          400: z.object({
+            message: z.string(),
+          }),
+        },
       },
     },
     async (request, reply) => {
@@ -33,6 +43,8 @@ export const createUser: FastifyPluginAsyncZod = async app => {
         email,
         password: passwordHash,
       })
+
+      return reply.status(201).send({ message: 'Usuário criado com sucesso' })
     }
   )
 }

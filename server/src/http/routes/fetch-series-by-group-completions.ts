@@ -23,13 +23,24 @@ export const fetchSeriesByGroupCompletions: FastifyPluginAsyncZod =
       '/workouts/series-by-group-completions',
       {
         schema: {
+          tags: ['Treinos'],
+          summary: 'Busca o total de séries agrupado por grupo muscular',
+          security: [{ bearerAuth: [] }],
           querystring: z.object({
             start: z.string(),
             end: z.string(),
           }),
+          response: {
+            200: z.array(
+              z.object({
+                group: z.string(),
+                series: z.number(),
+              })
+            ),
+          },
         },
       },
-      async request => {
+      async (request, reply) => {
         const { start, end } = request.query
         const userId = await request.getCurrentUserId()
 
@@ -75,9 +86,11 @@ export const fetchSeriesByGroupCompletions: FastifyPluginAsyncZod =
           }
         })
 
-        return Array.from(groupMap.entries())
+        const seriesByGroups = Array.from(groupMap.entries())
           .map(([group, series]) => ({ group, series }))
           .sort((a, b) => a.series - b.series)
+
+        return reply.status(200).send(seriesByGroups)
       }
     )
   }

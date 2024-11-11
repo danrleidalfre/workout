@@ -10,9 +10,16 @@ export const deleteWorkout: FastifyPluginAsyncZod = async app => {
     '/workouts/:id',
     {
       schema: {
+        tags: ['Treinos'],
+        summary: 'Remove um treino',
+        security: [{ bearerAuth: [] }],
         params: z.object({
           id: z.string(),
         }),
+        response: {
+          200: z.object({ message: z.string() }),
+          401: z.object({ message: z.string() }),
+        },
       },
     },
     async (request, reply) => {
@@ -29,6 +36,8 @@ export const deleteWorkout: FastifyPluginAsyncZod = async app => {
       }
 
       await db.delete(workouts).where(eq(workouts.id, id))
+
+      return reply.status(200).send({ message: 'Treino removido com sucesso' })
     }
   )
 }
