@@ -1,5 +1,17 @@
 # Workout
 
+## Screenshots
+### Login
+![Login](screenshots/login.png "Login")
+### Home
+![Home](screenshots/home.png "Home")
+### Workout
+![Workout](screenshots/workout.png "Workout")
+### Seletor de tema
+![Switch Theme](screenshots/switch-theme.png "Switch Theme")
+### Tema light
+![Light Theme](screenshots/light-theme.png "Light Theme")
+
 ## Roadmap
 Status|Funcionalidade
 :-:| -
@@ -17,15 +29,15 @@ Status|Funcionalidade
 ✅|Mobile - Salvar em local storage o progresso do treino, para lembrete de continuar, caso o app for fechado
 ✅|Mobile/Server - Adicionar séries no treino em andamento
 ✅|Mobile/Server - Adicionar exercícios no treino em andamento
-✅|Mobile - Notificação via push quando tempo de descanso acabar
 ✅|Web/Mobile/Server - Autenticação com e-mail e senha
-❌|Mobile - Tempo de descanso e notificações em background
+⏳|Server - Documentação da API com Swagger
 ❌|Web/Mobile/Server - Tratamento de erros
 ❌|Web/Mobile - Validação dos forms
-❌|Server - Documentação da API com Swagger
+❌|Mobile - Tempo de descanso e notificações em background (Expo Bare)
+
+## Rodar o projeto
 
 ## Server
-
 ```bash
 cd server
 cp .env.example .env
@@ -38,7 +50,6 @@ npm run server
 ```
 
 ## Web
-
 ```bash
 cd web
 cp .env.local.example .env.local
@@ -47,7 +58,6 @@ npm run web
 ```
 
 ## Mobile
-
 ```bash
 cd mobile
 npm i
