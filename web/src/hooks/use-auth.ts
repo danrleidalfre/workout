@@ -1,3 +1,4 @@
+import { api } from '@/lib/axios'
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 
@@ -11,6 +12,14 @@ export const useAuth = () => {
   useEffect(() => {
     const token = localStorage.getItem('token')
     setIsAuthenticated(!!token)
+  }, [])
+
+  useEffect(() => {
+    const subscribe = api.interceptToken(logout)
+
+    return () => {
+      subscribe()
+    }
   }, [])
 
   const login = (token: string) => {
