@@ -9,7 +9,7 @@ export const createWorkout: FastifyPluginAsyncZod = async app => {
     '/workouts',
     {
       schema: {
-        tags: ['Treinos'],
+        tags: ['Treino'],
         summary: 'Cria um treino',
         security: [{ bearerAuth: [] }],
         body: z.object({

@@ -10,7 +10,7 @@ export const fetchExercises: FastifyPluginAsyncZod = async app => {
     '/exercises',
     {
       schema: {
-        tags: ['Exercícios'],
+        tags: ['Exercício'],
         summary: 'Busca os exercícios cadastrados',
         security: [{ bearerAuth: [] }],
         querystring: z.object({

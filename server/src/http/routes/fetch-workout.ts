@@ -15,7 +15,7 @@ export const fetchWorkout: FastifyPluginAsyncZod = async app => {
     '/workouts/:id',
     {
       schema: {
-        tags: ['Treinos'],
+        tags: ['Treino'],
         summary: 'Busca um treino',
         security: [{ bearerAuth: [] }],
         params: z.object({

@@ -12,7 +12,7 @@ export const fetchWorkoutsByMonthCompletions: FastifyPluginAsyncZod =
       '/workouts/workouts-by-month-completions',
       {
         schema: {
-          tags: ['Treinos'],
+          tags: ['Treino'],
           summary: 'Busca a quantidade de treinos agrupado por mês',
           security: [{ bearerAuth: [] }],
           response: {

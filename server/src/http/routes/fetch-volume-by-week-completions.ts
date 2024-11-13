@@ -16,7 +16,7 @@ export const fetchVolumeByWeekCompletions: FastifyPluginAsyncZod =
       '/workouts/volume-by-week-completions',
       {
         schema: {
-          tags: ['Treinos'],
+          tags: ['Treino'],
           summary: 'Busca o volume em kg agrupado por semana',
           security: [{ bearerAuth: [] }],
           response: {

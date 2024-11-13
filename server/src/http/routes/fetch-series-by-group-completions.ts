@@ -23,7 +23,7 @@ export const fetchSeriesByGroupCompletions: FastifyPluginAsyncZod =
       '/workouts/series-by-group-completions',
       {
         schema: {
-          tags: ['Treinos'],
+          tags: ['Treino'],
           summary: 'Busca o total de séries agrupado por grupo muscular',
           security: [{ bearerAuth: [] }],
           querystring: z.object({

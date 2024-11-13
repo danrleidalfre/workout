@@ -10,7 +10,7 @@ export const deleteWorkout: FastifyPluginAsyncZod = async app => {
     '/workouts/:id',
     {
       schema: {
-        tags: ['Treinos'],
+        tags: ['Treino'],
         summary: 'Remove um treino',
         security: [{ bearerAuth: [] }],
         params: z.object({

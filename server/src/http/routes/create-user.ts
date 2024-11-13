@@ -10,7 +10,7 @@ export const createUser: FastifyPluginAsyncZod = async app => {
     '/users',
     {
       schema: {
-        tags: ['Autenticação'],
+        tags: ['Usuário'],
         summary: 'Cria um usuário',
         body: z.object({
           name: z.string(),

@@ -1,3 +1,5 @@
+import { env } from '@/env'
+import fastifyCookie from '@fastify/cookie'
 import fastifyCors from '@fastify/cors'
 import fastifyJwt from '@fastify/jwt'
 import fastifySwagger from '@fastify/swagger'
@@ -27,6 +29,7 @@ import { fetchWorkout } from './routes/fetch-workout'
 import { fetchWorkouts } from './routes/fetch-workouts'
 import { fetchWorkoutsByMonthCompletions } from './routes/fetch-workouts-by-month-completions'
 import { fetchWorkoutsCompletions } from './routes/fetch-workouts-completions'
+import { refreshToken } from './routes/refresh-token'
 import { updateExercise } from './routes/update-exercise'
 import { updateWorkout } from './routes/update-workout'
 
@@ -63,12 +66,23 @@ app.register(fastifyCors, {
 })
 
 app.register(fastifyJwt, {
-  secret: 'super-secret-jwt',
+  secret: env.JWT_SECRET,
+  cookie: {
+    cookieName: 'refreshToken',
+    signed: false,
+  },
+  sign: {
+    expiresIn: '1m',
+  },
 })
 
+app.register(fastifyCookie)
+
 app.register(createUser)
+
 app.register(authenticateUser)
 app.register(fetchAuthenticateUser)
+app.register(refreshToken)
 
 app.register(createWorkout)
 app.register(fetchWorkouts)

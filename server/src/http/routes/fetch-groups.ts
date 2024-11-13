@@ -9,7 +9,7 @@ export const fetchGroups: FastifyPluginAsyncZod = async app => {
     '/groups',
     {
       schema: {
-        tags: ['Grupos musculares'],
+        tags: ['Grupo Muscular'],
         summary: 'Busca os grupos musculares',
         security: [{ bearerAuth: [] }],
         response: {

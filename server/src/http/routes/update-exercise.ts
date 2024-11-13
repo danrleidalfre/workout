@@ -9,7 +9,7 @@ export const updateExercise: FastifyPluginAsyncZod = async app => {
     '/exercises/:id',
     {
       schema: {
-        tags: ['Exercícios'],
+        tags: ['Exercício'],
         summary: 'Atualiza um exercício',
         security: [{ bearerAuth: [] }],
         params: z.object({

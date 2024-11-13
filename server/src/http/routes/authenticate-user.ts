@@ -11,13 +11,13 @@ export const authenticateUser: FastifyPluginAsyncZod = async app => {
     {
       schema: {
         tags: ['Autenticação'],
-        summary: 'Autentica um usuário com e-mail e senha',
+        summary: 'Autentica um usuário',
         body: z.object({
           email: z.string().email(),
           password: z.string(),
         }),
         response: {
-          201: z.string(),
+          200: z.string(),
           400: z.object({
             message: z.string(),
           }),
@@ -40,17 +40,33 @@ export const authenticateUser: FastifyPluginAsyncZod = async app => {
       }
 
       const token = await reply.jwtSign(
-        {
-          sub: user.id,
-        },
+        {},
         {
           sign: {
+            sub: user.id,
+          },
+        }
+      )
+
+      const refreshToken = await reply.jwtSign(
+        {},
+        {
+          sign: {
+            sub: user.id,
             expiresIn: '7d',
           },
         }
       )
 
-      return reply.status(201).send(token)
+      return reply
+        .setCookie('refreshToken', refreshToken, {
+          path: '/',
+          secure: true,
+          sameSite: true,
+          httpOnly: true,
+        })
+        .status(200)
+        .send(token)
     }
   )
 }

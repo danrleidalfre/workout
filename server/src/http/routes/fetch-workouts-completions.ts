@@ -16,7 +16,7 @@ export const fetchWorkoutsCompletions: FastifyPluginAsyncZod = async app => {
     '/workouts/completions',
     {
       schema: {
-        tags: ['Treinos'],
+        tags: ['Treino'],
         summary: 'Busca as informações dos últimos treinos finalizados',
         security: [{ bearerAuth: [] }],
         response: {

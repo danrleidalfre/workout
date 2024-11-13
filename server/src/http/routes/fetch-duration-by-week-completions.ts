@@ -12,7 +12,7 @@ export const fetchDurationByWeekCompletions: FastifyPluginAsyncZod =
       '/workouts/duration-by-week-completions',
       {
         schema: {
-          tags: ['Treinos'],
+          tags: ['Treino'],
           summary: 'Busca a duração de treino em horas agrupado por semana',
           security: [{ bearerAuth: [] }],
           response: {
