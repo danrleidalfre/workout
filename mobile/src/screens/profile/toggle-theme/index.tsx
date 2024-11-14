@@ -1,6 +1,6 @@
 import { Check } from "@/components/icons/check";
-import { useThemeContext } from "@/contexts/theme";
 import { cn } from "@/libs/utils";
+import { useThemeContext } from "@/providers/theme";
 import { Text, TouchableOpacity, View } from "react-native";
 
 export function ToggleTheme() {

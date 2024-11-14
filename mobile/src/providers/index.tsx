@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@/contexts/theme';
+import { ThemeProvider } from '@/providers/theme';
 import { ReactNode } from 'react';
 import { AuthProvider } from './auth';
 

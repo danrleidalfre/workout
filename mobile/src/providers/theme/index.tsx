@@ -1,8 +1,19 @@
 import { getThemeStorage, setThemeStorage, Theme } from "@/storages/theme";
 import { useColorScheme } from "nativewind";
-import { useEffect, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
-export function useTheme() {
+interface ThemeContextProps {
+  theme: Theme;
+  changeTheme: (newTheme: Theme) => void;
+}
+
+type ProvidersProps = {
+  children: ReactNode;
+}
+
+const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
+
+export const ThemeProvider = ({ children }: ProvidersProps) => {
   const { setColorScheme } = useColorScheme();
   const [theme, setTheme] = useState<Theme>('system');
 
@@ -25,5 +36,17 @@ export function useTheme() {
     await setThemeStorage(newTheme);
   };
 
-  return { theme, changeTheme };
-}
+  return (
+    <ThemeContext.Provider value={{ theme, changeTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
+export const useThemeContext = () => {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error("useThemeContext must be used within a ThemeProvider");
+  }
+  return context;
+};

@@ -1,6 +1,6 @@
 import { Button } from "@/components/button";
 import { LogOut } from "@/components/icons/logout";
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from "@/providers/auth";
 import { User } from "@/storages/user";
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";

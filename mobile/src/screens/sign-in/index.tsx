@@ -1,7 +1,7 @@
 import { Button } from "@/components/button";
 import { Input } from "@/components/input";
-import { useAuth } from "@/contexts/auth";
 import { api } from "@/libs/axios";
+import { useAuth } from "@/providers/auth";
 import { NavigationRoutes } from "@/routes";
 import { useNavigation } from "@react-navigation/native";
 import { Controller, useForm } from "react-hook-form";

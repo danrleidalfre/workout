@@ -1,4 +1,4 @@
-import { useAuth } from "@/contexts/auth";
+import { useAuth } from "@/providers/auth";
 import { NavigationContainer } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React from "react";
