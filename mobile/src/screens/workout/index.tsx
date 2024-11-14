@@ -365,144 +365,140 @@ export function Workout() {
         />
       </View>
       <ScrollView showsVerticalScrollIndicator={false} className="px-6 pt-4">
-        {isLoading ? <WorkoutSkeleton /> : (
-          <>
-            <View className="gap-6">
-              {workout.exercises?.map((exercise, exerciseIndex) => (
-                <View key={exerciseIndex} className="gap-2">
-                  <View className="flex-row justify-between items-center">
-                    <View className="flex-row items-center gap-3 w-full">
-                      <Dumbbell className="text-muted-foreground dark:text-muted -rotate-45" size={28} />
-                      <Text className="text-muted-foreground dark:text-muted font-semibold text-2xl">
-                        {exercise.exerciseTitle}
-                      </Text>
-                    </View>
-                  </View>
-
-                  {exercise.note && (
-                    <Text className="opacity-80 text-xl font-normal text-muted-foreground dark:text-muted text-justify mb-1">
-                      {exercise.note}
+        <>
+          <View className="gap-6">
+            {workout.exercises?.map((exercise, exerciseIndex) => (
+              <View key={exerciseIndex} className="gap-2">
+                <View className="flex-row justify-between items-center">
+                  <View className="flex-row items-center gap-3 w-full">
+                    <Dumbbell className="text-muted-foreground dark:text-muted -rotate-45" size={28} />
+                    <Text className="text-muted-foreground dark:text-muted font-semibold text-2xl">
+                      {exercise.exerciseTitle}
                     </Text>
-                  )}
-
-                  {exercise.series.map((_, serieIndex) => (
-                    <View key={serieIndex} className="flex-row gap-2">
-                      <Controller
-                        name={`exercises.${exerciseIndex}.series.${serieIndex}.load`}
-                        control={control}
-                        render={({ field: { onChange, value } }) => (
-                          <View className="flex-[0.45] flex-col justify-center">
-                            <Input
-                              value={value === 0 ? '' : String(value)}
-                              onChangeText={onChange}
-                              keyboardType="numeric"
-                              className="w-full"
-                            />
-                            <Text className="absolute right-4 text-base text-muted-foreground dark:text-muted opacity-50 dark:opacity-80">
-                              kg
-                            </Text>
-                          </View>
-                        )}
-                      />
-
-                      <Controller
-                        name={`exercises.${exerciseIndex}.series.${serieIndex}.reps`}
-                        control={control}
-                        render={({ field: { onChange, value } }) => (
-                          <View className="flex-[0.45] flex-col justify-center">
-                            <Input
-                              value={value === 0 ? '' : String(value)}
-                              onChangeText={onChange}
-                              keyboardType="numeric"
-                              className="w-full"
-                            />
-                            <Text className="absolute right-4 text-base text-muted-foreground dark:text-muted opacity-50 dark:opacity-80">
-                              reps
-                            </Text>
-                          </View>
-                        )}
-                      />
-
-                      <Controller
-                        name={`exercises.${exerciseIndex}.series.${serieIndex}.completed`}
-                        control={control}
-                        render={({ field: { onChange, value } }) => {
-                          const { load, reps } = workout.exercises[exerciseIndex].series[serieIndex];
-
-                          return (
-                            <Checkbox
-                              disabled={Number(load) <= 0 || Number(reps) <= 0}
-                              checked={value}
-                              onChange={(checked) => {
-                                onChange(checked);
-                                if (checked) {
-                                  handleSerieComplete(exercise.rest);
-                                }
-                              }}
-                              className="flex-[0.1]"
-                            />)
-                        }}
-                      />
-                    </View>
-                  ))}
-
-                  <Button
-                    label="Adicionar série"
-                    variant="secondary"
-                    icon={PlusCircle}
-                    onPress={() => handleAddSerie(exerciseIndex)}
-                  />
+                  </View>
                 </View>
-              ))}
-            </View>
 
-            <View className="gap-2 mt-6">
-              <View className="flex-row gap-2">
-                <View className="flex-[0.5]">
-                  <Select
-                    options={availableExercises}
-                    selectedValue={newExercise.exerciseId}
-                    onSelect={handleExerciseSelect}
-                    placeholder="Selecione o exercício"
-                    labelKey="title"
-                    valueKey="id"
-                    icon={Dumbbell}
-                    iconClasses="-rotate-45 text-primary"
-                  />
-                </View>
-                <View className="flex-[0.5]">
-                  <Select
-                    options={restTimes}
-                    selectedValue={newExercise.rest}
-                    onSelect={handleRestTimeSelect}
-                    placeholder="Selecione o descanso"
-                    labelKey="label"
-                    valueKey="value"
-                    icon={Clock}
-                    iconClasses="text-primary"
-                  />
-                </View>
+                {exercise.note && (
+                  <Text className="opacity-80 text-xl font-normal text-muted-foreground dark:text-muted text-justify mb-1">
+                    {exercise.note}
+                  </Text>
+                )}
+
+                {exercise.series.map((_, serieIndex) => (
+                  <View key={serieIndex} className="flex-row gap-2">
+                    <Controller
+                      name={`exercises.${exerciseIndex}.series.${serieIndex}.load`}
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                        <View className="flex-[0.45] flex-col justify-center">
+                          <Input
+                            value={value === 0 ? '' : String(value)}
+                            onChangeText={onChange}
+                            keyboardType="numeric"
+                            className="w-full"
+                          />
+                          <Text className="absolute right-4 text-base text-muted-foreground dark:text-muted opacity-50 dark:opacity-80">
+                            kg
+                          </Text>
+                        </View>
+                      )}
+                    />
+
+                    <Controller
+                      name={`exercises.${exerciseIndex}.series.${serieIndex}.reps`}
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                        <View className="flex-[0.45] flex-col justify-center">
+                          <Input
+                            value={value === 0 ? '' : String(value)}
+                            onChangeText={onChange}
+                            keyboardType="numeric"
+                            className="w-full"
+                          />
+                          <Text className="absolute right-4 text-base text-muted-foreground dark:text-muted opacity-50 dark:opacity-80">
+                            reps
+                          </Text>
+                        </View>
+                      )}
+                    />
+
+                    <Controller
+                      name={`exercises.${exerciseIndex}.series.${serieIndex}.completed`}
+                      control={control}
+                      render={({ field: { onChange, value } }) => {
+                        const { load, reps } = workout.exercises[exerciseIndex].series[serieIndex];
+
+                        return (
+                          <Checkbox
+                            disabled={Number(load) <= 0 || Number(reps) <= 0}
+                            checked={value}
+                            onChange={(checked) => {
+                              onChange(checked);
+                              if (checked) {
+                                handleSerieComplete(exercise.rest);
+                              }
+                            }}
+                            className="flex-[0.1]"
+                          />)
+                      }}
+                    />
+                  </View>
+                ))}
+
+                <Button
+                  label="Adicionar série"
+                  variant="secondary"
+                  icon={PlusCircle}
+                  onPress={() => handleAddSerie(exerciseIndex)}
+                />
               </View>
-              <Button
-                label="Adicionar exercício"
-                icon={PlusCircle}
-                onPress={handleAddExercise}
-                labelClasses="text-primary dark:text-primary"
-                variant="secondary"
-              />
+            ))}
+          </View>
+          <View className="gap-2 mt-6">
+            <View className="flex-row gap-2">
+              <View className="flex-[0.5]">
+                <Select
+                  options={availableExercises}
+                  selectedValue={newExercise.exerciseId}
+                  onSelect={handleExerciseSelect}
+                  placeholder="Selecione o exercício"
+                  labelKey="title"
+                  valueKey="id"
+                  icon={Dumbbell}
+                  iconClasses="-rotate-45 text-primary"
+                />
+              </View>
+              <View className="flex-[0.5]">
+                <Select
+                  options={restTimes}
+                  selectedValue={newExercise.rest}
+                  onSelect={handleRestTimeSelect}
+                  placeholder="Selecione o descanso"
+                  labelKey="label"
+                  valueKey="value"
+                  icon={Clock}
+                  iconClasses="text-primary"
+                />
+              </View>
             </View>
-
-            <View className="flex-row gap-2 mb-96 mt-6">
-              <Button
-                label="Descartar treino"
-                icon={Trash2}
-                variant="destructive"
-                className="flex-1"
-                onPress={handleDiscardWorkout}
-              />
-            </View>
-          </>
-        )}
+            <Button
+              label="Adicionar exercício"
+              icon={PlusCircle}
+              onPress={handleAddExercise}
+              labelClasses="text-primary dark:text-primary"
+              variant="secondary"
+            />
+          </View>
+          <View className="flex-row gap-2 mb-96 mt-6">
+            <Button
+              label="Descartar treino"
+              icon={Trash2}
+              variant="destructive"
+              className="flex-1"
+              onPress={handleDiscardWorkout}
+            />
+          </View>
+        </>
       </ScrollView>
       {timeLeft > 0 && (
         <View className="absolute bottom-0 left-0 right-0 bg-secondary dark:bg-secondary-foreground pb-8 border-t border-background dark:border-foreground">
