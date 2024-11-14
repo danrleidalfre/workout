@@ -1,10 +1,10 @@
 import { Check } from "@/components/icons/check";
 import { cn } from "@/libs/utils";
-import { useThemeContext } from "@/providers/theme";
+import { useTheme } from "@/providers/theme";
 import { Text, TouchableOpacity, View } from "react-native";
 
 export function ToggleTheme() {
-  const { theme, changeTheme } = useThemeContext();
+  const { theme, changeTheme } = useTheme();
 
   return (
     <View className="flex-row">
