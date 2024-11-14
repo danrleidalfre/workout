@@ -63,7 +63,7 @@ export const Select = ({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [dropdownPosition, setDropdownPosition] =
     useState<LayoutRectangle | null>(null);
-  const selectButtonRef = useRef<TouchableOpacity>(null);
+  const selectButtonRef = useRef<View>(null);
 
   const new_options = convertToOptions(options, labelKey, valueKey);
 
