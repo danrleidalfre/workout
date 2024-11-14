@@ -1,15 +1,12 @@
 import { Button } from "@/components/button";
 import { LogOut } from "@/components/icons/logout";
 import { useAuth } from "@/contexts/auth";
-import { NavigationRoutes } from "@/routes";
 import { User } from "@/storages/user";
-import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { ToggleTheme } from "./toggle-theme";
 
 export function Profile() {
-  const navigation = useNavigation<NavigationRoutes>();
   const { logout, getUser } = useAuth();
   const [user, setUser] = useState({} as User)
 
@@ -23,7 +20,6 @@ export function Profile() {
 
   const onLogout = async () => {
     await logout();
-    navigation.navigate("signIn");
   };
 
   return (

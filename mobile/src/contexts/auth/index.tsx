@@ -1,3 +1,4 @@
+import { api } from "@/libs/axios";
 import { getTokenStorage, removeTokenStorage, setTokenStorage } from "@/storages/token";
 import { getUserStorage, removeUserStorage, setUserStorage, User } from "@/storages/user";
 import React, { createContext, useContext, useEffect, useState } from "react";
@@ -42,6 +43,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const getUser = async () => {
     return await getUserStorage();
   }
+
+  useEffect(() => {
+    const subscribe = api.interceptToken(logout)
+
+    return () => {
+      subscribe()
+    }
+  }, [])
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout, setUser, getUser }}>
