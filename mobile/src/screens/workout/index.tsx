@@ -15,7 +15,6 @@ import { api } from "@/libs/axios";
 import { NavigationRoutes, RoutesProps } from "@/routes";
 import { getWorkoutStorage, removeWorkoutStorage, setWorkoutStorage } from "@/storages/workout";
 import { RouteProp, useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
-import * as Notifications from 'expo-notifications';
 import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { ScrollView, Text, View } from "react-native";
@@ -49,14 +48,6 @@ type Exercise = {
   id: string
   title: string
 }
-
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
-});
 
 export function Workout() {
   const { params } = useRoute<WorkoutScreenRouteProps>();
@@ -131,14 +122,6 @@ export function Workout() {
     fetchExercises();
   }, []);
 
-  useEffect(() => {
-    const requestPermissions = async () => {
-      await Notifications.requestPermissionsAsync();
-    };
-
-    requestPermissions();
-  }, []);
-
   const workout = watch();
 
   useEffect(() => {
@@ -187,8 +170,6 @@ export function Workout() {
           clearInterval(interval);
           setIsCountdownActive(false);
 
-          Notifications.cancelAllScheduledNotificationsAsync();
-
           return 0;
         }
         return prev - 1;
@@ -229,17 +210,6 @@ export function Workout() {
     setIsCountdownActive(true);
 
     await setWorkoutStorage(workout);
-
-    Notifications.cancelAllScheduledNotificationsAsync();
-
-    Notifications.scheduleNotificationAsync({
-      content: {
-        title: "Fim do descanso",
-        body: "Está na hora de começar a próxima série!",
-        data: { workoutId: workout.id },
-      },
-      trigger: { seconds: time },
-    });
   };
 
   const handleDiscardWorkout = async () => {
