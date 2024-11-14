@@ -61,6 +61,12 @@ export function Workouts() {
 
   return (
     <View className="flex-1 px-6">
+      {!isLoading && workouts.length === 0 && (
+        <View className="mt-4 items-center">
+          <Text className="text-muted-foreground dark:text-muted text-2xl font-bold">Nenhum treino cadastrado</Text>
+          <Text className="text-muted-foreground dark:text-muted text-lg font-normal">Acesse o dashboard para montar seu treino</Text>
+        </View>
+      )}
       {workoutAlreadyStarted.title && (
         <View className="px-6 py-4 mt-2 rounded-md">
           <View className="flex-row justify-between items-center">
